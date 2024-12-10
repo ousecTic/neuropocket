@@ -52,8 +52,17 @@ export function Hero() {
           </div>
           <div className="space-y-4">
             <DemoVideo />
-            <p className="text-sm text-gray-500 italic">
-              Train your own AI model to recognize anything - from gestures to objects, all in your browser
+            <p className="text-sm text-gray-600">
+              Students exploring the first iteration of NeuroPocket at{' '}
+              <a 
+                href="https://www.learnaianywhere.org" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 font-medium"
+              >
+                learnaianywhere.org
+              </a>
+              {' '}— part of our offline-first AI curriculum
             </p>
           </div>
         </div>

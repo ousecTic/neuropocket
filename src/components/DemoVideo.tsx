@@ -21,7 +21,7 @@ export function DemoVideo() {
       {isOnline ? (
         <img
           src="demo.gif"
-          alt="Demo of training an AI model to recognize different objects"
+          alt="Students from different schools exploring NeuroPocket as part of the offline-first AI curriculum at learnaianywhere.org"
           className="w-full h-full object-cover"
         />
       ) : (
