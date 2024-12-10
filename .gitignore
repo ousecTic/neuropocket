@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Capacitor
+android/
+ios/
+
+# Keep capacitor config
+!capacitor.config.ts

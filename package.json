@@ -3,21 +3,28 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Train and use AI models anywhere - works completely offline",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cap:android": "cap add android",
+    "cap:sync": "cap sync",
+    "cap:open:android": "cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
     "@tensorflow/tfjs": "^4.17.0",
     "idb": "^8.0.0",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.22.3",
-    "zustand": "^4.5.2",
-    "workbox-window": "^7.0.0"
+    "workbox-window": "^7.0.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
