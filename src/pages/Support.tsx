@@ -48,9 +48,12 @@ export function Support() {
                   </ol>
                   <div>
                     <a 
-                      href="https://github.com/ousecTic/neuropocket/releases/download/v1.0.0-edu/app-debug.apk" 
+                      href="#" 
                       className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                      download
+                      onClick={(e) => {
+                        e.preventDefault();
+                        alert('APK download coming soon!');
+                      }}
                     >
                       <Download size={16} />
                       Download APK

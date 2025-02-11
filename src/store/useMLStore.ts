@@ -42,6 +42,12 @@ export const useMLStore = create<MLStore>()(
       trainModel: async (projectId, classes) => {
         if (!get().isModelLoaded || get().isTraining) return false;
 
+        // Map classes to include their names
+        const trainingClasses = classes.map((c) => ({
+          name: c.name,
+          images: c.images
+        }));
+
         set({ 
           isTraining: true, 
           trainingProgress: null,
@@ -50,7 +56,7 @@ export const useMLStore = create<MLStore>()(
         });
 
         try {
-          const success = await mlService.trainModel(classes, (epoch, logs) => {
+          const success = await mlService.trainModel(trainingClasses, (epoch, logs) => {
             set({
               trainingProgress: {
                 epoch,

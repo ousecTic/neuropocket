@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+  base: process.env.IS_DEV ? '/' : './',
   plugins: [
     react(),
     VitePWA({
@@ -80,6 +81,9 @@ export default defineConfig({
     exclude: ['lucide-react']
   },
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         manualChunks: {

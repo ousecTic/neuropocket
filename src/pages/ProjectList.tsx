@@ -4,10 +4,12 @@ import { ProjectHeader } from '../components/ProjectHeader';
 import { useProjectStore } from '../store/useProjectStore';
 import { CreateProjectDialog } from '../components/CreateProjectDialog';
 import { Brain } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export function ProjectList() {
   const { projects, loading, loadProjects } = useProjectStore();
   const [isCreating, setIsCreating] = React.useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadProjects();
@@ -32,6 +34,10 @@ export function ProjectList() {
         action={projects.length > 0 ? {
           label: "Create Project",
           onClick: () => setIsCreating(true)
+        } : undefined}
+        secondaryAction={projects.length > 0 ? {
+          label: "Try Bias Challenge",
+          onClick: () => navigate('/challenge')
         } : undefined}
       />
 

@@ -3,6 +3,7 @@ import { Home } from './pages/Home';
 import { ProjectList } from './pages/ProjectList';
 import { ProjectDetail } from './pages/ProjectDetail';
 import { Support } from './pages/Support';
+import { Challenge } from './pages/Challenge';
 import { PWAPrompt } from './components/PWAPrompt';
 import { OfflineIndicator } from './components/OfflineIndicator';
 
@@ -14,6 +15,7 @@ function App() {
         <Route path="/app" element={<ProjectList />} />
         <Route path="/project/:id" element={<ProjectDetail />} />
         <Route path="/support" element={<Support />} />
+        <Route path="/challenge" element={<Challenge />} />
       </Routes>
       <PWAPrompt />
       <OfflineIndicator />

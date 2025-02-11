@@ -42,10 +42,8 @@ export function PreviewSection({ project }: PreviewSectionProps) {
         // Make prediction
         const result = await predict(dataUrl);
         if (result) {
-          // Find the class name from the project
-          const classData = project.classes[parseInt(result.className)];
           setPrediction({
-            className: classData?.name || 'Error: Class not found',
+            className: result.className,
             probability: result.probability
           });
         }
