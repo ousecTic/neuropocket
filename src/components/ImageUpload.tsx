@@ -14,8 +14,8 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
     
     for (const file of files) {
       // Check file type
-      if (!file.type.startsWith('image/')) {
-        alert('Please upload only image files');
+      if (!['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) {
+        alert('Please upload only PNG or JPG files');
         continue;
       }
 
@@ -49,25 +49,26 @@ export function ImageUpload({ onUpload }: ImageUploadProps) {
   };
 
   return (
-    <div className="flex items-center justify-center w-full">
-      <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-          <Upload className="w-10 h-10 mb-3 text-gray-400" />
-          <p className="mb-2 text-sm text-gray-500">
-            <span className="font-semibold">Click to upload</span> or drag and drop
-          </p>
-          <p className="text-xs text-gray-500">PNG, JPG, GIF (MAX. 5MB)</p>
-          <p className="text-xs text-gray-500 mt-1">You can select multiple images</p>
-        </div>
-        <input
-          ref={fileInputRef}
-          type="file"
-          className="hidden"
-          accept="image/*"
-          multiple
-          onChange={handleFileChange}
-        />
-      </label>
+    <div className="text-center">
+      <div className="flex items-center justify-center w-full">
+        <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+            <Upload className="w-10 h-10 mb-3 text-gray-400" />
+            <p className="mb-2 text-sm text-gray-500">
+              <span className="font-semibold">Click to upload</span> or drag and drop
+            </p>
+            <p className="text-xs text-gray-500">PNG or JPG (MAX. 5MB)</p>
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            accept=".png,.jpg,.jpeg"
+            multiple
+            onChange={handleFileChange}
+          />
+        </label>
+      </div>
     </div>
   );
 }
