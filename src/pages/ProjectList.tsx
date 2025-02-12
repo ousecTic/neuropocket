@@ -34,10 +34,10 @@ export function ProjectList() {
           label: "Create Project",
           onClick: () => setIsCreating(true)
         } : undefined}
-        secondaryAction={{
+        secondaryAction={projects.length > 0 ? {
           label: "Try Bias Challenge",
           onClick: () => navigate('/challenge')
-        }}
+        } : undefined}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
@@ -51,7 +51,16 @@ export function ProjectList() {
               <p className="text-gray-600 mb-8 text-lg">
                 Start your AI journey by creating a new project
               </p>
-              <CreateProjectDialog variant="full-width" />
+              <div className="space-y-4">
+                <CreateProjectDialog variant="full-width" />
+                <button
+                  onClick={() => navigate('/challenge')}
+                  className="w-full py-4 text-lg rounded-lg flex items-center justify-center gap-2
+                    border-2 border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors"
+                >
+                  Or Try the Bias Challenge
+                </button>
+              </div>
             </div>
           </div>
         ) : (
