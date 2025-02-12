@@ -50,7 +50,7 @@ export function ProjectDetail() {
   if (!project) {
     return (
       <div className="min-h-screen bg-gray-100">
-        <ProjectHeader title="Project Not Found" backTo="/app" />
+        <ProjectHeader title="Project Not Found" backTo="/" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
           <div className="bg-white rounded-lg shadow-sm p-8 text-center">
             <p className="text-red-600 text-lg">Project not found</p>
@@ -64,7 +64,7 @@ export function ProjectDetail() {
     <div className="min-h-screen bg-gray-100">
       <ProjectHeader 
         title={project.name}
-        backTo="/app"
+        backTo="/"
         action={activeSection === 'classes' ? {
           label: "Add Class",
           onClick: () => {

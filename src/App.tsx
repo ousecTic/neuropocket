@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Home } from './pages/Home';
 import { ProjectList } from './pages/ProjectList';
 import { ProjectDetail } from './pages/ProjectDetail';
 import { Support } from './pages/Support';
@@ -11,8 +10,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/app" element={<ProjectList />} />
+        <Route path="/" element={<ProjectList />} />
         <Route path="/project/:id" element={<ProjectDetail />} />
         <Route path="/support" element={<Support />} />
         <Route path="/challenge" element={<Challenge />} />
