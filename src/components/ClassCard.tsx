@@ -127,7 +127,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
       
       <ImageUpload
         onUpload={(files) => addImageToClass(projectId, classData.id, files)}
-        onDelete={(image) => deleteImageFromClass(projectId, classData.id, image)}
+        onDelete={(imageId) => deleteImageFromClass(projectId, classData.id, imageId)}
         images={classData.images}
       />
     </div>
