@@ -157,11 +157,25 @@ export function PreviewSection({ project }: PreviewSectionProps) {
               </div>
             ) : selectedImage ? (
               <div className="text-center py-8 text-gray-500">
-                No prediction available
+                Processing prediction...
               </div>
             ) : (
-              <div className="text-center py-8 text-gray-500">
-                Upload an image to see the prediction
+              <div className="bg-gray-50 rounded-lg p-6 border-2 border-dashed border-gray-200">
+                <h3 className="font-semibold mb-4 text-gray-400">Prediction Results</h3>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-gray-400 mb-1">Class</p>
+                    <div className="h-7 bg-gray-100 rounded w-32"></div>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 mb-1">Confidence</p>
+                    <div className="h-7 bg-gray-100 rounded w-24"></div>
+                    <div className="mt-2 h-2 bg-gray-100 rounded"></div>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-400 mt-4 text-center">
+                  Upload an image to see the prediction
+                </p>
               </div>
             )}
           </div>

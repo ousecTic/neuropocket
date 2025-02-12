@@ -35,10 +35,10 @@ export function ProjectList() {
           label: "Create Project",
           onClick: () => setIsCreating(true)
         } : undefined}
-        secondaryAction={projects.length > 0 ? {
+        secondaryAction={{
           label: "Try Bias Challenge",
           onClick: () => navigate('/challenge')
-        } : undefined}
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">

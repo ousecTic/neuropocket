@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useProjectStore } from '../store/useProjectStore';
 
+const MAX_PROJECT_NAME_LENGTH = 50;
+
 interface CreateProjectDialogProps {
   variant?: 'default' | 'full-width';
   onClose?: () => void;
@@ -55,19 +57,28 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Create New Project</h2>
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={projectName}
-            onChange={(e) => {
-              setProjectName(e.target.value);
-              setError(null);
-            }}
-            placeholder="Enter project name"
-            className={`w-full px-3 py-2 border rounded-lg mb-2 ${
-              error ? 'border-red-500' : ''
-            }`}
-            autoFocus
-          />
+          <div className="relative">
+            <input
+              type="text"
+              value={projectName}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                if (newValue.length <= MAX_PROJECT_NAME_LENGTH) {
+                  setProjectName(newValue);
+                  setError(null);
+                }
+              }}
+              placeholder="Enter project name"
+              className={`w-full px-3 py-2 border rounded-lg mb-1 ${
+                error ? 'border-red-500' : ''
+              }`}
+              maxLength={MAX_PROJECT_NAME_LENGTH}
+              autoFocus
+            />
+            <div className="text-right text-sm text-gray-500 mb-2">
+              {projectName.length}/{MAX_PROJECT_NAME_LENGTH}
+            </div>
+          </div>
           {error && (
             <p className="text-red-500 text-sm mb-4">{error}</p>
           )}
@@ -89,6 +100,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              disabled={!projectName.trim()}
             >
               Create
             </button>

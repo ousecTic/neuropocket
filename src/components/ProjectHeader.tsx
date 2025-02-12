@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Brain, ArrowLeft, Plus } from 'lucide-react';
+import { Brain, ArrowLeft, Plus, MoreVertical } from 'lucide-react';
+import { useState } from 'react';
 
 interface ProjectHeaderProps {
   title: string;
@@ -15,6 +16,14 @@ interface ProjectHeaderProps {
 }
 
 export function ProjectHeader({ title, backTo, action, secondaryAction }: ProjectHeaderProps) {
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const hasMultipleActions = action && secondaryAction;
+
+  const handleActionClick = (callback: () => void) => {
+    setShowMobileMenu(false);
+    callback();
+  };
+
   return (
     <div className="bg-white shadow-sm sticky top-0 z-10">
       <div className="max-w-6xl mx-auto">
@@ -33,12 +42,12 @@ export function ProjectHeader({ title, backTo, action, secondaryAction }: Projec
               </div>
             </div>
 
-            {/* Action buttons - visible on all screen sizes */}
-            <div className="flex items-center gap-2">
+            {/* Desktop Actions - Always show both buttons */}
+            <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
               {action && (
                 <button
                   onClick={action.onClick}
-                  className="flex items-center gap-2 bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex-shrink-0 text-sm sm:text-base whitespace-nowrap"
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-base whitespace-nowrap"
                 >
                   <Plus size={18} className="flex-shrink-0" />
                   {action.label}
@@ -47,10 +56,67 @@ export function ProjectHeader({ title, backTo, action, secondaryAction }: Projec
               {secondaryAction && (
                 <button
                   onClick={secondaryAction.onClick}
-                  className="hidden sm:flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
+                  className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-base whitespace-nowrap"
                 >
                   {secondaryAction.label}
                 </button>
+              )}
+            </div>
+
+            {/* Mobile Actions */}
+            <div className="sm:hidden flex-shrink-0">
+              {hasMultipleActions ? (
+                // Show dropdown for multiple actions
+                <div className="relative">
+                  <button
+                    onClick={() => setShowMobileMenu(!showMobileMenu)}
+                    className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
+                  >
+                    <MoreVertical size={20} />
+                  </button>
+
+                  {showMobileMenu && (
+                    <>
+                      {/* Backdrop */}
+                      <div 
+                        className="fixed inset-0 z-10"
+                        onClick={() => setShowMobileMenu(false)}
+                      />
+                      
+                      {/* Dropdown Menu */}
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20">
+                        {action && (
+                          <button
+                            onClick={() => handleActionClick(action.onClick)}
+                            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                          >
+                            <Plus size={16} className="flex-shrink-0" />
+                            {action.label}
+                          </button>
+                        )}
+                        {secondaryAction && (
+                          <button
+                            onClick={() => handleActionClick(secondaryAction.onClick)}
+                            className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                          >
+                            {secondaryAction.label}
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : (
+                // Show single button if only one action
+                action && (
+                  <button
+                    onClick={action.onClick}
+                    className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm whitespace-nowrap"
+                  >
+                    <Plus size={16} className="flex-shrink-0" />
+                    {action.label}
+                  </button>
+                )
               )}
             </div>
           </div>

@@ -6,6 +6,7 @@ import { ClassCard } from '../components/ClassCard';
 import { TrainingSection } from '../components/TrainingSection';
 import { PreviewSection } from '../components/PreviewSection';
 import { ProjectHeader } from '../components/ProjectHeader';
+import { MAX_CLASS_NAME_LENGTH } from '../constants';
 
 export function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -159,27 +160,37 @@ export function ProjectDetail() {
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-semibold mb-4">Add New Class</h2>
             <form onSubmit={handleAddClass}>
-              <input
-                type="text"
-                value={newClassName}
-                onChange={(e) => {
-                  setNewClassName(e.target.value);
-                  setClassError(null);
-                }}
-                placeholder="Enter class name"
-                className={`w-full px-3 py-2 border rounded-lg mb-2 ${
-                  classError ? 'border-red-500' : ''
-                }`}
-                autoFocus
-              />
-              {classError && (
-                <p className="text-red-500 text-sm mb-4">{classError}</p>
-              )}
+              <div className="mb-4">
+                <input
+                  type="text"
+                  value={newClassName}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= MAX_CLASS_NAME_LENGTH) {
+                      setNewClassName(value);
+                      setClassError(null);
+                    }
+                  }}
+                  placeholder="Enter class name"
+                  className={`w-full px-3 py-2 border rounded-lg mb-1 ${
+                    classError ? 'border-red-500' : ''
+                  }`}
+                  maxLength={MAX_CLASS_NAME_LENGTH}
+                  autoFocus
+                />
+                <div className="text-right text-sm text-gray-500">
+                  {newClassName.length}/{MAX_CLASS_NAME_LENGTH}
+                </div>
+                {classError && (
+                  <p className="text-red-500 text-sm mt-1">{classError}</p>
+                )}
+              </div>
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     setIsAddingClass(false);
+                    setNewClassName('');
                     setClassError(null);
                   }}
                   className="px-4 py-2 text-gray-600 hover:text-gray-800"
@@ -189,8 +200,9 @@ export function ProjectDetail() {
                 <button
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  disabled={!newClassName.trim()}
                 >
-                  Add
+                  Create
                 </button>
               </div>
             </form>
