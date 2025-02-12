@@ -30,8 +30,6 @@ export function ProjectList() {
     <div className="min-h-screen bg-gray-100">
       <ProjectHeader 
         title="My Projects" 
-        backTo="https://neuropocket.com"
-        backToExternal={true}
         action={projects.length > 0 ? {
           label: "Create Project",
           onClick: () => setIsCreating(true)

@@ -471,10 +471,10 @@ export function Challenge() {
                   {/* Test Results */}
                   {testResults.length > 0 && (
                     <div className="space-y-4">
-                      {/* Wrap the table in a scrollable container */}
-                      <div className="border rounded-lg overflow-hidden">
+                      {/* Desktop View */}
+                      <div className="hidden md:block border rounded-lg overflow-hidden">
                         <div className="overflow-x-auto">
-                          <div className="min-w-[800px]"> {/* Minimum width to prevent squishing */}
+                          <div className="min-w-[800px]">
                             {/* Header */}
                             <div className="grid grid-cols-6 gap-4 p-3 font-medium bg-gray-50">
                               <div>Test Case</div>
@@ -497,7 +497,7 @@ export function Challenge() {
                                     : 'bg-red-50'
                                 }`}
                               >
-                                <div className="text-sm font-medium">
+                                <div>
                                   Test {index + 1}
                                 </div>
                                 <div>
@@ -545,21 +545,82 @@ export function Challenge() {
                         </div>
                       </div>
 
-                      {/* Summary */}
+                      {/* Mobile View - Card Layout */}
+                      <div className="md:hidden space-y-4">
+                        {testResults.map((result, index) => (
+                          <div 
+                            key={result.imageName}
+                            className={`p-4 rounded-lg ${
+                              result.expected === result.predicted 
+                                ? 'bg-green-50' 
+                                : 'bg-red-50'
+                            }`}
+                          >
+                            <div className="flex justify-between items-start mb-3">
+                              <span className="font-medium">Test {index + 1}</span>
+                              {result.expected === result.predicted ? (
+                                <div className="flex items-center text-green-600">
+                                  <CheckCircle2 className="w-5 h-5" />
+                                  <span className="ml-1 font-medium">Correct</span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center text-red-600">
+                                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                  </svg>
+                                  <span className="ml-1 font-medium">Wrong</span>
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="flex gap-4 mb-3">
+                              <img 
+                                src={validationImages.find(img => img.name === result.imageName)?.src} 
+                                alt={result.imageName}
+                                className="w-20 h-20 object-cover rounded"
+                              />
+                              <div className="flex-1 space-y-2">
+                                <div>
+                                  <span className="text-sm text-gray-600">Expected:</span>
+                                  <div className="font-medium">{result.expected}</div>
+                                </div>
+                                <div>
+                                  <span className="text-sm text-gray-600">Predicted:</span>
+                                  <div className={`font-medium ${
+                                    result.expected === result.predicted 
+                                      ? 'text-green-600' 
+                                      : 'text-red-600'
+                                  }`}>
+                                    {result.predicted}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="text-sm text-gray-600">
+                              Model is <span className="font-medium">{(result.confidence * 100).toFixed(1)}% confident</span> this is a {result.predicted}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Summary - Updated for better mobile display */}
                       <div className={`p-4 rounded-lg ${
                         testResults.every(r => r.expected === r.predicted) 
                           ? 'bg-green-50 text-green-700' 
                           : 'bg-gray-50 text-gray-700'
                       }`}>
-                        <div className="flex justify-between items-center">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                           <span className="font-medium">Summary:</span>
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium">
-                              Passed: {testResults.filter(r => r.expected === r.predicted).length}/{testResults.length} tests
-                            </span>
-                            <span className="text-sm">
-                              ({((testResults.filter(r => r.expected === r.predicted).length / testResults.length) * 100).toFixed(1)}%)
-                            </span>
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">
+                                Passed: {testResults.filter(r => r.expected === r.predicted).length}/{testResults.length}
+                              </span>
+                              <span>
+                                ({((testResults.filter(r => r.expected === r.predicted).length / testResults.length) * 100).toFixed(1)}%)
+                              </span>
+                            </div>
                             {testResults.every(r => r.expected === r.predicted) && (
                               <CheckCircle2 className="w-5 h-5 text-green-600" />
                             )}

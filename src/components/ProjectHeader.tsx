@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 interface ProjectHeaderProps {
   title: string;
-  backTo: string;
+  backTo?: string;
   backToExternal?: boolean;
   action?: {
     label: string;
@@ -25,32 +25,28 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
     callback();
   };
 
-  const BackButton = () => (
-    <div className="mr-4 p-2 text-gray-600 hover:text-gray-900 -ml-2">
-      <ArrowLeft size={20} />
-    </div>
-  );
-
   return (
     <div className="bg-white shadow-sm sticky top-0 z-10">
       <div className="max-w-6xl mx-auto">
         <div className="px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center min-w-0">
-              {backToExternal ? (
-                <a
-                  href={backTo}
-                  className="mr-4 p-2 text-gray-600 hover:text-gray-900 -ml-2"
-                >
-                  <ArrowLeft size={20} />
-                </a>
-              ) : (
-                <Link
-                  to={backTo}
-                  className="mr-4 p-2 text-gray-600 hover:text-gray-900 -ml-2"
-                >
-                  <ArrowLeft size={20} />
-                </Link>
+              {backTo && (
+                backToExternal ? (
+                  <a
+                    href={backTo}
+                    className="mr-4 p-2 text-gray-600 hover:text-gray-900 -ml-2"
+                  >
+                    <ArrowLeft size={20} />
+                  </a>
+                ) : (
+                  <Link
+                    to={backTo}
+                    className="mr-4 p-2 text-gray-600 hover:text-gray-900 -ml-2"
+                  >
+                    <ArrowLeft size={20} />
+                  </Link>
+                )
               )}
               <div className="flex items-center gap-3 min-w-0">
                 <Brain size={24} className="text-blue-600 flex-shrink-0" />
