@@ -42,12 +42,9 @@ export function Challenge() {
   const [error, setError] = useState<string | null>(null);
   const [isTrained, setIsTrained] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
-
-  // Load validation images
   const [validationImages, setValidationImages] = useState<{ name: string; src: string }[]>([]);
 
   useEffect(() => {
-    // Load MobileNet model when component mounts
     const loadModel = async () => {
       setError(null);
       setIsModelLoaded(false);
@@ -68,25 +65,43 @@ export function Challenge() {
 
     // Import all images from the challenge folder
     const importImages = async () => {
-      const imageModules = import.meta.glob('/src/assets/challenge/**/*.{png,jpg,jpeg}', { eager: true });
-      const loadedImages: ImageItem[] = [];
-      
-      for (const path in imageModules) {
-        const module = imageModules[path] as { default: string };
-        const id = path.split('/').pop()?.split('.')[0] || '';
-        const type = path.toLowerCase().includes('apple') ? 'apple' : 'pear';
-        const name = type === 'apple' ? `Apple ${id}` : `Pear ${id}`;
+      try {
+        const imageModules = import.meta.glob('../assets/challenge/**/*.jpg', { eager: true });
+        const loadedImages: ImageItem[] = [];
         
-        loadedImages.push({
-          id,
-          name,
-          type,
-          src: module.default,
-          selected: false
-        });
+        for (const path in imageModules) {
+          const module = imageModules[path] as { default: string };
+          const filename = path.split('/').pop()?.split('.')[0] || '';
+          const type = path.includes('/apples/') ? 'apple' : 'pear';
+          const name = type === 'apple' ? `Apple ${filename}` : `Pear ${filename}`;
+          
+          // Skip validation images
+          if (!path.includes('/validation/')) {
+            loadedImages.push({
+              id: filename,
+              name,
+              type,
+              src: module.default,
+              selected: false
+            });
+          }
+        }
+        
+        setImages(loadedImages);
+
+        // Load validation images separately
+        const validationModules = Object.entries(imageModules)
+          .filter(([path]) => path.includes('/validation/'))
+          .map(([path, module]) => ({
+            name: path.split('/').pop()?.split('.')[0] || '',
+            src: (module as { default: string }).default
+          }));
+
+        setValidationImages(validationModules);
+      } catch (error) {
+        console.error('Error loading images:', error);
+        setError('Failed to load challenge images. Please refresh the page and try again.');
       }
-      
-      setImages(loadedImages);
     };
 
     importImages();
@@ -94,21 +109,6 @@ export function Challenge() {
     return () => {
       mlService.dispose();
     };
-  }, []);
-
-  useEffect(() => {
-    const loadValidationImages = async () => {
-      const imageModules = import.meta.glob('/src/assets/challenge/validation/*.{png,jpg,jpeg}', { eager: true });
-      
-      const images = Object.entries(imageModules).map(([path, module]) => ({
-        name: path.split('/').pop() || '',
-        src: (module as { default: string }).default
-      }));
-
-      setValidationImages(images);
-    };
-
-    loadValidationImages();
   }, []);
 
   const handleImageSelect = (image: ImageItem) => {
