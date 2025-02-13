@@ -13,7 +13,6 @@ export function TrainingSection({ project }: TrainingSectionProps) {
     isTraining, 
     isTrained,
     trainingProgress, 
-    finalTrainingProgress,
     currentProjectId,
     loadModel, 
     trainModel,
@@ -75,7 +74,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
   const canTrain = hasMinimumClasses && hasMinimumImages;
 
   const renderTrainingMetrics = () => {
-    const metrics = trainingProgress || finalTrainingProgress;
+    const metrics = trainingProgress;
     if (!metrics) return null;
 
     const currentEpoch = metrics.epoch;

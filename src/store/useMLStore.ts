@@ -11,11 +11,6 @@ interface MLState {
     loss: number;
     accuracy: number;
   } | null;
-  finalTrainingProgress: {
-    epoch: number;
-    loss: number;
-    accuracy: number;
-  } | null;
   currentProjectId: string | null;
 }
 
@@ -35,7 +30,6 @@ export const useMLStore = create<MLStore>()(
       isTraining: false,
       isTrained: false,
       trainingProgress: null,
-      finalTrainingProgress: null,
       currentProjectId: null,
 
       loadModel: async () => {
@@ -56,37 +50,33 @@ export const useMLStore = create<MLStore>()(
 
         set({ 
           isTraining: true, 
-          currentProjectId: projectId,
           trainingProgress: null,
-          finalTrainingProgress: null 
+          currentProjectId: projectId,
+          isTrained: false
         });
 
-        const success = await mlService.trainModel(trainingClasses, (epoch, logs) => {
-          set({
-            trainingProgress: {
-              epoch,
-              loss: logs.loss,
-              accuracy: logs.acc
-            }
+        try {
+          const success = await mlService.trainModel(trainingClasses, (epoch, logs) => {
+            set({
+              trainingProgress: {
+                epoch,
+                loss: logs.loss,
+                accuracy: logs.acc
+              }
+            });
           });
-        });
 
-        if (success) {
-          set(state => ({ 
-            isTraining: false,
-            isTrained: true,
-            finalTrainingProgress: state.trainingProgress
-          }));
-        } else {
-          set({ 
-            isTraining: false,
-            isTrained: false,
-            trainingProgress: null,
-            finalTrainingProgress: null
-          });
+          if (success) {
+            set({ isTrained: true });
+          }
+
+          return success;
+        } catch (error) {
+          console.error('Training error:', error);
+          return false;
+        } finally {
+          set({ isTraining: false });
         }
-
-        return success;
       },
 
       predict: async (imageData) => {
@@ -95,12 +85,11 @@ export const useMLStore = create<MLStore>()(
       },
 
       resetTrainingState: () => {
-        set({ 
-          isTraining: false, 
-          isTrained: false, 
+        set({
+          isTraining: false,
+          isTrained: false,
           trainingProgress: null,
-          finalTrainingProgress: null,
-          currentProjectId: null 
+          currentProjectId: null
         });
       }
     }),
