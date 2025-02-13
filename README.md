@@ -98,6 +98,92 @@ src/
 - `ImageClassifier`: Handles real-time classification
 - `StorageManager`: Manages offline data persistence
 
+## Development Setup
+
+### Initial Setup
+```bash
+# Install dependencies
+npm install
+
+# Build the web app
+npm run build
+
+# Add platforms
+npx cap add @capacitor-community/electron  # Add Electron support
+npx cap add android                       # Add Android support (optional)
+```
+
+### Development Workflow
+
+#### Web Development
+```bash
+# Start development server
+npm run dev
+```
+
+#### Electron Development
+```bash
+# After making changes to the main web app:
+npm run build                              # Build the web app
+npx cap copy @capacitor-community/electron # Copy web assets to electron
+
+# Start Electron app in development mode
+cd electron
+npm run electron:start-live
+```
+
+#### Android Development
+```bash
+# After making changes to the main web app:
+npm run build    # Build the web app
+npx cap sync     # Sync changes to Android
+
+# Open in Android Studio
+npx cap open android
+```
+
+#### Building Applications
+
+##### Electron
+```bash
+cd electron
+npm run electron:make
+```
+The built application will be available in the `electron/dist` directory.
+
+##### Android
+Open the project in Android Studio and use the Build menu to create APK or Android App Bundle.
+
+## Project Structure
+- `/src` - Main web application code
+- `/electron` - Electron-specific code and configuration
+  - `/electron/src` - Electron main process code
+  - `/electron/app` - Built web app (don't edit directly)
+
+## Important Notes
+- The electron folder should be kept in version control as it contains custom configurations
+- The android folder should NOT be kept in version control - each developer should create their own using `npx cap add android`
+- Always run appropriate sync commands after making changes to the main web application:
+  - For Electron: `npm run build && npx cap copy @capacitor-community/electron`
+  - For Android: `npm run build && npx cap sync`
+- Window size and other Electron-specific configurations can be found in `electron/src/index.ts`
+
+## .gitignore Recommendations
+```
+# Android
+/android
+
+# Electron build outputs
+/electron/dist
+/electron/build
+/electron/node_modules
+
+# General
+node_modules
+dist
+.env
+```
+
 ## 📝 Contributing
 
 1. Fork the repository
