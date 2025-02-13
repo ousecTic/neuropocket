@@ -1,5 +1,4 @@
 import { Brain, Phone, Monitor, Cloud } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { Hero } from '../components/Hero';
 import { Footer } from '../components/Footer';
 
