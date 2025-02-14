@@ -1,4 +1,4 @@
-import { Brain, Phone, Monitor, Cloud, WifiOff } from 'lucide-react';
+import { Brain, Monitor, WifiOff } from 'lucide-react';
 import { Hero } from '../components/Hero';
 import { Footer } from '../components/Footer';
 

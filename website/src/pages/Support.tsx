@@ -1,4 +1,4 @@
-import { Phone, Monitor, Download, Database, WifiOff, Smartphone, AlertTriangle, ArrowLeft, Globe } from 'lucide-react';
+import { Monitor, Download, Database, WifiOff, Smartphone, AlertTriangle, ArrowLeft, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Support() {
