@@ -1,4 +1,4 @@
-import { Phone, Monitor, Download, Database, WifiOff, Smartphone, AlertTriangle, ArrowLeft } from 'lucide-react';
+import { Phone, Monitor, Download, Database, WifiOff, Smartphone, AlertTriangle, ArrowLeft, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function Support() {
@@ -16,132 +16,133 @@ export function Support() {
         </div>
         
         <div className="space-y-8">
-          {/* Installation Guide */}
+          {/* Quick Start */}
           <div className="bg-white rounded-lg shadow-sm p-8">
-            <h2 className="text-2xl font-bold mb-6">Install NeuroPocket</h2>
+            <h2 className="text-2xl font-bold mb-6">Get Started with NeuroPocket</h2>
             
-            {/* Android Section */}
+            {/* Web Version */}
             <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4 text-gray-800">Android</h3>
+              <div className="bg-blue-50 rounded-lg p-6 mb-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <Globe className="w-5 h-5 text-blue-600" />
+                  <h4 className="text-lg font-semibold">Web App</h4>
+                </div>
+                <div className="space-y-4">
+                  <a 
+                    href="https://neuropocket.netlify.app"
+                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    <Globe className="w-5 h-5" />
+                    Open NeuroPocket
+                  </a>
+                  <div className="flex items-start gap-2 text-blue-800 bg-blue-50 p-3 rounded-lg">
+                    <WifiOff className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm">
+                      <p>Need offline access? Install NeuroPocket on your device to use it without internet. See options below.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Native Apps */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4 text-gray-800">Native Apps for Better Performance</h3>
               <div className="grid md:grid-cols-2 gap-6">
+                {/* Windows */}
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Monitor className="w-6 h-6 text-blue-600" />
+                    <h4 className="text-lg font-semibold">Windows App</h4>
+                  </div>
+                  <p className="text-gray-600 mb-4">
+                    Enhanced desktop experience with better performance
+                  </p>
+                  <a 
+                    href="https://github.com/ousecTic/neuropocket/releases/download/v1.1.0/Neuropocket-Setup-1.1.0.exe" 
+                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    <Download size={16} />
+                    Download for Windows
+                  </a>
+                </div>
+
+                {/* Android */}
                 <div className="bg-gray-50 rounded-lg p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <Smartphone className="w-6 h-6 text-blue-600" />
-                    <h4 className="text-lg font-semibold">Native App (Recommended)</h4>
+                    <h4 className="text-lg font-semibold">Android App</h4>
                   </div>
                   <p className="text-gray-600 mb-4">
-                    For the best experience with persistent storage:
+                    Full-featured mobile experience with better storage
                   </p>
-                  <ol className="space-y-2 mb-4">
-                    <li className="flex gap-2 text-gray-600">
-                      <span className="text-blue-600 font-medium">1.</span>
-                      Download the APK file
-                    </li>
-                    <li className="flex gap-2 text-gray-600">
-                      <span className="text-blue-600 font-medium">2.</span>
-                      Open the APK file
-                    </li>
-                    <li className="flex gap-2 text-gray-600">
-                      <span className="text-blue-600 font-medium">3.</span>
-                      Follow installation prompts
-                    </li>
-                  </ol>
-                  <div>
-                    <a 
-                      href="#" 
-                      className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        alert('APK download coming soon!');
-                      }}
-                    >
-                      <Download size={16} />
-                      Download APK
-                    </a>
-                  </div>
+                  <a 
+                    href="https://github.com/ousecTic/neuropocket/releases/download/v1.1.0/neuropocket-1.1.0.apk" 
+                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  >
+                    <Download size={16} />
+                    Download APK
+                  </a>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div className="bg-gray-50 rounded-lg p-6">
+          {/* Advanced Installation Options */}
+          <div className="bg-white rounded-lg shadow-sm p-8">
+            <h2 className="text-2xl font-bold mb-6">Advanced Installation Options</h2>
+            
+            <div className="space-y-6">
+              {/* PWA Installation */}
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Install as an App (PWA)</h3>
+                <div className="mt-12">
                   <div className="flex items-center gap-3 mb-4">
-                    <Phone className="w-6 h-6 text-blue-600" />
-                    <h4 className="text-lg font-semibold">PWA Alternative</h4>
+                    <Download className="w-5 h-5 text-blue-600" />
+                    <h4 className="text-lg font-semibold">Install on Your Device</h4>
                   </div>
                   <p className="text-gray-600 mb-4">
-                    Install as a Progressive Web App:
+                    After opening the web app, you can install it on your device to use it without internet and get quick access from your home screen:
                   </p>
-                  <ol className="space-y-2">
-                    <li className="flex gap-2 text-gray-600">
-                      <span className="text-blue-600 font-medium">1.</span>
-                      Open in Chrome
-                    </li>
-                    <li className="flex gap-2 text-gray-600">
-                      <span className="text-blue-600 font-medium">2.</span>
-                      Tap the menu (⋮)
-                    </li>
-                    <li className="flex gap-2 text-gray-600">
-                      <span className="text-blue-600 font-medium">3.</span>
-                      Select "Add to Home screen"
-                    </li>
-                  </ol>
                 </div>
-              </div>
-            </div>
+                
+                <div className="grid md:grid-cols-3 gap-6">
+                  {/* Chrome/Android */}
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <h4 className="font-semibold mb-3">Chrome/Android</h4>
+                    <ol className="space-y-2 text-sm">
+                      <li className="text-gray-600">1. Open in Chrome</li>
+                      <li className="text-gray-600">2. Tap menu (⋮)</li>
+                      <li className="text-gray-600">3. "Install App"</li>
+                    </ol>
+                  </div>
 
-            {/* iOS Section */}
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold mb-4 text-gray-800">iOS / iPadOS</h3>
-              <div className="bg-gray-50 rounded-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Phone className="w-6 h-6 text-blue-600" />
-                  <h4 className="text-lg font-semibold">Safari Installation</h4>
-                </div>
-                <div className="mb-4">
-                  <div className="flex items-start gap-2 text-amber-600 bg-amber-50 p-3 rounded-lg mb-4">
-                    <AlertTriangle className="w-5 h-5 mt-0.5" />
-                    <p className="text-sm">
-                      Note: iOS Safari has storage limitations for web apps. Your data may be cleared by the browser, requiring you to reconnect to restore the app.
-                    </p>
+                  {/* Safari iOS */}
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <h4 className="font-semibold mb-3">Safari (iOS/iPadOS)</h4>
+                    <ol className="space-y-2 text-sm">
+                      <li className="text-gray-600">1. Open in Safari</li>
+                      <li className="text-gray-600">2. Tap Share</li>
+                      <li className="text-gray-600">3. "Add to Home Screen"</li>
+                    </ol>
+                    <div className="mt-3">
+                      <div className="flex items-start gap-2 text-amber-600 bg-amber-50 p-2 rounded text-sm">
+                        <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span>Limited functionality on iOS/iPadOS</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktop Chrome */}
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <h4 className="font-semibold mb-3">Desktop Chrome</h4>
+                    <ol className="space-y-2 text-sm">
+                      <li className="text-gray-600">1. Open in Chrome</li>
+                      <li className="text-gray-600">2. Click install icon in address bar</li>
+                      <li className="text-gray-600">3. "Install"</li>
+                    </ol>
                   </div>
                 </div>
-                <ol className="space-y-2">
-                  <li className="flex gap-2 text-gray-600">
-                    <span className="text-blue-600 font-medium">1.</span>
-                    Open in Safari (required)
-                  </li>
-                  <li className="flex gap-2 text-gray-600">
-                    <span className="text-blue-600 font-medium">2.</span>
-                    Tap the Share button
-                  </li>
-                  <li className="flex gap-2 text-gray-600">
-                    <span className="text-blue-600 font-medium">3.</span>
-                    Choose "Add to Home Screen"
-                  </li>
-                </ol>
-              </div>
-            </div>
-
-            {/* Desktop Section */}
-            <div>
-              <h3 className="text-xl font-semibold mb-4 text-gray-800">Desktop</h3>
-              <div className="bg-gray-50 rounded-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Monitor className="w-6 h-6 text-blue-600" />
-                  <h4 className="text-lg font-semibold">Chrome Installation</h4>
-                </div>
-                <ol className="space-y-2">
-                  <li className="flex gap-2 text-gray-600">
-                    <span className="text-blue-600 font-medium">1.</span>
-                    Open in Chrome
-                  </li>
-                  <li className="flex gap-2 text-gray-600">
-                    <span className="text-blue-600 font-medium">2.</span>
-                    Click install icon in address bar
-                  </li>
-                  <li className="flex gap-2 text-gray-600">
-                    <span className="text-blue-600 font-medium">3.</span>
-                    Click "Install"
-                  </li>
-                </ol>
               </div>
             </div>
           </div>
@@ -151,25 +152,18 @@ export function Support() {
             <h2 className="text-2xl font-bold mb-6">Storage & Offline Support</h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <div className="flex items-start gap-3 mb-6">
+                <div className="flex items-start gap-3">
                   <Database className="w-6 h-6 text-blue-600 mt-1" />
                   <div>
                     <h3 className="font-semibold mb-2">Storage Behavior</h3>
-                    <p className="text-gray-600 mb-3">
-                      Storage persistence varies by platform:
-                    </p>
                     <ul className="space-y-3">
                       <li className="flex items-start gap-2 text-gray-600">
                         <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
-                        <span><strong>Android App:</strong> Permanent storage, unaffected by browser clearing</span>
+                        <span><strong>Native Apps:</strong> Best storage persistence</span>
                       </li>
                       <li className="flex items-start gap-2 text-gray-600">
                         <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
-                        <span><strong>PWA:</strong> Data persists until browser storage is cleared</span>
-                      </li>
-                      <li className="flex items-start gap-2 text-gray-600">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
-                        <span><strong>iOS Safari:</strong> Subject to browser storage limitations</span>
+                        <span><strong>Web/PWA:</strong> Storage may be cleared by browser</span>
                       </li>
                     </ul>
                   </div>
@@ -180,22 +174,15 @@ export function Support() {
                 <div className="flex items-start gap-3">
                   <WifiOff className="w-6 h-6 text-blue-600 mt-1" />
                   <div>
-                    <h3 className="font-semibold mb-2">Offline Functionality</h3>
-                    <p className="text-gray-600 mb-3">
-                      After initial installation:
-                    </p>
+                    <h3 className="font-semibold mb-2">Offline Support</h3>
                     <ul className="space-y-3">
                       <li className="flex items-start gap-2 text-gray-600">
                         <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
-                        <span>Create and manage projects offline</span>
+                        <span>All versions work offline after first load</span>
                       </li>
                       <li className="flex items-start gap-2 text-gray-600">
                         <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
-                        <span>Train and use AI models without internet</span>
-                      </li>
-                      <li className="flex items-start gap-2 text-gray-600">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
-                        <span>Internet needed only if storage is cleared</span>
+                        <span>Native apps provide the most reliable offline experience</span>
                       </li>
                     </ul>
                   </div>

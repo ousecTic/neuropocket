@@ -35,7 +35,7 @@ export function Hero() {
             </div>
             <div className="flex flex-wrap gap-4">
               <a
-                href="https://neuropocket.com"
+                href="https://neuropocket.netlify.app"
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-blue-700 transition-colors"
               >
                 Get Started
