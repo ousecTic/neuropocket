@@ -26,7 +26,7 @@ NeuroPocket is a Progressive Web Application (PWA) that enables offline image cl
 
 1. Clone the repository:
 ```bash
-git clone [your-repository-url]
+git clone repo
 cd offline-bolt-teachable-machine
 ```
 
