@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { ClassData } from '../types/project';
 import { ImageUpload } from './ImageUpload';
 import { useProjectStore } from '../store/useProjectStore';
@@ -11,7 +11,6 @@ interface ClassCardProps {
 }
 
 export function ClassCard({ projectId, classData }: ClassCardProps) {
-  const [showMenu, setShowMenu] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(classData.name);
   const [renameError, setRenameError] = useState<string | null>(null);
@@ -20,11 +19,14 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
 
   const handleRename = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newName.trim() || newName === classData.name) {
-      setIsRenaming(false);
+    if (!newName.trim()) {
       return;
     }
-    
+    if (newName === classData.name) {
+      setIsRenaming(false);
+      setRenameError(null);
+      return;
+    }
     const result = await renameClass(projectId, classData.id, newName.trim());
     if (result.success) {
       setIsRenaming(false);
@@ -67,7 +69,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
               <button
                 type="submit"
                 className="text-blue-600 hover:text-blue-800 px-3 py-1"
-                disabled={!newName.trim() || newName === classData.name}
+                disabled={!newName.trim()}
               >
                 Save
               </button>
@@ -87,39 +89,25 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
         ) : (
           <>
             <h3 className="text-lg font-semibold truncate pr-8" title={classData.name}>{classData.name}</h3>
-            <div className="relative">
+            <div className="flex gap-2">
               <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="p-1 hover:bg-gray-100 rounded-full"
+                onClick={() => setIsRenaming(true)}
+                className="p-1.5 bg-blue-100 hover:bg-blue-200 rounded-full text-blue-700 transition-all hover:scale-110 shadow-sm"
+                title="Rename class"
               >
-                <MoreVertical size={20} />
+                <Pencil size={16} />
               </button>
-
-              {showMenu && (
-                <div className="absolute right-0 mt-1 py-2 w-48 bg-white rounded-lg shadow-lg border z-10">
-                  <button
-                    onClick={() => {
-                      setIsRenaming(true);
-                      setShowMenu(false);
-                    }}
-                    className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2"
-                  >
-                    <Pencil size={16} />
-                    Rename
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (window.confirm('Are you sure you want to delete this class?')) {
-                        deleteClass(projectId, classData.id);
-                      }
-                    }}
-                    className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                  >
-                    <Trash2 size={16} />
-                    Delete
-                  </button>
-                </div>
-              )}
+              <button
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to delete this class?')) {
+                    deleteClass(projectId, classData.id);
+                  }
+                }}
+                className="p-1.5 bg-red-100 hover:bg-red-200 rounded-full text-red-700 transition-all hover:scale-110 shadow-sm"
+                title="Delete class"
+              >
+                <Trash2 size={16} />
+              </button>
             </div>
           </>
         )}

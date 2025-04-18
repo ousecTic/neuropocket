@@ -65,12 +65,6 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
         continue;
       }
 
-      // Check file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        alert(`File ${file.name} is too large (max 5MB)`);
-        continue;
-      }
-
       try {
         // First read the file as data URL
         const originalDataUrl = await new Promise<string>((resolve, reject) => {
@@ -113,7 +107,8 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
               {onDelete && (
                 <button
                   onClick={() => onDelete(image.id)}
-                  className="absolute top-2 right-2 p-1 bg-black bg-opacity-50 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-2 right-2 p-1.5 bg-red-500 bg-opacity-70 hover:bg-opacity-100 rounded-full text-white shadow transition-all hover:scale-110"
+                  title="Delete image"
                 >
                   <X size={16} />
                 </button>
@@ -131,7 +126,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
             <p className="mb-2 text-sm text-gray-500">
               <span className="font-semibold">Click to upload</span> or drag and drop
             </p>
-            <p className="text-xs text-gray-500">PNG or JPG (MAX. 5MB)</p>
+            <p className="text-xs text-gray-500">PNG or JPG files</p>
           </div>
           <input
             ref={fileInputRef}
