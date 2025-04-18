@@ -51,7 +51,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
     // Require at least one image per class
     const emptyClasses = project.classes.filter(c => c.images.length === 0);
     if (emptyClasses.length > 0) {
-      setError(`Each class must have at least one image to train the model. Please add images to: ${emptyClasses.map(c => c.name).join(', ')}`);
+      setError(`Each group must have at least one image to train the model. Please add images to: ${emptyClasses.map(c => c.name).join(', ')}`);
       return;
     }
 
@@ -193,7 +193,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
               <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
               <div className="text-red-600 text-sm text-left">
                 {!hasMinimumClasses && (
-                  <p className="mb-1">Need at least 2 classes to train the model.</p>
+                  <p className="mb-1">Need at least 2 groups to train the model.</p>
                 )}
                 {error && <p>{error}</p>}
               </div>
@@ -232,7 +232,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
             <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
             <div className="text-red-600 text-sm text-left">
               {!hasMinimumClasses && (
-                <p className="mb-1">Need at least 2 classes to train the model.</p>
+                <p className="mb-1">Need at least 2 groups to train the model.</p>
               )}
               {error && <p>{error}</p>}
             </div>

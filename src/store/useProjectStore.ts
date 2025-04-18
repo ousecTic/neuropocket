@@ -110,7 +110,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
     // Check if class name already exists
     if (project.classes.some(c => c.name.toLowerCase() === className.toLowerCase())) {
-      return { success: false, error: 'A class with this name already exists' };
+      return { success: false, error: 'A group with this name already exists' };
     }
 
     const newClass: ClassData = {
@@ -162,7 +162,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
     // Check if new name already exists in other classes
     if (project.classes.some(c => c.id !== classId && c.name.toLowerCase() === newName.toLowerCase())) {
-      return { success: false, error: 'A class with this name already exists' };
+      return { success: false, error: 'A group with this name already exists' };
     }
 
     const updatedProject = {

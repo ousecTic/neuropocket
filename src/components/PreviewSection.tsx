@@ -72,7 +72,7 @@ export function PreviewSection({ project }: PreviewSectionProps) {
             {!isModelLoaded 
               ? "Loading model..."
               : !isTrained
-              ? "Please train your model first before using the preview feature."
+              ? "Please train your model first before using the model feature."
               : "You need at least 2 classes to use the model. Please add more classes."}
           </p>
         </div>
