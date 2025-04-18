@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import { ClassImage } from '../types/project';
 
@@ -10,6 +10,7 @@ interface ImageUploadProps {
 
 export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
 
   // Function to resize an image to the specified dimensions
   const resizeImage = (dataUrl: string, maxWidth: number, maxHeight: number): Promise<string> => {
@@ -55,6 +56,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
     const files = Array.from(e.target.files || []);
     const validFiles: string[] = [];
     
@@ -90,6 +92,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
+    setLoading(false);
   };
 
   return (
@@ -120,13 +123,25 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
 
       {/* Upload Area */}
       <div className="flex items-center justify-center w-full">
-        <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+        <label className={`flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${loading ? 'opacity-60 pointer-events-none' : ''}`}>
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
-            <Upload className="w-10 h-10 mb-3 text-gray-400" />
-            <p className="mb-2 text-sm text-gray-500">
-              <span className="font-semibold">Click to upload</span> or drag and drop
-            </p>
-            <p className="text-xs text-gray-500">PNG or JPG files</p>
+            {loading ? (
+              <>
+                <svg className="animate-spin h-8 w-8 text-blue-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                <p className="mb-2 text-sm text-blue-600 font-semibold">Uploading...</p>
+              </>
+            ) : (
+              <>
+                <Upload className="w-10 h-10 mb-3 text-gray-400" />
+                <p className="mb-2 text-sm text-gray-500">
+                  <span className="font-semibold">Click to upload</span> or drag and drop
+                </p>
+                <p className="text-xs text-gray-500">PNG or JPG files</p>
+              </>
+            )}
           </div>
           <input
             ref={fileInputRef}
@@ -135,6 +150,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
             accept=".png,.jpg,.jpeg"
             multiple
             onChange={handleFileChange}
+            disabled={loading}
           />
         </label>
       </div>
