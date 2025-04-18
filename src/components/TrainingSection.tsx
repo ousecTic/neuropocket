@@ -177,7 +177,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
             <CheckCircle2 size={48} className="mx-auto text-green-600 mb-4" />
             <h2 className="text-xl font-semibold mb-2">Model Trained Successfully!</h2>
             <p className="text-gray-600 mb-6">
-              Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Preview tab</span> to test it out.
+              Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it out.
             </p>
             <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 mb-6">
               <p>

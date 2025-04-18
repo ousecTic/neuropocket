@@ -66,7 +66,7 @@ export function ProjectDetail() {
         title={project.name}
         backTo="/"
         action={activeSection === 'classes' ? {
-          label: "Add Class",
+          label: "Add Group",
           onClick: () => {
             setIsAddingClass(true);
             setClassError(null);
@@ -86,7 +86,7 @@ export function ProjectDetail() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Classes
+              Data
             </button>
             <button
               onClick={() => setActiveSection('training')}
@@ -106,7 +106,7 @@ export function ProjectDetail() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Preview
+              Model
             </button>
           </nav>
         </div>
@@ -120,9 +120,9 @@ export function ProjectDetail() {
               <div className="bg-white rounded-lg shadow-sm p-8 text-center">
                 <div className="max-w-md mx-auto">
                   <Brain size={48} className="mx-auto text-blue-600 mb-4" />
-                  <h2 className="text-xl font-semibold mb-2">Create Your First Class</h2>
+                  <h2 className="text-xl font-semibold mb-2">Create Your First Group</h2>
                   <p className="text-gray-600 mb-6">
-                    Start by creating classes for different objects or categories you want to recognize
+                    Start by creating groups for different objects or categories you want to recognize
                   </p>
                   <button
                     onClick={() => {
@@ -132,7 +132,7 @@ export function ProjectDetail() {
                     className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     <Plus size={20} />
-                    Add Your First Class
+                    Add Your First Group
                   </button>
                 </div>
               </div>
@@ -154,11 +154,11 @@ export function ProjectDetail() {
         {activeSection === 'preview' && <PreviewSection project={project} />}
       </div>
 
-      {/* Add Class Dialog */}
+      {/* Add Group Dialog */}
       {isAddingClass && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Add New Class</h2>
+            <h2 className="text-xl font-semibold mb-4">Add New Group</h2>
             <form onSubmit={handleAddClass}>
               <div className="mb-4">
                 <input
@@ -171,7 +171,7 @@ export function ProjectDetail() {
                       setClassError(null);
                     }
                   }}
-                  placeholder="Enter class name"
+                  placeholder="Enter group name"
                   className={`w-full px-3 py-2 border rounded-lg mb-1 ${
                     classError ? 'border-red-500' : ''
                   }`}
