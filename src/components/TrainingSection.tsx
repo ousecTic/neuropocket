@@ -48,10 +48,10 @@ export function TrainingSection({ project }: TrainingSectionProps) {
   const handleTrainModel = async () => {
     setError(null);
 
-    // Validate classes have enough images
-    const invalidClasses = project.classes.filter(c => c.images.length < 5);
-    if (invalidClasses.length > 0) {
-      setError(`Each class needs at least 5 images. Add more images to: ${invalidClasses.map(c => c.name).join(', ')}`);
+    // Require at least one image per class
+    const emptyClasses = project.classes.filter(c => c.images.length === 0);
+    if (emptyClasses.length > 0) {
+      setError(`Each class must have at least one image to train the model. Please add images to: ${emptyClasses.map(c => c.name).join(', ')}`);
       return;
     }
 
@@ -69,9 +69,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
 
   // Check if all requirements are met
   const hasMinimumClasses = project.classes.length >= 2;
-  const classesWithMinimumImages = project.classes.filter(c => c.images.length >= 5);
-  const hasMinimumImages = classesWithMinimumImages.length === project.classes.length && project.classes.length > 0;
-  const canTrain = hasMinimumClasses && hasMinimumImages;
+  const canTrain = hasMinimumClasses && project.classes.length > 0;
 
   const renderTrainingMetrics = () => {
     const metrics = trainingProgress;
@@ -190,14 +188,15 @@ export function TrainingSection({ project }: TrainingSectionProps) {
 
           {renderTrainingMetrics()}
 
-          {!canTrain && (
-            <div className="mb-6 p-4 bg-amber-50 rounded-lg flex items-start gap-3">
-              <AlertCircle className="text-amber-600 shrink-0 mt-0.5" size={20} />
-              <p className="text-amber-600 text-sm text-left">
-                {!hasMinimumClasses 
-                  ? "Need at least 2 classes to retrain the model"
-                  : "Each class needs at least 5 images to retrain the model"}
-              </p>
+          {(!canTrain || error) && (
+            <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
+              <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
+              <div className="text-red-600 text-sm text-left">
+                {!hasMinimumClasses && (
+                  <p className="mb-1">Need at least 2 classes to train the model.</p>
+                )}
+                {error && <p>{error}</p>}
+              </div>
             </div>
           )}
 
@@ -228,26 +227,14 @@ export function TrainingSection({ project }: TrainingSectionProps) {
           </p>
         </div>
 
-        {error && (
+        {(!canTrain || error) && (
           <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
             <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
-            <p className="text-red-600 text-sm">{error}</p>
-          </div>
-        )}
-
-        {!canTrain && (
-          <div className="mb-6 p-4 bg-amber-50 rounded-lg flex items-start gap-3">
-            <AlertCircle className="text-amber-600 shrink-0 mt-0.5" size={20} />
-            <div className="text-amber-600 text-sm">
-              <p className="font-medium mb-1">Requirements for training:</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li className={hasMinimumClasses ? 'opacity-50' : ''}>
-                  At least 2 classes {hasMinimumClasses && '✓'}
-                </li>
-                <li className={hasMinimumImages ? 'opacity-50' : ''}>
-                  At least 5 images per class {hasMinimumImages && '✓'}
-                </li>
-              </ul>
+            <div className="text-red-600 text-sm text-left">
+              {!hasMinimumClasses && (
+                <p className="mb-1">Need at least 2 classes to train the model.</p>
+              )}
+              {error && <p>{error}</p>}
             </div>
           </div>
         )}
