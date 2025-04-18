@@ -1,4 +1,3 @@
-import React from 'react';
 import { Brain, Target } from 'lucide-react';
 
 interface ChallengeIntroProps {
