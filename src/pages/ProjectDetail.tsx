@@ -75,7 +75,7 @@ export function ProjectDetail() {
       />
 
       {/* Section Tabs */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-white shadow-sm sticky top-0 z-30 border-b">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <nav className="flex gap-8">
             <button
@@ -113,7 +113,7 @@ export function ProjectDetail() {
       </div>
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         {activeSection === 'classes' && (
           <div className="space-y-6">
             {project.classes.length === 0 ? (

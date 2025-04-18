@@ -92,10 +92,10 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
             <div className="flex gap-2">
               <button
                 onClick={() => setIsRenaming(true)}
-                className="p-1.5 bg-blue-100 hover:bg-blue-200 rounded-full text-blue-700 transition-all hover:scale-110 shadow-sm"
-                title="Rename class"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                title="Rename Class"
               >
-                <Pencil size={16} />
+                <Pencil size={20} />
               </button>
               <button
                 onClick={() => {
@@ -103,10 +103,10 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
                     deleteClass(projectId, classData.id);
                   }
                 }}
-                className="p-1.5 bg-red-100 hover:bg-red-200 rounded-full text-red-700 transition-all hover:scale-110 shadow-sm"
-                title="Delete class"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-400"
+                title="Delete Class"
               >
-                <Trash2 size={16} />
+                <Trash2 size={20} />
               </button>
             </div>
           </>

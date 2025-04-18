@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { Project } from '../types/project';
 import { useProjectStore } from '../store/useProjectStore';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
-  const [showMenu, setShowMenu] = useState(false);
+
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(project.name);
   const [error, setError] = useState<string | null>(null);
@@ -20,11 +20,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   const handleRename = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newName.trim() || newName === project.name) {
-      setIsRenaming(false);
+    if (!newName.trim()) {
       return;
     }
-    
+    if (newName === project.name) {
+      setIsRenaming(false);
+      setError(null);
+      return;
+    }
     const result = await renameProject(project.id, newName.trim());
     if (result.success) {
       setIsRenaming(false);
@@ -71,7 +74,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               <button
                 type="submit"
                 className="text-blue-600 hover:text-blue-800 px-3 py-1"
-                disabled={!newName.trim() || newName === project.name}
+                disabled={!newName.trim()}
               >
                 Save
               </button>
@@ -105,40 +108,25 @@ export function ProjectCard({ project }: ProjectCardProps) {
               </p>
             </div>
           </Link>
-          
-          <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-4 flex gap-2">
             <button
-              onClick={() => setShowMenu(!showMenu)}
-              className="p-1 hover:bg-gray-100 rounded-full"
+              onClick={() => setIsRenaming(true)}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              title="Rename Project"
             >
-              <MoreVertical size={20} />
+              <Pencil size={20} />
             </button>
-            
-            {showMenu && (
-              <div className="absolute right-0 mt-1 py-2 w-48 bg-white rounded-lg shadow-lg border z-10">
-                <button
-                  onClick={() => {
-                    setIsRenaming(true);
-                    setShowMenu(false);
-                  }}
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2"
-                >
-                  <Pencil size={16} />
-                  Rename
-                </button>
-                <button
-                  onClick={() => {
-                    if (window.confirm('Are you sure you want to delete this project?')) {
-                      deleteProject(project.id);
-                    }
-                  }}
-                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
-                >
-                  <Trash2 size={16} />
-                  Delete
-                </button>
-              </div>
-            )}
+            <button
+              onClick={() => {
+                if (window.confirm('Are you sure you want to delete this project?')) {
+                  deleteProject(project.id);
+                }
+              }}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-400"
+              title="Delete Project"
+            >
+              <Trash2 size={20} />
+            </button>
           </div>
         </>
       )}
