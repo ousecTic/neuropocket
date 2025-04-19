@@ -181,7 +181,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
             </p>
             <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 mb-6">
               <p>
-                <span className="font-medium text-gray-700">Note about retraining:</span> If you add, remove, or change any images in your classes, you'll need to retrain the model for those changes to take effect.
+                <span className="font-medium text-gray-700">Note about retraining:</span> If you add, remove, or change any images in your groups, you'll need to retrain the model for those changes to take effect.
               </p>
             </div>
           </div>
