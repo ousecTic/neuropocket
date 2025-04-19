@@ -223,7 +223,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
           <Brain size={48} className="mx-auto text-blue-600 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Train Your Model</h2>
           <p className="text-gray-600">
-            Train your model to recognize the classes you've created.
+            Train your model to recognize the groups you've created.
           </p>
         </div>
 
