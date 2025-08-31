@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useProjectStore } from '../store/useProjectStore';
 
 const MAX_PROJECT_NAME_LENGTH = 50;
@@ -13,6 +14,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
   const [isOpen, setIsOpen] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
   const createProject = useProjectStore(state => state.createProject);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,11 +22,13 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
     if (!projectName.trim()) return;
     
     const result = await createProject(projectName.trim());
-    if (result.success) {
+    if (result.success && result.projectId) {
       setProjectName('');
       setError(null);
       setIsOpen(false);
       onClose?.();
+      // Navigate to the new project
+      navigate(`/project/${result.projectId}`);
     } else {
       setError(result.error || 'Error creating project');
     }

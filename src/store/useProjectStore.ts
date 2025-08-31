@@ -6,7 +6,7 @@ interface ProjectStore {
   projects: Project[];
   loading: boolean;
   loadProjects: () => Promise<void>;
-  createProject: (name: string) => Promise<{ success: boolean; error?: string }>;
+  createProject: (name: string) => Promise<{ success: boolean; error?: string; projectId?: string }>;
   deleteProject: (id: string) => Promise<void>;
   renameProject: (id: string, newName: string) => Promise<{ success: boolean; error?: string }>;
   addClass: (projectId: string, className: string) => Promise<{ success: boolean; error?: string }>;
@@ -64,7 +64,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     const db = await initDB();
     await db.add(STORE_NAME, newProject);
     set({ projects: [...get().projects, newProject] });
-    return { success: true };
+    return { success: true, projectId: newProject.id };
   },
 
   deleteProject: async (id: string) => {
