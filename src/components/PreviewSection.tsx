@@ -134,7 +134,7 @@ export function PreviewSection({ project }: PreviewSectionProps) {
                 <h3 className="font-semibold mb-4">Prediction Results</h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-gray-600 mb-1">Class</p>
+                    <p className="text-gray-600 mb-1">Group</p>
                     <p className="text-xl font-semibold">{prediction.className}</p>
                   </div>
                   <div>

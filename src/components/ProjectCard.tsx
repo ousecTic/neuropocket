@@ -101,7 +101,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </p>
             <div className="flex gap-3 mt-1">
               <p className="text-sm text-gray-500">
-                Classes: {project.classes.length}
+                Groups: {project.classes.length}
               </p>
               <p className="text-sm text-gray-500">
                 Images: {totalImages}
