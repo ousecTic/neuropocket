@@ -15,7 +15,7 @@ export class MLService {
     if (this.mobilenet) return true;
 
     try {
-      const modelUrl = '/model/model.json';
+      const modelUrl = './model/model.json';
       this.mobilenet = await tf.loadGraphModel(modelUrl);
       
       // Warmup the model
