@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export function Support() {
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 py-12">
         <div className="mb-8">
           <Link 
             to="/"

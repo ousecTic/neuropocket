@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Brain, Phone, Monitor, WifiOff, Cloud, ArrowRight } from 'lucide-react';
-import { DemoVideo } from './DemoVideo';
 
 export function Hero() {
   return (
     <div className="bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-24">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 py-24">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <div className="flex items-center gap-3">
@@ -51,9 +50,15 @@ export function Hero() {
             </div>
           </div>
           <div className="space-y-4">
-            <DemoVideo />
+          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden shadow-lg">
+          <img
+            src="/offline-demo.png"
+            alt="Students from different schools exploring NeuroPocket as part of the offline-first AI curriculum at learnaianywhere.org"
+            className="w-full h-full object-cover"
+          />
+    </div>
             <p className="text-sm text-gray-600">
-              Students exploring the first iteration of NeuroPocket at{' '}
+              Students exploring NeuroPocket at{' '}
               <a 
                 href="https://www.learnaianywhere.org" 
                 target="_blank" 
