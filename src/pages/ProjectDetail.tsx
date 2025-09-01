@@ -77,13 +77,6 @@ export function ProjectDetail() {
       <ProjectHeader 
         title={project.name}
         backTo="/"
-        action={activeSection === 'classes' ? {
-          label: "Add Group",
-          onClick: () => {
-            setIsAddingClass(true);
-            setClassError(null);
-          }
-        } : undefined}
       />
 
       {/* Section Tabs */}
@@ -173,6 +166,21 @@ export function ProjectDetail() {
         {activeSection === 'training' && <TrainingSection project={project} />}
         {activeSection === 'preview' && <PreviewSection project={project} />}
       </div>
+
+      {/* Floating Add Group Button - Only show in classes section */}
+      {activeSection === 'classes' && (
+        <button
+          onClick={() => {
+            setIsAddingClass(true);
+            setClassError(null);
+          }}
+          className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-40 flex items-center gap-2"
+          title="Add Group"
+        >
+          <Plus size={24} />
+          <span className="hidden sm:inline font-medium">Add Group</span>
+        </button>
+      )}
 
       {/* Add Group Dialog */}
       {isAddingClass && (
