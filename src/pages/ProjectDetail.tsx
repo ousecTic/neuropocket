@@ -91,7 +91,7 @@ export function ProjectDetail() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Data
+              1. Data
             </button>
             <button
               onClick={() => setActiveSection('training')}
@@ -101,7 +101,7 @@ export function ProjectDetail() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Training
+              2. Training
             </button>
             <button
               onClick={() => setActiveSection('preview')}
@@ -111,7 +111,7 @@ export function ProjectDetail() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              Model
+              3. Model
             </button>
           </nav>
         </div>
