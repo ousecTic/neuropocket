@@ -121,7 +121,7 @@ export function TrainingSection({ project }: TrainingSectionProps) {
             </p>
             <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 mb-6">
               <p>
-                <span className="font-medium text-gray-700">Important:</span> If you decide to add or remove images, click "Retrain Model" to update your AI.
+                <span className="font-medium text-gray-700">Important:</span> If you add or remove images in the Data tab, click "Retrain Model" for your AI to recognize the updates.
               </p>
             </div>
           </div>

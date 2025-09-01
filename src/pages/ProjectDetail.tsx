@@ -167,8 +167,8 @@ export function ProjectDetail() {
         {activeSection === 'preview' && <PreviewSection project={project} />}
       </div>
 
-      {/* Floating Add Group Button - Only show in classes section */}
-      {activeSection === 'classes' && (
+      {/* Floating Add Group Button - Only show in classes section when there are groups */}
+      {activeSection === 'classes' && project.classes.length > 0 && (
         <button
           onClick={() => {
             setIsAddingClass(true);

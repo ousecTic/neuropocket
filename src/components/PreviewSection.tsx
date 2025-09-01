@@ -67,12 +67,12 @@ export function PreviewSection({ project }: PreviewSectionProps) {
       <div className="bg-white rounded-lg shadow-sm p-8">
         <div className="max-w-md mx-auto text-center">
           <AlertCircle size={48} className="mx-auto text-amber-500 mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Model Not Ready</h2>
+          <h2 className="text-xl font-semibold mb-2">Model hasn't been trained yet</h2>
           <p className="text-gray-600">
             {!isModelLoaded 
               ? "Loading model..."
               : !isTrained
-              ? "Please train your model first before using the model feature."
+              ? "Please go to the Training tab to train your model before using this Model tab."
               : "You need at least 2 classes to use the model. Please add more classes."}
           </p>
         </div>
