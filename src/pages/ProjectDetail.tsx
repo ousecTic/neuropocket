@@ -31,6 +31,18 @@ export function ProjectDetail() {
       setNewClassName('');
       setClassError(null);
       setIsAddingClass(false);
+      
+      // Scroll to the newly created group after a short delay
+      setTimeout(() => {
+        const groupElements = document.querySelectorAll('[data-group-card]');
+        const lastGroup = groupElements[groupElements.length - 1];
+        if (lastGroup) {
+          lastGroup.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }
+      }, 100);
     } else {
       setClassError(result.error || 'Error adding class');
     }
@@ -116,6 +128,13 @@ export function ProjectDetail() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         {activeSection === 'classes' && (
           <div className="space-y-6">
+            {project.classes.length < 2 && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-blue-800 text-sm">
+                  This AI Image classifier needs at least 2 different groups to compare
+                </p>
+              </div>
+            )}
             {project.classes.length === 0 ? (
               <div className="bg-white rounded-lg shadow-sm p-8 text-center">
                 <div className="max-w-md mx-auto">
@@ -139,11 +158,12 @@ export function ProjectDetail() {
             ) : (
               <div className="grid grid-cols-1 gap-6">
                 {project.classes.map((classData) => (
-                  <ClassCard
-                    key={classData.id}
-                    projectId={project.id}
-                    classData={classData}
-                  />
+                  <div key={classData.id} data-group-card>
+                    <ClassCard
+                      projectId={project.id}
+                      classData={classData}
+                    />
+                  </div>
                 ))}
               </div>
             )}

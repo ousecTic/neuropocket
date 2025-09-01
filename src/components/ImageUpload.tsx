@@ -61,9 +61,9 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
     const validFiles: string[] = [];
     
     for (const file of files) {
-      // Check file type
-      if (!['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) {
-        alert('Please upload only PNG or JPG files');
+      // Check file type more strictly
+      if (!file.type.startsWith('image/') || !['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) {
+        alert(`"${file.name}" is not a valid image file. Please upload only PNG or JPG files.`);
         continue;
       }
 
@@ -137,7 +137,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
               <>
                 <Upload className="w-10 h-10 mb-3 text-gray-400" />
                 <p className="mb-2 text-sm text-gray-500">
-                  <span className="font-semibold">Click to upload</span> or drag and drop
+                  <span className="font-semibold">Click to add images to this group</span>
                 </p>
                 <p className="text-xs text-gray-500">PNG or JPG files</p>
               </>
@@ -147,7 +147,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
             ref={fileInputRef}
             type="file"
             className="hidden"
-            accept=".png,.jpg,.jpeg"
+            accept="image/png,image/jpeg,image/jpg"
             multiple
             onChange={handleFileChange}
             disabled={loading}
