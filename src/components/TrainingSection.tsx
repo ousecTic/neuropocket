@@ -70,7 +70,8 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
 
   // Check if all requirements are met
   const hasMinimumClasses = project.classes.length >= 2;
-  const canTrain = hasMinimumClasses && project.classes.length > 0;
+  const hasImagesInAllClasses = project.classes.every(c => c.images.length > 0);
+  const canTrain = hasMinimumClasses && hasImagesInAllClasses;
 
   const renderTrainingMetrics = () => {
     const metrics = trainingProgress;
@@ -183,6 +184,9 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
             <div className="text-red-600 text-sm text-left">
               {!hasMinimumClasses && (
                 <p className="mb-1">Need at least 2 groups to train the model.</p>
+              )}
+              {hasMinimumClasses && !hasImagesInAllClasses && (
+                <p className="mb-1">Each group must have at least one image to train the model.</p>
               )}
               {error && <p>{error}</p>}
             </div>
