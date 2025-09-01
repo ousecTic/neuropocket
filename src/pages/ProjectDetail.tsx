@@ -149,15 +149,48 @@ export function ProjectDetail() {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-6">
-                {project.classes.map((classData) => (
-                  <div key={classData.id} data-group-card>
-                    <ClassCard
-                      projectId={project.id}
-                      classData={classData}
-                    />
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 gap-6">
+                  {project.classes.map((classData) => (
+                    <div key={classData.id} data-group-card>
+                      <ClassCard
+                        projectId={project.id}
+                        classData={classData}
+                      />
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Tips and Continue to Training Button */}
+                {project.classes.length >= 2 && 
+                 project.classes.every(c => c.images.length > 0) && (
+                  <div className="mt-8 space-y-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="bg-blue-100 rounded-full p-1 flex-shrink-0 mt-0.5">
+                          <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="text-sm">
+                          <p className="font-medium text-blue-800 mb-1">💡 Pro Tip</p>
+                          <p className="text-blue-700">
+                            More images and diverse examples (different angles, lighting, backgrounds) help your model perform better.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <button
+                        onClick={() => setActiveSection('training')}
+                        className="w-full bg-blue-500 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-600 font-medium"
+                      >
+                        Continue to Training →
+                      </button>
+                    </div>
                   </div>
-                ))}
+                )}
               </div>
             )}
           </div>
