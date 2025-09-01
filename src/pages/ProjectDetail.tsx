@@ -163,8 +163,18 @@ export function ProjectDetail() {
           </div>
         )}
 
-        {activeSection === 'training' && <TrainingSection project={project} />}
-        {activeSection === 'preview' && <PreviewSection project={project} />}
+        {activeSection === 'training' && (
+          <TrainingSection 
+            project={project} 
+            onContinueToModel={() => setActiveSection('preview')}
+          />
+        )}
+        {activeSection === 'preview' && (
+          <PreviewSection 
+            project={project} 
+            onGoBackToData={() => setActiveSection('classes')}
+          />
+        )}
       </div>
 
       {/* Floating Add Group Button - Only show in classes section when there are groups */}

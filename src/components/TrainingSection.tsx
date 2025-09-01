@@ -5,9 +5,10 @@ import { Project } from '../types/project';
 
 interface TrainingSectionProps {
   project: Project;
+  onContinueToModel?: () => void;
 }
 
-export function TrainingSection({ project }: TrainingSectionProps) {
+export function TrainingSection({ project, onContinueToModel }: TrainingSectionProps) {
   const { 
     isModelLoaded, 
     isTraining, 
@@ -151,6 +152,15 @@ export function TrainingSection({ project }: TrainingSectionProps) {
           >
             Retrain Model
           </button>
+
+          {onContinueToModel && (
+            <button
+              onClick={onContinueToModel}
+              className="w-full mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-600"
+            >
+              Continue to Model →
+            </button>
+          )}
         </div>
       </div>
     );

@@ -427,11 +427,11 @@ export function Challenge() {
                 </div>
 
                 {/* Progress indicator */}
-                <div className="mt-6 flex justify-center">
+                <div className="mt-6">
                   <button
                     onClick={() => isDataComplete && setActiveSection('training')}
                     disabled={!isDataComplete}
-                    className={`px-6 py-3 rounded-lg font-medium text-white ${
+                    className={`w-full px-6 py-3 rounded-lg font-medium text-white ${
                       isDataComplete
                         ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
                         : 'bg-gray-400 cursor-not-allowed'

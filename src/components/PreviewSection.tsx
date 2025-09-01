@@ -5,9 +5,10 @@ import { Project } from '../types/project';
 
 interface PreviewSectionProps {
   project: Project;
+  onGoBackToData?: () => void;
 }
 
-export function PreviewSection({ project }: PreviewSectionProps) {
+export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps) {
   const { isModelLoaded, isTrained, predict, resetTrainingState } = useMLStore();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [prediction, setPrediction] = useState<{ className: string; probability: number } | null>(null);
@@ -180,6 +181,21 @@ export function PreviewSection({ project }: PreviewSectionProps) {
             )}
           </div>
         </div>
+
+        {/* Go Back to Data Button - Only show after user has tested the model */}
+        {onGoBackToData && prediction && (
+          <div className="mt-8 text-center">
+            <p className="text-sm text-gray-600 mb-4">
+              Not the results you expected? Try selecting different training images to improve your model.
+            </p>
+            <button
+              onClick={onGoBackToData}
+              className="w-full bg-blue-500 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-600 font-medium"
+            >
+              ← Go Back to Data
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
