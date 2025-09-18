@@ -84,12 +84,6 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          tensorflow: ['@tensorflow/tfjs']
-        }
-      }
-    }
+    target: 'es2018'
   }
 });

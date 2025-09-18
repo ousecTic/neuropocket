@@ -64,41 +64,54 @@ export function Challenge() {
 
     loadModel();
 
-    // Import all images from the challenge folder
+    // Load images from public folder for better LMS compatibility
     const importImages = async () => {
       try {
-        const imageModules = import.meta.glob('../assets/challenge/**/*.jpg', { eager: true });
-        const loadedImages: ImageItem[] = [];
-        
-        for (const path in imageModules) {
-          const module = imageModules[path] as { default: string };
-          const filename = path.split('/').pop()?.split('.')[0] || '';
-          const type = path.includes('/apples/') ? 'apple' : 'pear';
-          const name = type === 'apple' ? `Apple ${filename}` : `Pear ${filename}`;
-          
-          // Skip validation images
-          if (!path.includes('/validation/')) {
-            loadedImages.push({
-              id: filename,
-              name,
-              type,
-              src: module.default,
-              selected: false
-            });
-          }
-        }
+        // Define apple images statically
+        const appleImageNames = [
+          'apple-1', 'apple-10', 'apple-11', 'apple-12', 'apple-13', 'apple-14', 'apple-15',
+          'apple-16', 'apple-17', 'apple-18', 'apple-19', 'apple-2', 'apple-20', 'apple-21',
+          'apple-22', 'apple-23', 'apple-24', 'apple-25', 'apple-3', 'apple-31', 'apple-4',
+          'apple-5', 'apple-55', 'apple-6', 'apple-67', 'apple-7', 'apple-8', 'apple-9', 'apple-94'
+        ];
+
+        // Define pear images statically
+        const pearImageNames = [
+          'pear-1', 'pear-10', 'pear-11', 'pear-12', 'pear-14', 'pear-15', 'pear-16',
+          'pear-17', 'pear-18', 'pear-2', 'pear-26', 'pear-27', 'pear-28', 'pear-3',
+          'pear-30', 'pear-31', 'pear-32', 'pear-33', 'pear-34', 'pear-35', 'pear-36',
+          'pear-37', 'pear-4', 'pear-40', 'pear-5', 'pear-6', 'pear-7', 'pear-8', 'pear-9'
+        ];
+
+        // Create image objects with public folder paths
+        const loadedImages: ImageItem[] = [
+          ...appleImageNames.map(id => ({
+            id,
+            name: `Apple ${id.replace('apple-', '')}`,
+            type: 'apple' as const,
+            src: `./challenge/apples/${id}.jpg`,
+            selected: false
+          })),
+          ...pearImageNames.map(id => ({
+            id,
+            name: `Pear ${id.replace('pear-', '')}`,
+            type: 'pear' as const,
+            src: `./challenge/pears/${id}.jpg`,
+            selected: false
+          }))
+        ];
         
         setImages(loadedImages);
 
-        // Load validation images separately
-        const validationModules = Object.entries(imageModules)
-          .filter(([path]) => path.includes('/validation/'))
-          .map(([path, module]) => ({
-            name: path.split('/').pop()?.split('.')[0] || '',
-            src: (module as { default: string }).default
-          }));
+        // Load validation images from public folder
+        const validationImageData = [
+          { name: 'green-apple-validation', src: './challenge/validation/green-apple-validation.jpg' },
+          { name: 'green-pear-validation', src: './challenge/validation/green-pear-validation.jpg' },
+          { name: 'red-apple-validation', src: './challenge/validation/red-apple-validation.jpg' },
+          { name: 'red-pear-validation', src: './challenge/validation/red-pear-validation.jpg' }
+        ];
 
-        setValidationImages(validationModules);
+        setValidationImages(validationImageData);
       } catch (error) {
         console.error('Error loading images:', error);
         setError('Failed to load challenge images. Please refresh the page and try again.');
