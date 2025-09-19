@@ -142,26 +142,26 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
             </div>
           )}
 
+          {onContinueToModel && (
+            <button
+              onClick={onContinueToModel}
+              className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-700 font-medium"
+            >
+              Continue to Model Testing →
+            </button>
+          )}
+
           <button
             onClick={handleTrainModel}
             disabled={!canTrain}
-            className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors ${
+            className={`w-full mt-4 border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
               canTrain 
-                ? 'hover:bg-blue-700' 
-                : 'opacity-50 cursor-not-allowed'
+                ? 'hover:bg-blue-50' 
+                : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
             }`}
           >
             Retrain Model
           </button>
-
-          {onContinueToModel && (
-            <button
-              onClick={onContinueToModel}
-              className="w-full mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-600"
-            >
-              Continue to Model →
-            </button>
-          )}
         </div>
       </div>
     );

@@ -3,6 +3,7 @@ import { Pencil, Trash2 } from 'lucide-react';
 import { Project } from '../types/project';
 import { useProjectStore } from '../store/useProjectStore';
 import { Link } from 'react-router-dom';
+import { ConfirmDialog } from './ConfirmDialog';
 
 const MAX_PROJECT_NAME_LENGTH = 50; // Same limit as CreateProjectDialog
 
@@ -15,6 +16,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(project.name);
   const [error, setError] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   const { deleteProject, renameProject } = useProjectStore();
 
@@ -125,11 +127,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               <Pencil size={20} />
             </button>
             <button
-              onClick={() => {
-                if (window.confirm('Are you sure you want to delete this project?')) {
-                  deleteProject(project.id);
-                }
-              }}
+              onClick={() => setShowDeleteConfirm(true)}
               className="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-400"
               title="Delete Project"
             >
@@ -138,6 +136,20 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </>
       )}
+      
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Project"
+        message={`Are you sure you want to delete the "${project.name}" project? This action cannot be undone and will remove all groups, images, and training data.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={() => {
+          deleteProject(project.id);
+          setShowDeleteConfirm(false);
+        }}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </div>
   );
 }

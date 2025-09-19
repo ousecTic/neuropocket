@@ -4,6 +4,7 @@ import { ClassData } from '../types/project';
 import { ImageUpload } from './ImageUpload';
 import { useProjectStore } from '../store/useProjectStore';
 import { MAX_CLASS_NAME_LENGTH } from '../constants';
+import { ConfirmDialog } from './ConfirmDialog';
 
 interface ClassCardProps {
   projectId: string;
@@ -14,6 +15,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(classData.name);
   const [renameError, setRenameError] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   const { renameClass, deleteClass, addImageToClass, deleteImageFromClass } = useProjectStore();
 
@@ -106,11 +108,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
                 <Pencil size={20} />
               </button>
               <button
-                onClick={() => {
-                  if (window.confirm('Are you sure you want to delete this class?')) {
-                    deleteClass(projectId, classData.id);
-                  }
-                }}
+                onClick={() => setShowDeleteConfirm(true)}
                 className="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-400"
                 title="Delete Class"
               >
@@ -125,6 +123,20 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
         onUpload={(files) => addImageToClass(projectId, classData.id, files)}
         onDelete={(imageId) => deleteImageFromClass(projectId, classData.id, imageId)}
         images={classData.images}
+      />
+      
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Group"
+        message={`Are you sure you want to delete the "${classData.name}" group? This action cannot be undone and will remove all images in this group.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={() => {
+          deleteClass(projectId, classData.id);
+          setShowDeleteConfirm(false);
+        }}
+        onCancel={() => setShowDeleteConfirm(false)}
       />
     </div>
   );

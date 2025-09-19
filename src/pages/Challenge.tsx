@@ -511,24 +511,24 @@ export function Challenge() {
                         </div>
                       )}
 
-                      <button
-                        onClick={handleStartTraining}
-                        disabled={selectedApples.length === 0 || selectedPears.length === 0}
-                        className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors ${
-                          selectedApples.length > 0 && selectedPears.length > 0
-                            ? 'hover:bg-blue-700' 
-                            : 'opacity-50 cursor-not-allowed'
-                        }`}
-                      >
-                        Retrain Model
-                      </button>
-
                       {/* Continue to Model Button */}
                       <button
                         onClick={() => setActiveSection('testing')}
-                        className="w-full mt-6 bg-blue-500 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-600"
+                        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-700 font-medium"
                       >
-                        Continue to Model →
+                        Continue to Model Testing →
+                      </button>
+
+                      <button
+                        onClick={handleStartTraining}
+                        disabled={selectedApples.length === 0 || selectedPears.length === 0}
+                        className={`w-full mt-4 border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
+                          selectedApples.length > 0 && selectedPears.length > 0
+                            ? 'hover:bg-blue-50' 
+                            : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
+                        }`}
+                      >
+                        Retrain Model
                       </button>
                     </div>
                   </div>
