@@ -18,8 +18,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   
   const { deleteProject, renameProject } = useProjectStore();
 
-  const handleRename = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleRename = async () => {
     if (!newName.trim()) {
       return;
     }
@@ -37,6 +36,13 @@ export function ProjectCard({ project }: ProjectCardProps) {
     }
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleRename();
+    }
+  };
+
   const totalImages = project.classes.reduce((total, classData) => 
     total + classData.images.length, 0
   );
@@ -44,7 +50,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-4 relative hover:shadow-lg transition-shadow">
       {isRenaming ? (
-        <form onSubmit={handleRename} className="flex flex-col gap-2">
+        <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-2">
           <div className="flex flex-col w-full">
             <div className="flex-1">
               <input
@@ -57,6 +63,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     setError(null);
                   }
                 }}
+                onKeyPress={handleKeyPress}
                 className={`w-full px-2 py-1 border rounded ${
                   error ? 'border-red-500' : ''
                 }`}
@@ -72,7 +79,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
             </div>
             <div className="flex justify-end gap-2 mt-2">
               <button
-                type="submit"
+                type="button"
+                onClick={handleRename}
                 className="text-blue-600 hover:text-blue-800 px-3 py-1"
                 disabled={!newName.trim()}
               >

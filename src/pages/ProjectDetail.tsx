@@ -22,8 +22,7 @@ export function ProjectDetail() {
     loadProjects();
   }, [loadProjects]);
 
-  const handleAddClass = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleAddClass = async () => {
     if (!newClassName.trim() || !id) return;
 
     const result = await addClass(id, newClassName.trim());
@@ -45,6 +44,13 @@ export function ProjectDetail() {
       }, 100);
     } else {
       setClassError(result.error || 'Error adding class');
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddClass();
     }
   };
 
@@ -230,7 +236,7 @@ export function ProjectDetail() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-semibold mb-4">Add New Group</h2>
-            <form onSubmit={handleAddClass}>
+            <form onSubmit={(e) => e.preventDefault()}>
               <div className="mb-4">
                 <input
                   type="text"
@@ -242,6 +248,7 @@ export function ProjectDetail() {
                       setClassError(null);
                     }
                   }}
+                  onKeyPress={handleKeyPress}
                   placeholder="Enter group name"
                   className={`w-full px-3 py-2 border rounded-lg mb-1 ${
                     classError ? 'border-red-500' : ''
@@ -269,7 +276,8 @@ export function ProjectDetail() {
                   Cancel
                 </button>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleAddClass}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                   disabled={!newClassName.trim()}
                 >

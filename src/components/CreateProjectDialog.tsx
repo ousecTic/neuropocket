@@ -17,8 +17,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
   const navigate = useNavigate();
   const createProject = useProjectStore(state => state.createProject);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (!projectName.trim()) return;
     
     const result = await createProject(projectName.trim());
@@ -31,6 +30,13 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
       navigate(`/project/${result.projectId}`);
     } else {
       setError(result.error || 'Error creating project');
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSubmit();
     }
   };
 
@@ -60,7 +66,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Create New Project</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
             <input
               type="text"
@@ -72,6 +78,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
                   setError(null);
                 }
               }}
+              onKeyPress={handleKeyPress}
               placeholder="Enter project name"
               className={`w-full px-3 py-2 border rounded-lg mb-1 ${
                 error ? 'border-red-500' : ''
@@ -102,7 +109,8 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
               Cancel
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
               disabled={!projectName.trim()}
             >
