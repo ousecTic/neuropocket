@@ -19,14 +19,20 @@ interface ProjectStore {
 const DB_NAME = 'teachable-machine-db';
 const STORE_NAME = 'projects';
 
-const initDB = async () => {
-  return openDB(DB_NAME, 1, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-      }
-    },
-  });
+// Singleton DB instance
+let dbInstance: Awaited<ReturnType<typeof openDB>> | null = null;
+
+const getDB = async () => {
+  if (!dbInstance) {
+    dbInstance = await openDB(DB_NAME, 1, {
+      upgrade(db) {
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+        }
+      },
+    });
+  }
+  return dbInstance;
 };
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -34,7 +40,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   loading: true,
 
   loadProjects: async () => {
-    const db = await initDB();
+    const db = await getDB();
     const projects = await db.getAll(STORE_NAME);
     const validatedProjects = projects.map(project => ({
       ...project,
@@ -61,14 +67,14 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       classes: [],
     };
 
-    const db = await initDB();
+    const db = await getDB();
     await db.add(STORE_NAME, newProject);
     set({ projects: [...get().projects, newProject] });
     return { success: true, projectId: newProject.id };
   },
 
   deleteProject: async (id: string) => {
-    const db = await initDB();
+    const db = await getDB();
     await db.delete(STORE_NAME, id);
     set({ projects: get().projects.filter(p => p.id !== id) });
   },
@@ -83,7 +89,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       return { success: false, error: 'A project with this name already exists' };
     }
 
-    const db = await initDB();
+    const db = await getDB();
     const project = get().projects.find(p => p.id === id);
     if (!project) return { success: false, error: 'Project not found' };
 
@@ -104,7 +110,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   },
 
   addClass: async (projectId: string, className: string) => {
-    const db = await initDB();
+    const db = await getDB();
     const project = get().projects.find(p => p.id === projectId);
     if (!project) return { success: false, error: 'Project not found' };
 
@@ -137,7 +143,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   },
 
   deleteClass: async (projectId: string, classId: string) => {
-    const db = await initDB();
+    const db = await getDB();
     const project = get().projects.find(p => p.id === projectId);
     if (!project) return;
 
@@ -156,7 +162,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   },
 
   renameClass: async (projectId: string, classId: string, newName: string) => {
-    const db = await initDB();
+    const db = await getDB();
     const project = get().projects.find(p => p.id === projectId);
     if (!project) return { success: false, error: 'Project not found' };
 
@@ -184,7 +190,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   },
 
   addImageToClass: async (projectId: string, classId: string, dataUrls: string[]) => {
-    const db = await initDB();
+    const db = await getDB();
     const project = get().projects.find(p => p.id === projectId);
     if (!project) return;
 
@@ -213,7 +219,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   },
 
   deleteImageFromClass: async (projectId: string, classId: string, imageId: string) => {
-    const db = await initDB();
+    const db = await getDB();
     const project = get().projects.find(p => p.id === projectId);
     if (!project) return;
 
