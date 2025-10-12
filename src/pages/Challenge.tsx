@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ProjectHeader } from '../components/ProjectHeader';
-import { mlService } from '../services/ml';
+import { useMLStore } from '../store/useMLStore';
 import { ChallengeIntro } from '../components/ChallengeIntro';
 import { CheckCircle2, Brain } from 'lucide-react';
 
@@ -12,12 +12,6 @@ interface ImageItem {
   selected: boolean;
 }
 
-interface TrainingProgress {
-  epoch: number;
-  loss: number;
-  accuracy: number;
-}
-
 interface TestResult {
   imageName: string;
   expected: string;
@@ -26,12 +20,13 @@ interface TestResult {
 }
 
 export function Challenge() {
+  const { mobilenet, isTraining, isTrained, trainingProgress, currentProjectId, loadModel, trainModel, predict, resetTrainingState } = useMLStore();
   const [selectedApples, setSelectedApples] = useState<string[]>([]);
   const [selectedPears, setSelectedPears] = useState<string[]>([]);
   const [images, setImages] = useState<ImageItem[]>([]);
-  const [isModelLoaded, setIsModelLoaded] = useState(false);
-  const [isTraining, setIsTraining] = useState(false);
-  const [trainingProgress, setTrainingProgress] = useState<TrainingProgress | null>(null);
+  
+  // Check if the challenge specifically has been trained
+  const isChallengeTrained = isTrained && currentProjectId === 'challenge';
   const [trainingResult, setTrainingResult] = useState<{
     finalLoss: number;
     finalAccuracy: number;
@@ -40,29 +35,25 @@ export function Challenge() {
   const [isTesting, setIsTesting] = useState(false);
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [isTrained, setIsTrained] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [validationImages, setValidationImages] = useState<{ name: string; src: string }[]>([]);
   const [activeSection, setActiveSection] = useState<'data' | 'training' | 'testing'>('data');
 
   useEffect(() => {
-    const loadModel = async () => {
+    const initModel = async () => {
       setError(null);
-      setIsModelLoaded(false);
       try {
-        const success = await mlService.loadMobileNet();
-        setIsModelLoaded(success);
+        const success = await loadModel();
         if (!success) {
           setError('Failed to load the model. Please refresh the page and try again.');
         }
       } catch (err) {
         console.error('Error loading model:', err);
         setError('Failed to load the model. Please refresh the page and try again.');
-        setIsModelLoaded(false);
       }
     };
 
-    loadModel();
+    initModel();
 
     // Load images from public folder for better LMS compatibility
     const importImages = async () => {
@@ -119,11 +110,7 @@ export function Challenge() {
     };
 
     importImages();
-
-    return () => {
-      mlService.dispose();
-    };
-  }, []);
+  }, [loadModel]);
 
   const handleImageSelect = (image: ImageItem) => {
     if (image.type === 'apple') {
@@ -142,7 +129,7 @@ export function Challenge() {
   };
 
   const handleStartTraining = async () => {
-    if (!isModelLoaded) {
+    if (!mobilenet) {
       setError('Model is not loaded yet. Please wait.');
       return;
     }
@@ -153,8 +140,6 @@ export function Challenge() {
     }
 
     setError(null);
-    setIsTraining(true);
-    setTrainingProgress(null);
 
     // Get the selected images
     const appleImages = selectedApples
@@ -168,7 +153,6 @@ export function Challenge() {
     // Validate we have images for both classes
     if (appleImages.length === 0 || pearImages.length === 0) {
       setError('Failed to prepare training data. Please try selecting different images.');
-      setIsTraining(false);
       return;
     }
 
@@ -192,23 +176,18 @@ export function Challenge() {
     console.log('Training with classes:', classes);
 
     try {
-      const success = await mlService.trainModel(classes, (epoch, logs) => {
-        setTrainingProgress({
-          epoch,
-          loss: logs.loss,
-          accuracy: logs.acc
-        });
-        
-        // Update final results on each epoch
-        setTrainingResult({
-          finalLoss: logs.loss,
-          finalAccuracy: logs.acc,
-          totalEpochs: epoch + 1
-        });
-      });
+      const success = await trainModel('challenge', classes);
 
       if (success) {
-        setIsTrained(true);
+        // Get final training progress from store
+        const finalProgress = useMLStore.getState().trainingProgress;
+        if (finalProgress) {
+          setTrainingResult({
+            finalLoss: finalProgress.loss,
+            finalAccuracy: finalProgress.accuracy,
+            totalEpochs: finalProgress.epoch + 1
+          });
+        }
         setError(null);
       } else {
         setError('Training failed. Please try again with different images.');
@@ -218,13 +197,11 @@ export function Challenge() {
       console.error('Training error:', err);
       setError('An error occurred during training. Please try again with different images.');
       setTrainingResult(null);
-    } finally {
-      setIsTraining(false);
     }
   };
 
   const handleStartTesting = async () => {
-    if (!isTrained) {
+    if (!isChallengeTrained) {
       setError('Please train the model first before testing.');
       return;
     }
@@ -236,7 +213,7 @@ export function Challenge() {
     try {
       // Test each validation image
       for (const image of validationImages) {
-        const prediction = await mlService.predict(image.src);
+        const prediction = await predict(image.src);
         if (!prediction) {
           throw new Error(`Failed to get prediction for ${image.name}`);
         }
@@ -261,7 +238,7 @@ export function Challenge() {
   const isDataComplete = selectedApples.length > 0 && selectedPears.length > 0;
   
   // Check if training is complete
-  const isTrainingComplete = isTrained && trainingResult;
+  const isTrainingComplete = isChallengeTrained && trainingResult;
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -458,14 +435,14 @@ export function Challenge() {
 
             {activeSection === 'training' && (
               <>
-                {!isModelLoaded ? (
+                {!mobilenet ? (
                   <div className="bg-white rounded-lg shadow-sm p-8">
                     <div className="max-w-md mx-auto text-center">
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
                       <p className="text-gray-600">Loading...</p>
                     </div>
                   </div>
-                ) : isTrained ? (
+                ) : isChallengeTrained ? (
                   <div className="bg-white rounded-lg shadow-sm p-8">
                     <div className="max-w-md mx-auto">
                       <div className="text-center">
@@ -481,8 +458,8 @@ export function Challenge() {
                         </div>
                       </div>
 
-                      {/* Training Metrics */}
-                      {trainingProgress && (
+                      {/* Training Metrics - only show if training the challenge */}
+                      {trainingProgress && currentProjectId === 'challenge' && (
                         <div className="mt-6 mb-8 space-y-6">
                           <div className="space-y-4">
                             <div className="flex justify-between text-sm text-gray-600">
@@ -568,7 +545,7 @@ export function Challenge() {
                       </button>
 
                       {/* Training Metrics */}
-                      {trainingProgress && (
+                      {trainingProgress && currentProjectId === 'challenge' && (
                         <div className="mt-6 mb-8 space-y-6">
                           <div className="space-y-4">
                             <div className="flex justify-between text-sm text-gray-600">
@@ -592,7 +569,7 @@ export function Challenge() {
 
             {activeSection === 'testing' && (
               <div className="bg-white rounded-lg shadow-sm p-8">
-                {!isTrained ? (
+                {!isChallengeTrained ? (
                   <p className="text-gray-600 text-center">
                     Train your model first before testing.
                   </p>
@@ -602,9 +579,9 @@ export function Challenge() {
                     <div className="flex flex-col items-center">
                       <button
                         onClick={handleStartTesting}
-                        disabled={isTesting || !isTrained}
+                        disabled={isTesting || !isChallengeTrained}
                         className={`w-full max-w-md px-8 py-3 rounded-lg font-medium text-white ${
-                          isTesting || !isTrained
+                          isTesting || !isChallengeTrained
                             ? 'bg-gray-400 cursor-not-allowed'
                             : 'bg-blue-600 hover:bg-blue-700'
                         }`}

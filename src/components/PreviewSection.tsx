@@ -9,10 +9,13 @@ interface PreviewSectionProps {
 }
 
 export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps) {
-  const { isModelLoaded, isTrained, predict, resetTrainingState } = useMLStore();
+  const { mobilenet, isTrained, currentProjectId, predict, resetTrainingState } = useMLStore();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [prediction, setPrediction] = useState<{ className: string; probability: number } | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Check if this specific project has been trained
+  const isProjectTrained = isTrained && currentProjectId === project.id;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previousClassCount = useRef(project.classes.length);
 
@@ -61,7 +64,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
   };
 
   // Check if model can be used
-  const canUseModel = isModelLoaded && isTrained && project.classes.length >= 2;
+  const canUseModel = mobilenet && isProjectTrained && project.classes.length >= 2;
 
   if (!canUseModel) {
     return (
@@ -70,9 +73,9 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
           <AlertCircle size={48} className="mx-auto text-amber-500 mb-4" />
           <h2 className="text-xl font-semibold mb-2">Model hasn't been trained yet</h2>
           <p className="text-gray-600">
-            {!isModelLoaded 
+            {!mobilenet 
               ? "Loading model..."
-              : !isTrained
+              : !isProjectTrained
               ? "Please go to the Training tab to train your model before using this Model tab."
               : "You need at least 2 classes to use the model. Please add more classes."}
           </p>

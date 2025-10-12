@@ -10,7 +10,7 @@ interface TrainingSectionProps {
 
 export function TrainingSection({ project, onContinueToModel }: TrainingSectionProps) {
   const { 
-    isModelLoaded, 
+    mobilenet,
     isTraining, 
     isTrained,
     trainingProgress, 
@@ -19,6 +19,9 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
     trainModel,
     resetTrainingState 
   } = useMLStore();
+  
+  // Check if this specific project has been trained
+  const isProjectTrained = isTrained && currentProjectId === project.id;
   
   const [error, setError] = useState<string | null>(null);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
@@ -74,8 +77,10 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
   const canTrain = hasMinimumClasses && hasImagesInAllClasses;
 
   const renderTrainingMetrics = () => {
+    // Only show training progress if it's for this specific project
+    if (!trainingProgress || currentProjectId !== project.id) return null;
+    
     const metrics = trainingProgress;
-    if (!metrics) return null;
 
     const currentEpoch = metrics.epoch;
     const progress = ((currentEpoch + 1) / 50) * 100;
@@ -100,7 +105,7 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
     );
   };
 
-  if (!isModelLoaded) {
+  if (!mobilenet) {
     return (
       <div className="bg-white rounded-lg shadow-sm p-8">
         <div className="max-w-md mx-auto text-center">
@@ -111,7 +116,7 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
     );
   }
 
-  if (isTrained && currentProjectId === project.id) {
+  if (isProjectTrained) {
     return (
       <div className="bg-white rounded-lg shadow-sm p-8">
         <div className="max-w-md mx-auto">
