@@ -224,12 +224,21 @@ export const useMLStore = create<MLStore>()(
             classNames
           });
 
+          // Determine validation split based on dataset size
+          // For small datasets (< 10 images per class), use all data for training
+          // to avoid the issue where validation split leaves no training data
+          const minImagesPerClass = Math.min(...classes.map(c => c.images.length));
+          const useValidationSplit = minImagesPerClass >= 10;
+          const validationSplit = useValidationSplit ? 0.2 : 0.0;
+          
+          console.log(`Using validation split: ${validationSplit} (min images per class: ${minImagesPerClass})`);
+
           // Train the model
           console.log('Starting model training...');
           await newModel.fit(xs, ys, {
             epochs: TRAINING_EPOCHS,
             batchSize: BATCH_SIZE,
-            validationSplit: 0.2,
+            validationSplit,
             callbacks: {
               onEpochEnd: (epoch, logs) => {
                 if (logs) {

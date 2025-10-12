@@ -142,6 +142,9 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
                 {!hasMinimumClasses && (
                   <p className="mb-1">Need at least 2 groups to train the model.</p>
                 )}
+                {!hasImagesInAllClasses && !error && (
+                  <p className="mb-1">Each group must have at least one image to train the model.</p>
+                )}
                 {error && <p>{error}</p>}
               </div>
             </div>
