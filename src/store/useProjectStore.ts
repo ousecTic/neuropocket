@@ -16,7 +16,7 @@ interface ProjectStore {
   deleteImageFromClass: (projectId: string, classId: string, imageId: string) => Promise<void>;
 }
 
-const DB_NAME = 'teachable-machine-db';
+const DB_NAME = 'learn-ai-anywhere-db';
 const STORE_NAME = 'projects';
 
 // Singleton DB instance
@@ -33,6 +33,33 @@ const getDB = async () => {
     });
   }
   return dbInstance;
+};
+
+// Helper function to update a project in both DB and state
+const updateProject = async (
+  projectId: string,
+  updater: (project: Project) => Project,
+  get: () => ProjectStore,
+  set: (state: Partial<ProjectStore>) => void
+) => {
+  const project = get().projects.find(p => p.id === projectId);
+  if (!project) return null;
+
+  const updatedProject = {
+    ...updater(project),
+    updatedAt: Date.now(),
+  };
+
+  const db = await getDB();
+  await db.put(STORE_NAME, updatedProject);
+  
+  set({
+    projects: get().projects.map(p => 
+      p.id === projectId ? updatedProject : p
+    ),
+  });
+
+  return updatedProject;
 };
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
@@ -89,28 +116,17 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       return { success: false, error: 'A project with this name already exists' };
     }
 
-    const db = await getDB();
-    const project = get().projects.find(p => p.id === id);
-    if (!project) return { success: false, error: 'Project not found' };
+    const result = await updateProject(
+      id,
+      (project) => ({ ...project, name: newName }),
+      get,
+      set
+    );
 
-    const updatedProject = {
-      ...project,
-      name: newName,
-      updatedAt: Date.now(),
-    };
-
-    await db.put(STORE_NAME, updatedProject);
-    set({
-      projects: get().projects.map(p => 
-        p.id === id ? updatedProject : p
-      ),
-    });
-
-    return { success: true };
+    return result ? { success: true } : { success: false, error: 'Project not found' };
   },
 
   addClass: async (projectId: string, className: string) => {
-    const db = await getDB();
     const project = get().projects.find(p => p.id === projectId);
     if (!project) return { success: false, error: 'Project not found' };
 
@@ -126,43 +142,29 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       images: [],
     };
 
-    const updatedProject = {
-      ...project,
-      classes: [...project.classes, newClass],
-      updatedAt: Date.now(),
-    };
+    const result = await updateProject(
+      projectId,
+      (project) => ({ ...project, classes: [...project.classes, newClass] }),
+      get,
+      set
+    );
 
-    await db.put(STORE_NAME, updatedProject);
-    set({
-      projects: get().projects.map(p => 
-        p.id === projectId ? updatedProject : p
-      ),
-    });
-
-    return { success: true };
+    return result ? { success: true } : { success: false, error: 'Project not found' };
   },
 
   deleteClass: async (projectId: string, classId: string) => {
-    const db = await getDB();
-    const project = get().projects.find(p => p.id === projectId);
-    if (!project) return;
-
-    const updatedProject = {
-      ...project,
-      classes: project.classes.filter(c => c.id !== classId),
-      updatedAt: Date.now(),
-    };
-
-    await db.put(STORE_NAME, updatedProject);
-    set({
-      projects: get().projects.map(p => 
-        p.id === projectId ? updatedProject : p
-      ),
-    });
+    await updateProject(
+      projectId,
+      (project) => ({
+        ...project,
+        classes: project.classes.filter(c => c.id !== classId),
+      }),
+      get,
+      set
+    );
   },
 
   renameClass: async (projectId: string, classId: string, newName: string) => {
-    const db = await getDB();
     const project = get().projects.find(p => p.id === projectId);
     if (!project) return { success: false, error: 'Project not found' };
 
@@ -171,73 +173,56 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       return { success: false, error: 'A group with this name already exists' };
     }
 
-    const updatedProject = {
-      ...project,
-      classes: project.classes.map(c => 
-        c.id === classId ? { ...c, name: newName } : c
-      ),
-      updatedAt: Date.now(),
-    };
+    const result = await updateProject(
+      projectId,
+      (project) => ({
+        ...project,
+        classes: project.classes.map(c => 
+          c.id === classId ? { ...c, name: newName } : c
+        ),
+      }),
+      get,
+      set
+    );
 
-    await db.put(STORE_NAME, updatedProject);
-    set({
-      projects: get().projects.map(p => 
-        p.id === projectId ? updatedProject : p
-      ),
-    });
-
-    return { success: true };
+    return result ? { success: true } : { success: false, error: 'Project not found' };
   },
 
   addImageToClass: async (projectId: string, classId: string, dataUrls: string[]) => {
-    const db = await getDB();
-    const project = get().projects.find(p => p.id === projectId);
-    if (!project) return;
-
     const newImages: ClassImage[] = dataUrls.map(dataUrl => ({
       id: crypto.randomUUID(),
       dataUrl,
       createdAt: Date.now(),
     }));
 
-    const updatedProject = {
-      ...project,
-      classes: project.classes.map(c => 
-        c.id === classId 
-          ? { ...c, images: [...c.images, ...newImages] }
-          : c
-      ),
-      updatedAt: Date.now(),
-    };
-
-    await db.put(STORE_NAME, updatedProject);
-    set({
-      projects: get().projects.map(p => 
-        p.id === projectId ? updatedProject : p
-      ),
-    });
+    await updateProject(
+      projectId,
+      (project) => ({
+        ...project,
+        classes: project.classes.map(c => 
+          c.id === classId 
+            ? { ...c, images: [...c.images, ...newImages] }
+            : c
+        ),
+      }),
+      get,
+      set
+    );
   },
 
   deleteImageFromClass: async (projectId: string, classId: string, imageId: string) => {
-    const db = await getDB();
-    const project = get().projects.find(p => p.id === projectId);
-    if (!project) return;
-
-    const updatedProject = {
-      ...project,
-      classes: project.classes.map(c => 
-        c.id === classId 
-          ? { ...c, images: c.images.filter(img => img.id !== imageId) }
-          : c
-      ),
-      updatedAt: Date.now(),
-    };
-
-    await db.put(STORE_NAME, updatedProject);
-    set({
-      projects: get().projects.map(p => 
-        p.id === projectId ? updatedProject : p
-      ),
-    });
+    await updateProject(
+      projectId,
+      (project) => ({
+        ...project,
+        classes: project.classes.map(c => 
+          c.id === classId 
+            ? { ...c, images: c.images.filter(img => img.id !== imageId) }
+            : c
+        ),
+      }),
+      get,
+      set
+    );
   },
 }));
