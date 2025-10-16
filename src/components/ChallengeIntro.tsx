@@ -2,9 +2,20 @@ import { Brain, Target } from 'lucide-react';
 
 interface ChallengeIntroProps {
   onDismiss: () => void;
+  challengeType: 'bears-vs-dogs' | 'apples-vs-pears';
 }
 
-export function ChallengeIntro({ onDismiss }: ChallengeIntroProps) {
+export function ChallengeIntro({ onDismiss, challengeType }: ChallengeIntroProps) {
+  const isBearsDogs = challengeType === 'bears-vs-dogs';
+  
+  const description = isBearsDogs
+    ? 'Train a model to distinguish between bears and dogs using black and white images. Select your training images carefully. The test results might surprise you!'
+    : 'Train a model to distinguish between apples and pears. Select your training images carefully. The test results might surprise you!';
+  
+  const goal = isBearsDogs
+    ? 'Create a model that accurately identifies both bears and dogs based on their shape and features.'
+    : 'Create a model that accurately identifies both apples and pears.';
+
   return (
     <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
       <div className="max-w-2xl mx-auto">
@@ -17,15 +28,14 @@ export function ChallengeIntro({ onDismiss }: ChallengeIntroProps) {
             
             <div className="space-y-4 text-gray-600">
               <p>
-                Train a model to distinguish between apples and pears. Select your training images carefully. 
-                The test results might surprise you!
+                {description}
               </p>
 
               <div className="flex items-start gap-2 text-gray-700 bg-gray-50 p-4 rounded-lg">
                 <Target className="w-5 h-5 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium">Goal</p>
-                  <p className="text-sm">Create a model that accurately identifies both apples and pears.</p>
+                  <p className="text-sm">{goal}</p>
                 </div>
               </div>
 

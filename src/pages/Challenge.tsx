@@ -4,10 +4,12 @@ import { useMLStore } from '../store/useMLStore';
 import { ChallengeIntro } from '../components/ChallengeIntro';
 import { CheckCircle2, Brain } from 'lucide-react';
 
+type ChallengeType = 'bears-vs-dogs' | 'apples-vs-pears';
+
 interface ImageItem {
   id: string;
   name: string;
-  type: 'apple' | 'pear';
+  type: string;
   src: string;
   selected: boolean;
 }
@@ -20,13 +22,17 @@ interface TestResult {
 }
 
 export function Challenge() {
-  const { mobilenet, isTraining, isTrained, trainingProgress, currentProjectId, loadModel, trainModel, predict, resetTrainingState } = useMLStore();
-  const [selectedApples, setSelectedApples] = useState<string[]>([]);
-  const [selectedPears, setSelectedPears] = useState<string[]>([]);
+  const { mobilenet, isTraining, isTrained, trainingProgress, currentProjectId, loadModel, trainModel, predict } = useMLStore();
+  const [challengeType, setChallengeType] = useState<ChallengeType>('bears-vs-dogs');
+  const [selectedClass1, setSelectedClass1] = useState<string[]>([]);
+  const [selectedClass2, setSelectedClass2] = useState<string[]>([]);
   const [images, setImages] = useState<ImageItem[]>([]);
   
-  // Check if the challenge specifically has been trained
-  const isChallengeTrained = isTrained && currentProjectId === 'challenge';
+  // Use different project IDs for each challenge type
+  const challengeProjectId = `challenge-${challengeType}`;
+  
+  // Check if the current challenge specifically has been trained
+  const isChallengeTrained = isTrained && currentProjectId === challengeProjectId;
   const [trainingResult, setTrainingResult] = useState<{
     finalLoss: number;
     finalAccuracy: number;
@@ -54,55 +60,99 @@ export function Challenge() {
     };
 
     initModel();
+  }, [loadModel]);
 
-    // Load images from public folder for better LMS compatibility
+  // Load images when challenge type changes
+  useEffect(() => {
     const importImages = async () => {
       try {
-        // Define apple images statically
-        const appleImageNames = [
-          'apple-1', 'apple-10', 'apple-11', 'apple-12', 'apple-13', 'apple-14', 'apple-15',
-          'apple-16', 'apple-17', 'apple-18', 'apple-19', 'apple-2', 'apple-20', 'apple-21',
-          'apple-22', 'apple-23', 'apple-24', 'apple-25', 'apple-3', 'apple-31', 'apple-4',
-          'apple-5', 'apple-55', 'apple-6', 'apple-67', 'apple-7', 'apple-8', 'apple-9', 'apple-94'
-        ];
+        let loadedImages: ImageItem[] = [];
+        let validationImageData: { name: string; src: string }[] = [];
 
-        // Define pear images statically
-        const pearImageNames = [
-          'pear-1', 'pear-10', 'pear-11', 'pear-12', 'pear-14', 'pear-15', 'pear-16',
-          'pear-17', 'pear-18', 'pear-2', 'pear-26', 'pear-27', 'pear-28', 'pear-3',
-          'pear-30', 'pear-31', 'pear-32', 'pear-33', 'pear-34', 'pear-35', 'pear-36',
-          'pear-37', 'pear-4', 'pear-40', 'pear-5', 'pear-6', 'pear-7', 'pear-8', 'pear-9'
-        ];
+        if (challengeType === 'bears-vs-dogs') {
+          // Define bear images
+          const bearImageNames = [
+            'bear-1', 'bear-2', 'bear-3', 'bear-4', 'bear-5', 'bear-6', 'bear-7', 'bear-8', 'bear-9', 'bear-10',
+            'bear-11', 'bear-12', 'bear-13', 'bear-14', 'bear-15', 'bear-16', 'bear-17', 'bear-18', 'bear-19', 'bear-20'
+          ];
 
-        // Create image objects with public folder paths
-        const loadedImages: ImageItem[] = [
-          ...appleImageNames.map(id => ({
-            id,
-            name: `Apple ${id.replace('apple-', '')}`,
-            type: 'apple' as const,
-            src: `./challenge/apples/${id}.jpg`,
-            selected: false
-          })),
-          ...pearImageNames.map(id => ({
-            id,
-            name: `Pear ${id.replace('pear-', '')}`,
-            type: 'pear' as const,
-            src: `./challenge/pears/${id}.jpg`,
-            selected: false
-          }))
-        ];
+          // Define dog images
+          const dogImageNames = [
+            'dog-1', 'dog-2', 'dog-3', 'dog-4', 'dog-5', 'dog-6', 'dog-7', 'dog-8', 'dog-9', 'dog-10',
+            'dog-11', 'dog-12', 'dog-13', 'dog-14', 'dog-15', 'dog-16', 'dog-17', 'dog-18', 'dog-19', 'dog-20'
+          ];
+
+          loadedImages = [
+            ...bearImageNames.map(id => ({
+              id,
+              name: `Bear ${id.replace('bear-', '')}`,
+              type: 'bear',
+              src: `./challenge/bears-vs-dogs/bears/${id}.jpg`,
+              selected: false
+            })),
+            ...dogImageNames.map(id => ({
+              id,
+              name: `Dog ${id.replace('dog-', '')}`,
+              type: 'dog',
+              src: `./challenge/bears-vs-dogs/dogs/${id}.jpg`,
+              selected: false
+            }))
+          ];
+
+          validationImageData = [
+            { name: 'bear-validation-1', src: './challenge/bears-vs-dogs/validation/bear-validation-1.jpg' },
+            { name: 'bear-validation-2', src: './challenge/bears-vs-dogs/validation/bear-validation-2.jpg' },
+            { name: 'dog-validation-1', src: './challenge/bears-vs-dogs/validation/dog-validation-1.jpg' },
+            { name: 'dog-validation-2', src: './challenge/bears-vs-dogs/validation/dog-validation-2.jpg' }
+          ];
+        } else {
+          // Define apple images
+          const appleImageNames = [
+            'apple-1', 'apple-2', 'apple-3', 'apple-4', 'apple-5', 'apple-6', 'apple-7', 'apple-8', 'apple-9', 'apple-10',
+            'apple-11', 'apple-12', 'apple-13', 'apple-14', 'apple-15', 'apple-16', 'apple-17', 'apple-18', 'apple-19', 'apple-20',
+            'apple-21', 'apple-22', 'apple-23', 'apple-24', 'apple-25', 'apple-26', 'apple-27', 'apple-28', 'apple-29'
+          ];
+
+          // Define pear images
+          const pearImageNames = [
+            'pear-1', 'pear-2', 'pear-3', 'pear-4', 'pear-5', 'pear-6', 'pear-7', 'pear-8', 'pear-9', 'pear-10',
+            'pear-11', 'pear-12', 'pear-14', 'pear-15', 'pear-16', 'pear-17', 'pear-18', 'pear-19', 'pear-20',
+            'pear-21', 'pear-22', 'pear-23', 'pear-24', 'pear-25', 'pear-26', 'pear-27', 'pear-28', 'pear-29', 'pear-30'
+          ];
+
+          loadedImages = [
+            ...appleImageNames.map(id => ({
+              id,
+              name: `Apple ${id.replace('apple-', '')}`,
+              type: 'apple',
+              src: `./challenge/apples-vs-pears/apples/${id}.jpg`,
+              selected: false
+            })),
+            ...pearImageNames.map(id => ({
+              id,
+              name: `Pear ${id.replace('pear-', '')}`,
+              type: 'pear',
+              src: `./challenge/apples-vs-pears/pears/${id}.jpg`,
+              selected: false
+            }))
+          ];
+
+          validationImageData = [
+            { name: 'apple-validation-1', src: './challenge/apples-vs-pears/validation/apple-validation-1.jpg' },
+            { name: 'apple-validation-2', src: './challenge/apples-vs-pears/validation/apple-validation-2.jpg' },
+            { name: 'pear-validation-1', src: './challenge/apples-vs-pears/validation/pear-validation-1.jpg' },
+            { name: 'pear-validation-2', src: './challenge/apples-vs-pears/validation/pear-validation-2.jpg' }
+          ];
+        }
         
         setImages(loadedImages);
-
-        // Load validation images from public folder
-        const validationImageData = [
-          { name: 'green-apple-validation', src: './challenge/validation/green-apple-validation.jpg' },
-          { name: 'green-pear-validation', src: './challenge/validation/green-pear-validation.jpg' },
-          { name: 'red-apple-validation', src: './challenge/validation/red-apple-validation.jpg' },
-          { name: 'red-pear-validation', src: './challenge/validation/red-pear-validation.jpg' }
-        ];
-
         setValidationImages(validationImageData);
+        // Reset all state when changing challenge type
+        setSelectedClass1([]);
+        setSelectedClass2([]);
+        setTestResults([]);
+        setTrainingResult(null);
+        setActiveSection('data');
       } catch (error) {
         console.error('Error loading images:', error);
         setError('Failed to load challenge images. Please refresh the page and try again.');
@@ -110,20 +160,30 @@ export function Challenge() {
     };
 
     importImages();
-  }, [loadModel]);
+  }, [challengeType]);
+
+  // Get class types based on challenge
+  const getClassTypes = () => {
+    if (challengeType === 'bears-vs-dogs') {
+      return { class1: 'bear', class2: 'dog', class1Name: 'Bears', class2Name: 'Dogs' };
+    }
+    return { class1: 'apple', class2: 'pear', class1Name: 'Apples', class2Name: 'Pears' };
+  };
+
+  const classTypes = getClassTypes();
 
   const handleImageSelect = (image: ImageItem) => {
-    if (image.type === 'apple') {
-      if (selectedApples.includes(image.id)) {
-        setSelectedApples(prev => prev.filter(id => id !== image.id));
-      } else if (selectedApples.length < 10) {
-        setSelectedApples(prev => [...prev, image.id]);
+    if (image.type === classTypes.class1) {
+      if (selectedClass1.includes(image.id)) {
+        setSelectedClass1(prev => prev.filter(id => id !== image.id));
+      } else if (selectedClass1.length < 10) {
+        setSelectedClass1(prev => [...prev, image.id]);
       }
     } else {
-      if (selectedPears.includes(image.id)) {
-        setSelectedPears(prev => prev.filter(id => id !== image.id));
-      } else if (selectedPears.length < 10) {
-        setSelectedPears(prev => [...prev, image.id]);
+      if (selectedClass2.includes(image.id)) {
+        setSelectedClass2(prev => prev.filter(id => id !== image.id));
+      } else if (selectedClass2.length < 10) {
+        setSelectedClass2(prev => [...prev, image.id]);
       }
     }
   };
@@ -134,7 +194,7 @@ export function Challenge() {
       return;
     }
 
-    if (selectedApples.length === 0 || selectedPears.length === 0) {
+    if (selectedClass1.length === 0 || selectedClass2.length === 0) {
       setError('Please select at least one image for each category.');
       return;
     }
@@ -142,41 +202,41 @@ export function Challenge() {
     setError(null);
 
     // Get the selected images
-    const appleImages = selectedApples
+    const class1Images = selectedClass1
       .map(id => images.find(img => img.id === id))
       .filter((img): img is ImageItem => img !== undefined);
 
-    const pearImages = selectedPears
+    const class2Images = selectedClass2
       .map(id => images.find(img => img.id === id))
       .filter((img): img is ImageItem => img !== undefined);
 
     // Validate we have images for both classes
-    if (appleImages.length === 0 || pearImages.length === 0) {
+    if (class1Images.length === 0 || class2Images.length === 0) {
       setError('Failed to prepare training data. Please try selecting different images.');
       return;
     }
 
     console.log('Training data:', {
-      apples: appleImages.length,
-      pears: pearImages.length
+      class1: class1Images.length,
+      class2: class2Images.length
     });
 
     // Prepare training data
     const classes = [
       {
-        name: 'Apple',
-        images: appleImages.map(img => img.src)
+        name: classTypes.class1Name.slice(0, -1), // Remove 's' to get singular
+        images: class1Images.map(img => img.src)
       },
       {
-        name: 'Pear',
-        images: pearImages.map(img => img.src)
+        name: classTypes.class2Name.slice(0, -1), // Remove 's' to get singular
+        images: class2Images.map(img => img.src)
       }
     ];
 
     console.log('Training with classes:', classes);
 
     try {
-      const success = await trainModel('challenge', classes);
+      const success = await trainModel(challengeProjectId, classes);
 
       if (success) {
         // Get final training progress from store
@@ -218,10 +278,15 @@ export function Challenge() {
           throw new Error(`Failed to get prediction for ${image.name}`);
         }
 
+        // Determine expected class based on image name
+        const expected = image.name.toLowerCase().includes(classTypes.class1.toLowerCase()) 
+          ? classTypes.class1Name.slice(0, -1) 
+          : classTypes.class2Name.slice(0, -1);
+
         // Add test result
         setTestResults(prev => [...prev, {
           imageName: image.name,
-          expected: image.name.toLowerCase().includes('apple') ? 'Apple' : 'Pear',
+          expected,
           predicted: prediction.className,
           confidence: prediction.probability
         }]);
@@ -235,7 +300,7 @@ export function Challenge() {
   };
 
   // Check if data selection is complete
-  const isDataComplete = selectedApples.length > 0 && selectedPears.length > 0;
+  const isDataComplete = selectedClass1.length > 0 && selectedClass2.length > 0;
   
   // Check if training is complete
   const isTrainingComplete = isChallengeTrained && trainingResult;
@@ -245,11 +310,25 @@ export function Challenge() {
       <ProjectHeader 
         title="AI Bias Challenge" 
         backTo="/"
+        customContent={
+          <select
+            id="dataset-select"
+            value={challengeType}
+            onChange={(e) => setChallengeType(e.target.value as ChallengeType)}
+            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
+          >
+            <option value="bears-vs-dogs">Bears vs Dogs (Black & White)</option>
+            <option value="apples-vs-pears">Apples vs Pears (Color)</option>
+          </select>
+        }
       />
 
       {showIntro ? (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-          <ChallengeIntro onDismiss={() => setShowIntro(false)} />
+          <ChallengeIntro 
+            onDismiss={() => setShowIntro(false)} 
+            challengeType={challengeType}
+          />
         </div>
       ) : (
         <>
@@ -308,13 +387,13 @@ export function Challenge() {
             {activeSection === 'data' && (
               <div className="bg-white rounded-lg shadow-sm p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Apples Section */}
+                  {/* Class 1 Section */}
                   <div className="border rounded-lg p-4 bg-white shadow-sm flex flex-col">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-medium text-gray-800">Apples</h3>
+                        <h3 className="text-lg font-medium text-gray-800">{classTypes.class1Name}</h3>
                         <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
-                          Selected: {selectedApples.length}/10
+                          Selected: {selectedClass1.length}/10
                         </span>
                       </div>
                     </div>
@@ -325,12 +404,12 @@ export function Challenge() {
                     }}>
                       <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 p-2">
                         {images
-                          .filter(img => img.type === 'apple')
+                          .filter(img => img.type === classTypes.class1)
                           .map(image => (
                             <div
                               key={image.id}
                               className={`relative aspect-square rounded-lg overflow-hidden cursor-pointer border-2 transition-all hover:scale-105 ${
-                                selectedApples.includes(image.id)
+                                selectedClass1.includes(image.id)
                                   ? 'border-blue-500 shadow-lg'
                                   : 'border-transparent hover:border-gray-300'
                               }`}
@@ -338,10 +417,10 @@ export function Challenge() {
                             >
                               <img
                                 src={image.src}
-                                alt="Apple"
+                                alt={classTypes.class1Name}
                                 className="w-full h-full object-cover"
                               />
-                              {selectedApples.includes(image.id) && (
+                              {selectedClass1.includes(image.id) && (
                                 <div className="absolute inset-0 bg-blue-500 bg-opacity-10">
                                   <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
                                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -356,13 +435,13 @@ export function Challenge() {
                     </div>
                   </div>
 
-                  {/* Pears Section */}
+                  {/* Class 2 Section */}
                   <div className="border rounded-lg p-4 bg-white shadow-sm flex flex-col">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-medium text-gray-800">Pears</h3>
+                        <h3 className="text-lg font-medium text-gray-800">{classTypes.class2Name}</h3>
                         <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
-                          Selected: {selectedPears.length}/10
+                          Selected: {selectedClass2.length}/10
                         </span>
                       </div>
                     </div>
@@ -373,12 +452,12 @@ export function Challenge() {
                     }}>
                       <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2 p-2">
                         {images
-                          .filter(img => img.type === 'pear')
+                          .filter(img => img.type === classTypes.class2)
                           .map(image => (
                             <div
                               key={image.id}
                               className={`relative aspect-square rounded-lg overflow-hidden cursor-pointer border-2 transition-all hover:scale-105 ${
-                                selectedPears.includes(image.id)
+                                selectedClass2.includes(image.id)
                                   ? 'border-blue-500 shadow-lg'
                                   : 'border-transparent hover:border-gray-300'
                               }`}
@@ -386,10 +465,10 @@ export function Challenge() {
                             >
                               <img
                                 src={image.src}
-                                alt="Pear"
+                                alt={classTypes.class2Name}
                                 className="w-full h-full object-cover"
                               />
-                              {selectedPears.includes(image.id) && (
+                              {selectedClass2.includes(image.id) && (
                                 <div className="absolute inset-0 bg-blue-500 bg-opacity-10">
                                   <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
                                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -459,7 +538,7 @@ export function Challenge() {
                       </div>
 
                       {/* Training Metrics - only show if training the challenge */}
-                      {trainingProgress && currentProjectId === 'challenge' && (
+                      {trainingProgress && currentProjectId === challengeProjectId && (
                         <div className="mt-6 mb-8 space-y-6">
                           <div className="space-y-4">
                             <div className="flex justify-between text-sm text-gray-600">
@@ -477,7 +556,7 @@ export function Challenge() {
                       )}
 
                       {/* Error Display */}
-                      {(selectedApples.length === 0 || selectedPears.length === 0) && (
+                      {(selectedClass1.length === 0 || selectedClass2.length === 0) && (
                         <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
                           <svg className="text-red-600 shrink-0 mt-0.5 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -498,9 +577,9 @@ export function Challenge() {
 
                       <button
                         onClick={handleStartTraining}
-                        disabled={selectedApples.length === 0 || selectedPears.length === 0}
+                        disabled={selectedClass1.length === 0 || selectedClass2.length === 0}
                         className={`w-full mt-4 border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
-                          selectedApples.length > 0 && selectedPears.length > 0
+                          selectedClass1.length > 0 && selectedClass2.length > 0
                             ? 'hover:bg-blue-50' 
                             : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
                         }`}
@@ -521,7 +600,7 @@ export function Challenge() {
                       </div>
 
                       {/* Error Display */}
-                      {(selectedApples.length === 0 || selectedPears.length === 0) && (
+                      {(selectedClass1.length === 0 || selectedClass2.length === 0) && (
                         <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
                           <svg className="text-red-600 shrink-0 mt-0.5 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
@@ -534,9 +613,9 @@ export function Challenge() {
 
                       <button
                         onClick={handleStartTraining}
-                        disabled={selectedApples.length === 0 || selectedPears.length === 0 || isTraining}
+                        disabled={selectedClass1.length === 0 || selectedClass2.length === 0 || isTraining}
                         className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors ${
-                          selectedApples.length > 0 && selectedPears.length > 0 && !isTraining
+                          selectedClass1.length > 0 && selectedClass2.length > 0 && !isTraining
                             ? 'hover:bg-blue-700' 
                             : 'opacity-50 cursor-not-allowed'
                         }`}
@@ -545,7 +624,7 @@ export function Challenge() {
                       </button>
 
                       {/* Training Metrics */}
-                      {trainingProgress && currentProjectId === 'challenge' && (
+                      {trainingProgress && currentProjectId === challengeProjectId && (
                         <div className="mt-6 mb-8 space-y-6">
                           <div className="space-y-4">
                             <div className="flex justify-between text-sm text-gray-600">

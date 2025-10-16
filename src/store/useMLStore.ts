@@ -53,7 +53,7 @@ export const useMLStore = create<MLStore>()(
           
           // Warmup the model
           tf.tidy(() => {
-            const dummyInput = tf.zeros([1, MOBILE_NET_INPUT_HEIGHT, MOBILE_NET_INPUT_WIDTH, 3]);
+            const dummyInput = tf.zeros([1, MOBILE_NET_INPUT_WIDTH, MOBILE_NET_INPUT_HEIGHT, 3]);
             const warmupResult = mobilenet.predict(dummyInput) as tf.Tensor;
             console.log('Feature shape:', warmupResult.shape);
             warmupResult.dispose();
@@ -103,7 +103,7 @@ export const useMLStore = create<MLStore>()(
           const classNames = classes.map(c => c.name);
 
           // Get the feature shape from MobileNet
-          const dummyInput = tf.zeros([1, MOBILE_NET_INPUT_HEIGHT, MOBILE_NET_INPUT_WIDTH, 3]);
+          const dummyInput = tf.zeros([1, MOBILE_NET_INPUT_WIDTH, MOBILE_NET_INPUT_HEIGHT, 3]);
           const dummyOutput = mobilenet.predict(dummyInput) as tf.Tensor;
           const featureShape = dummyOutput.shape[1] as number;
           console.log('Feature shape:', featureShape);

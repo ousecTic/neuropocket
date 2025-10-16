@@ -14,9 +14,10 @@ interface ProjectHeaderProps {
     label: string;
     onClick: () => void;
   };
+  customContent?: React.ReactNode;
 }
 
-export function ProjectHeader({ title, backTo, backToExternal, action, secondaryAction }: ProjectHeaderProps) {
+export function ProjectHeader({ title, backTo, backToExternal, action, secondaryAction, customContent }: ProjectHeaderProps) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const hasMultipleActions = action && secondaryAction;
 
@@ -54,7 +55,12 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
               </div>
             </div>
 
-            {/* Desktop Actions - Always show both buttons */}
+            {/* Custom Content or Desktop Actions */}
+            {customContent ? (
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {customContent}
+              </div>
+            ) : (
             <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
               {action && (
                 <button
@@ -74,6 +80,7 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
                 </button>
               )}
             </div>
+            )}
 
             {/* Mobile Menu Button - Only show if there are multiple actions */}
             {hasMultipleActions && (
