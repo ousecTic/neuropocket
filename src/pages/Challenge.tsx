@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { ProjectHeader } from '../components/ProjectHeader';
 import { useMLStore } from '../store/useMLStore';
 import { ChallengeIntro } from '../components/ChallengeIntro';
-import { CheckCircle2, Brain } from 'lucide-react';
+import { Brain, CheckCircle2 } from 'lucide-react';
+import { TrainingStatusBanner } from '../components/TrainingStatusBanner';
 
 type ChallengeType = 'bears-vs-dogs' | 'apples-vs-pears';
 
@@ -33,6 +34,7 @@ export function Challenge() {
   
   // Check if the current challenge specifically has been trained
   const isChallengeTrained = isTrained && currentProjectId === challengeProjectId;
+  
   const [trainingResult, setTrainingResult] = useState<{
     finalLoss: number;
     finalAccuracy: number;
@@ -399,10 +401,27 @@ export function Challenge() {
                 {error}
               </div>
             )}
+            
+            {/* Persistent Status Banner */}
+            <TrainingStatusBanner 
+              projectId={challengeProjectId}
+              classes={[
+                {
+                  name: classTypes.class1Name.slice(0, -1),
+                  images: selectedClass1.map(id => images.find(img => img.id === id)?.src || '').filter(src => src)
+                },
+                {
+                  name: classTypes.class2Name.slice(0, -1),
+                  images: selectedClass2.map(id => images.find(img => img.id === id)?.src || '').filter(src => src)
+                }
+              ]}
+              currentTab={activeSection === 'data' ? 'data' : activeSection === 'training' ? 'training' : 'model'}
+              onGoToTraining={() => setActiveSection('training')}
+            />
 
             {activeSection === 'data' && (
               <div className="bg-white rounded-lg shadow-sm p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Class 1 Section */}
                   <div className="border rounded-lg p-4 bg-white shadow-sm flex flex-col">
                     <div className="flex items-center justify-between mb-4">
@@ -744,7 +763,9 @@ export function Challenge() {
                                   <div>
                                     {result.expected === result.predicted ? (
                                       <div className="flex items-center text-green-600">
-                                        <CheckCircle2 className="w-5 h-5" />
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                        </svg>
                                         <span className="ml-1 font-medium">Correct</span>
                                       </div>
                                     ) : (
@@ -839,7 +860,9 @@ export function Challenge() {
                                 </span>
                               </div>
                               {testResults.every(r => r.expected === r.predicted) && (
-                                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                                <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
                               )}
                             </div>
                           </div>

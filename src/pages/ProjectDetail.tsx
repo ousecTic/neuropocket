@@ -2,21 +2,30 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Brain, Plus } from 'lucide-react';
 import { useProjectStore } from '../store/useProjectStore';
+import { useMLStore } from '../store/useMLStore';
 import { ClassCard } from '../components/ClassCard';
 import { TrainingSection } from '../components/TrainingSection';
 import { PreviewSection } from '../components/PreviewSection';
 import { ProjectHeader } from '../components/ProjectHeader';
+import { TrainingStatusBanner } from '../components/TrainingStatusBanner';
 import { MAX_CLASS_NAME_LENGTH } from '../constants';
 
 export function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
   const { projects, loading, loadProjects, addClass } = useProjectStore();
+  const { isTrained, currentProjectId } = useMLStore();
   const project = projects.find(p => p.id === id);
 
   const [isAddingClass, setIsAddingClass] = useState(false);
   const [newClassName, setNewClassName] = useState('');
   const [classError, setClassError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<'classes' | 'training' | 'preview'>('classes');
+  
+  // Check if requirements are met for each tab
+  const canTrain = project ? (project.classes.length >= 2 && 
+                   project.classes.every(c => c.images.length > 0)) : false;
+  // Model tab requires: trained AND current data still meets requirements
+  const canTest = project ? (isTrained && currentProjectId === project.id && canTrain) : false;
 
   useEffect(() => {
     loadProjects();
@@ -100,21 +109,27 @@ export function ProjectDetail() {
               1. Data
             </button>
             <button
-              onClick={() => setActiveSection('training')}
+              onClick={() => canTrain && setActiveSection('training')}
+              disabled={!canTrain}
               className={`px-4 py-4 font-medium border-b-2 transition-colors ${
                 activeSection === 'training'
                   ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : !canTrain
+                    ? 'border-transparent text-gray-300 cursor-not-allowed'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
               2. Training
             </button>
             <button
-              onClick={() => setActiveSection('preview')}
+              onClick={() => canTest && setActiveSection('preview')}
+              disabled={!canTest}
               className={`px-4 py-4 font-medium border-b-2 transition-colors ${
                 activeSection === 'preview'
                   ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : !canTest
+                    ? 'border-transparent text-gray-300 cursor-not-allowed'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
               3. Model
@@ -125,15 +140,19 @@ export function ProjectDetail() {
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        {/* Persistent Status Banner */}
+        <TrainingStatusBanner 
+          projectId={project.id}
+          classes={project.classes.map(c => ({
+            name: c.name,
+            images: c.images.map(img => img.dataUrl)
+          }))}
+          currentTab={activeSection === 'classes' ? 'data' : activeSection === 'training' ? 'training' : 'model'}
+          onGoToTraining={() => setActiveSection('training')}
+        />
+        
         {activeSection === 'classes' && (
           <div className="space-y-6">
-            {project.classes.length < 2 && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-blue-800 text-sm">
-                  This AI Image classifier needs at least 2 different groups to compare
-                </p>
-              </div>
-            )}
             {project.classes.length === 0 ? (
               <div className="bg-white rounded-lg shadow-sm p-8 text-center">
                 <div className="max-w-md mx-auto">
@@ -167,26 +186,9 @@ export function ProjectDetail() {
                   ))}
                 </div>
                 
-                {/* Tips and Continue to Training Button */}
                 {project.classes.length >= 2 && 
                  project.classes.every(c => c.images.length > 0) && (
                   <div className="mt-8 space-y-4">
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <div className="flex items-start gap-3">
-                        <div className="bg-blue-100 rounded-full p-1 flex-shrink-0 mt-0.5">
-                          <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                          </svg>
-                        </div>
-                        <div className="text-sm">
-                          <p className="font-medium text-blue-800 mb-1">💡 Pro Tip</p>
-                          <p className="text-blue-700">
-                            More images and diverse examples (different angles, lighting, backgrounds) help your model perform better.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    
                     <div className="text-center">
                       <button
                         onClick={() => setActiveSection('training')}

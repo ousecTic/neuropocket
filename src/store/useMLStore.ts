@@ -9,6 +9,12 @@ import {
 } from '../constants';
 import { processImage, prepareTrainingData } from './mlHelpers';
 
+interface TrainingSnapshot {
+  classNames: string[];
+  imageCounts: number[];
+  totalImages: number;
+}
+
 interface MLState {
   mobilenet: tf.GraphModel | null;
   model: tf.Sequential | null;
@@ -21,6 +27,7 @@ interface MLState {
     accuracy: number;
   } | null;
   currentProjectId: string | null;
+  trainingSnapshot: TrainingSnapshot | null;
 }
 
 interface MLActions {
@@ -29,6 +36,7 @@ interface MLActions {
   predict: (imageData: string) => Promise<{ className: string; probability: number } | null>;
   resetTrainingState: () => void;
   dispose: () => void;
+  hasDataChanged: (classes: { name: string; images: string[] }[]) => boolean;
 }
 
 type MLStore = MLState & MLActions;
@@ -43,6 +51,7 @@ export const useMLStore = create<MLStore>()(
       isTrained: false,
       trainingProgress: null,
       currentProjectId: null,
+      trainingSnapshot: null,
 
       loadModel: async () => {
         if (get().mobilenet) return true;
@@ -211,11 +220,20 @@ export const useMLStore = create<MLStore>()(
           ys.dispose();
 
           console.log('Training completed successfully');
+          
+          // Create training snapshot
+          const snapshot: TrainingSnapshot = {
+            classNames: classes.map(c => c.name),
+            imageCounts: classes.map(c => c.images.length),
+            totalImages
+          };
+          
           set({ 
             model: newModel,
             classNames,
             isTrained: true,
-            isTraining: false
+            isTraining: false,
+            trainingSnapshot: snapshot
           });
           return true;
         } catch (error) {
@@ -265,8 +283,40 @@ export const useMLStore = create<MLStore>()(
           isTraining: false,
           isTrained: false,
           trainingProgress: null,
-          currentProjectId: null
+          currentProjectId: null,
+          trainingSnapshot: null
         });
+      },
+
+      hasDataChanged: (classes) => {
+        const { trainingSnapshot, currentProjectId } = get();
+        
+        // If no snapshot exists, data hasn't "changed" - it's just not trained
+        if (!trainingSnapshot || !currentProjectId) return false;
+        
+        // Check if number of classes changed
+        if (classes.length !== trainingSnapshot.classNames.length) return true;
+        
+        // Check if class names changed
+        const currentClassNames = classes.map(c => c.name).sort();
+        const snapshotClassNames = [...trainingSnapshot.classNames].sort();
+        if (JSON.stringify(currentClassNames) !== JSON.stringify(snapshotClassNames)) return true;
+        
+        // Check if image counts changed for any class
+        const currentImageCounts = classes.map(c => c.images.length);
+        const totalCurrentImages = currentImageCounts.reduce((sum, count) => sum + count, 0);
+        
+        if (totalCurrentImages !== trainingSnapshot.totalImages) return true;
+        
+        // Check individual class image counts (match by name)
+        for (let i = 0; i < classes.length; i++) {
+          const className = classes[i].name;
+          const snapshotIndex = trainingSnapshot.classNames.indexOf(className);
+          if (snapshotIndex === -1) return true; // Class not in snapshot
+          if (classes[i].images.length !== trainingSnapshot.imageCounts[snapshotIndex]) return true;
+        }
+        
+        return false;
       },
 
       dispose: () => {
