@@ -133,7 +133,7 @@ export const useMLStore = create<MLStore>()(
                 activation: 'relu',
                 kernelInitializer: 'heNormal'
               }),
-              tf.layers.batchNormalization(),
+
               tf.layers.dropout({ rate: dropoutRate }),
               
               // Second hidden layer

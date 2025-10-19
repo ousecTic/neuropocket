@@ -305,6 +305,22 @@ export function Challenge() {
   // Check if training is complete
   const isTrainingComplete = isChallengeTrained && trainingResult;
 
+  // Show loading screen while model is loading
+  if (!mobilenet) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto"></div>
+            <Brain className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          </div>
+          <p className="mt-6 text-xl font-medium text-gray-700">Loading AI Model...</p>
+          <p className="mt-2 text-sm text-gray-500">This may take a few seconds on first load</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <ProjectHeader 
