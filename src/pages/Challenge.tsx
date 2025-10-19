@@ -5,7 +5,7 @@ import { ChallengeIntro } from '../components/ChallengeIntro';
 import { Brain, CheckCircle2 } from 'lucide-react';
 import { TrainingStatusBanner } from '../components/TrainingStatusBanner';
 
-type ChallengeType = 'bears-vs-dogs' | 'apples-vs-pears';
+type ChallengeType = 'bears-vs-dogs';
 
 interface ImageItem {
   id: string;
@@ -24,7 +24,7 @@ interface TestResult {
 
 export function Challenge() {
   const { mobilenet, isTraining, isTrained, trainingProgress, currentProjectId, loadModel, trainModel, predict } = useMLStore();
-  const [challengeType, setChallengeType] = useState<ChallengeType>('bears-vs-dogs');
+  const challengeType: ChallengeType = 'bears-vs-dogs';
   const [selectedClass1, setSelectedClass1] = useState<string[]>([]);
   const [selectedClass2, setSelectedClass2] = useState<string[]>([]);
   const [images, setImages] = useState<ImageItem[]>([]);
@@ -107,44 +107,6 @@ export function Challenge() {
             { name: 'dog-validation-1', src: './challenge/bears-vs-dogs/validation/dog-validation-1.jpg' },
             { name: 'dog-validation-2', src: './challenge/bears-vs-dogs/validation/dog-validation-2.jpg' }
           ];
-        } else {
-          // Define apple images
-          const appleImageNames = [
-            'apple-1', 'apple-2', 'apple-3', 'apple-4', 'apple-5', 'apple-6', 'apple-7', 'apple-8', 'apple-9', 'apple-10',
-            'apple-11', 'apple-12', 'apple-13', 'apple-14', 'apple-15', 'apple-16', 'apple-17', 'apple-18', 'apple-19', 'apple-20',
-            'apple-21', 'apple-22', 'apple-23', 'apple-24', 'apple-25', 'apple-26', 'apple-27', 'apple-28', 'apple-29'
-          ];
-
-          // Define pear images
-          const pearImageNames = [
-            'pear-1', 'pear-2', 'pear-3', 'pear-4', 'pear-5', 'pear-6', 'pear-7', 'pear-8', 'pear-9', 'pear-10',
-            'pear-11', 'pear-12', 'pear-14', 'pear-15', 'pear-16', 'pear-17', 'pear-18', 'pear-19', 'pear-20',
-            'pear-21', 'pear-22', 'pear-23', 'pear-24', 'pear-25', 'pear-26', 'pear-27', 'pear-28', 'pear-29', 'pear-30'
-          ];
-
-          loadedImages = [
-            ...appleImageNames.map(id => ({
-              id,
-              name: `Apple ${id.replace('apple-', '')}`,
-              type: 'apple',
-              src: `./challenge/apples-vs-pears/apples/${id}.jpg`,
-              selected: false
-            })),
-            ...pearImageNames.map(id => ({
-              id,
-              name: `Pear ${id.replace('pear-', '')}`,
-              type: 'pear',
-              src: `./challenge/apples-vs-pears/pears/${id}.jpg`,
-              selected: false
-            }))
-          ];
-
-          validationImageData = [
-            { name: 'apple-validation-1', src: './challenge/apples-vs-pears/validation/apple-validation-1.jpg' },
-            { name: 'apple-validation-2', src: './challenge/apples-vs-pears/validation/apple-validation-2.jpg' },
-            { name: 'pear-validation-1', src: './challenge/apples-vs-pears/validation/pear-validation-1.jpg' },
-            { name: 'pear-validation-2', src: './challenge/apples-vs-pears/validation/pear-validation-2.jpg' }
-          ];
         }
         
         setImages(loadedImages);
@@ -164,15 +126,8 @@ export function Challenge() {
     importImages();
   }, [challengeType]);
 
-  // Get class types based on challenge
-  const getClassTypes = () => {
-    if (challengeType === 'bears-vs-dogs') {
-      return { class1: 'bear', class2: 'dog', class1Name: 'Bears', class2Name: 'Dogs' };
-    }
-    return { class1: 'apple', class2: 'pear', class1Name: 'Apples', class2Name: 'Pears' };
-  };
-
-  const classTypes = getClassTypes();
+  // Get class types
+  const classTypes = { class1: 'bear', class2: 'dog', class1Name: 'Bears', class2Name: 'Dogs' };
 
   const handleImageSelect = (image: ImageItem) => {
     if (image.type === classTypes.class1) {
@@ -328,24 +283,12 @@ export function Challenge() {
       <ProjectHeader 
         title="AI Bias Challenge" 
         backTo="/"
-        customContent={
-          <select
-            id="dataset-select"
-            value={challengeType}
-            onChange={(e) => setChallengeType(e.target.value as ChallengeType)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
-          >
-            <option value="bears-vs-dogs">Bears vs Dogs (Black & White)</option>
-            <option value="apples-vs-pears">Apples vs Pears (Color)</option>
-          </select>
-        }
       />
 
       {showIntro ? (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
           <ChallengeIntro 
-            onDismiss={() => setShowIntro(false)} 
-            challengeType={challengeType}
+            onDismiss={() => setShowIntro(false)}
           />
         </div>
       ) : (

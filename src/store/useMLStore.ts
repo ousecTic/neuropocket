@@ -124,7 +124,7 @@ export const useMLStore = create<MLStore>()(
           
           // Adaptive model architecture based on dataset size
           // Larger datasets get more complex models, smaller datasets get simpler ones
-          const hiddenUnits1 = Math.min(256, Math.max(64, totalImages * 4));
+          const hiddenUnits1 = Math.min(256, Math.max(128, totalImages * 4));
           const hiddenUnits2 = Math.floor(hiddenUnits1 / 2);
           const dropoutRate = totalImages < 50 ? 0.3 : 0.5; // Lower dropout for small datasets
           const learningRate = totalImages < 20 ? 0.001 : 0.0001; // Higher LR for small datasets
