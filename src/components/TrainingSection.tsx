@@ -118,59 +118,56 @@ export function TrainingSection({ project, onContinueToModel }: TrainingSectionP
 
   if (isProjectTrained) {
     return (
-      <div className="bg-white rounded-lg shadow-sm p-8">
-        <div className="max-w-md mx-auto">
-          <div className="text-center">
-            <CheckCircle2 size={48} className="mx-auto text-green-600 mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Model Trained Successfully!</h2>
-            <p className="text-gray-600 mb-6">
-              Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it out.
-            </p>
-            <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 mb-6">
-              <p>
-                <span className="font-medium text-gray-700">Important:</span> If you add or remove images in the Data tab, click "Retrain Model" for your AI to recognize the updates.
+      <div className="space-y-6">
+        <div className="bg-white rounded-lg shadow-sm p-8">
+          <div className="max-w-md mx-auto">
+            <div className="text-center">
+              <CheckCircle2 size={48} className="mx-auto text-green-600 mb-4" />
+              <h2 className="text-xl font-semibold mb-2">Model Trained Successfully!</h2>
+              <p className="text-gray-600 mb-6">
+                Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it out.
               </p>
             </div>
-          </div>
 
-          {renderTrainingMetrics()}
+            {renderTrainingMetrics()}
 
-          {(!canTrain || error) && (
-            <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
-              <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
-              <div className="text-red-600 text-sm text-left">
-                {!hasMinimumClasses && (
-                  <p className="mb-1">Need at least 2 groups to train the model.</p>
-                )}
-                {!hasImagesInAllClasses && !error && (
-                  <p className="mb-1">Each group must have at least one image to train the model.</p>
-                )}
-                {error && <p>{error}</p>}
+            {(!canTrain || error) && (
+              <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
+                <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
+                <div className="text-red-600 text-sm text-left">
+                  {!hasMinimumClasses && (
+                    <p className="mb-1">Need at least 2 groups to train the model.</p>
+                  )}
+                  {!hasImagesInAllClasses && !error && (
+                    <p className="mb-1">Each group must have at least one image to train the model.</p>
+                  )}
+                  {error && <p>{error}</p>}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {onContinueToModel && (
             <button
-              onClick={onContinueToModel}
-              className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-700 font-medium"
+              onClick={handleTrainModel}
+              disabled={!canTrain}
+              className={`w-full border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
+                canTrain 
+                  ? 'hover:bg-blue-50' 
+                  : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
+              }`}
             >
-              Continue to Model Testing →
+              Retrain Model
             </button>
-          )}
-
-          <button
-            onClick={handleTrainModel}
-            disabled={!canTrain}
-            className={`w-full mt-4 border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
-              canTrain 
-                ? 'hover:bg-blue-50' 
-                : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
-            }`}
-          >
-            Retrain Model
-          </button>
+          </div>
         </div>
+
+        {onContinueToModel && (
+          <button
+            onClick={onContinueToModel}
+            className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-700 font-medium text-lg"
+          >
+            Continue to Model Testing →
+          </button>
+        )}
       </div>
     );
   }

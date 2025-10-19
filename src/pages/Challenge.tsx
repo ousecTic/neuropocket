@@ -205,6 +205,8 @@ export function Challenge() {
             totalEpochs: finalProgress.epoch + 1
           });
         }
+        // Clear test results when model is retrained
+        setTestResults([]);
         setError(null);
       } else {
         setError('Training failed. Please try again with different images.');
@@ -359,7 +361,9 @@ export function Challenge() {
                 }
               ]}
               currentTab={activeSection === 'data' ? 'data' : activeSection === 'training' ? 'training' : 'model'}
+              onGoToData={() => setActiveSection('data')}
               onGoToTraining={() => setActiveSection('training')}
+              onGoToModel={() => setActiveSection('testing')}
             />
 
             {activeSection === 'data' && (
@@ -500,71 +504,68 @@ export function Challenge() {
                     </div>
                   </div>
                 ) : isChallengeTrained ? (
-                  <div className="bg-white rounded-lg shadow-sm p-8">
-                    <div className="max-w-md mx-auto">
-                      <div className="text-center">
-                        <CheckCircle2 size={48} className="mx-auto text-green-600 mb-4" />
-                        <h2 className="text-xl font-semibold mb-2">Model Trained Successfully!</h2>
-                        <p className="text-gray-600 mb-6">
-                          Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it out.
-                        </p>
-                        <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 mb-6">
-                          <p>
-                            <span className="font-medium text-gray-700">Important:</span> If you change your image selection in the Data tab, click "Retrain Model" for your AI to recognize the updates.
+                  <div className="space-y-6">
+                    <div className="bg-white rounded-lg shadow-sm p-8">
+                      <div className="max-w-md mx-auto">
+                        <div className="text-center">
+                          <CheckCircle2 size={48} className="mx-auto text-green-600 mb-4" />
+                          <h2 className="text-xl font-semibold mb-2">Model Trained Successfully!</h2>
+                          <p className="text-gray-600 mb-6">
+                            Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it out.
                           </p>
                         </div>
+
+                        {/* Training Metrics - only show if training the challenge */}
+                        {trainingProgress && currentProjectId === challengeProjectId && (
+                          <div className="mt-6 mb-8 space-y-6">
+                            <div className="space-y-4">
+                              <div className="flex justify-between text-sm text-gray-600">
+                                <span>Rounds of Training</span>
+                                <span>Round {trainingProgress.epoch + 1} of 50</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                                  style={{ width: `${((trainingProgress.epoch + 1) / 50) * 100}%` }}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Error Display */}
+                        {(selectedClass1.length === 0 || selectedClass2.length === 0) && (
+                          <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
+                            <svg className="text-red-600 shrink-0 mt-0.5 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                            <div className="text-red-600 text-sm text-left">
+                              <p>Need at least one image from each category to train the model.</p>
+                            </div>
+                          </div>
+                        )}
+
+                        <button
+                          onClick={handleStartTraining}
+                          disabled={selectedClass1.length === 0 || selectedClass2.length === 0}
+                          className={`w-full border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
+                            selectedClass1.length > 0 && selectedClass2.length > 0
+                              ? 'hover:bg-blue-50' 
+                              : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
+                          }`}
+                        >
+                          Retrain Model
+                        </button>
                       </div>
-
-                      {/* Training Metrics - only show if training the challenge */}
-                      {trainingProgress && currentProjectId === challengeProjectId && (
-                        <div className="mt-6 mb-8 space-y-6">
-                          <div className="space-y-4">
-                            <div className="flex justify-between text-sm text-gray-600">
-                              <span>Rounds of Training</span>
-                              <span>Round {trainingProgress.epoch + 1} of 50</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div 
-                                className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
-                                style={{ width: `${((trainingProgress.epoch + 1) / 50) * 100}%` }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Error Display */}
-                      {(selectedClass1.length === 0 || selectedClass2.length === 0) && (
-                        <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
-                          <svg className="text-red-600 shrink-0 mt-0.5 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                          </svg>
-                          <div className="text-red-600 text-sm text-left">
-                            <p>Need at least one image from each category to train the model.</p>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Continue to Model Button */}
-                      <button
-                        onClick={() => setActiveSection('testing')}
-                        className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-700 font-medium"
-                      >
-                        Continue to Model Testing →
-                      </button>
-
-                      <button
-                        onClick={handleStartTraining}
-                        disabled={selectedClass1.length === 0 || selectedClass2.length === 0}
-                        className={`w-full mt-4 border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
-                          selectedClass1.length > 0 && selectedClass2.length > 0
-                            ? 'hover:bg-blue-50' 
-                            : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
-                        }`}
-                      >
-                        Retrain Model
-                      </button>
                     </div>
+
+                    {/* Continue to Model Button - Outside the box */}
+                    <button
+                      onClick={() => setActiveSection('testing')}
+                      className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-700 font-medium text-lg"
+                    >
+                      Continue to Model Testing →
+                    </button>
                   </div>
                 ) : (
                   <div className="bg-white rounded-lg shadow-sm p-8">

@@ -148,7 +148,9 @@ export function ProjectDetail() {
             images: c.images.map(img => img.dataUrl)
           }))}
           currentTab={activeSection === 'classes' ? 'data' : activeSection === 'training' ? 'training' : 'model'}
+          onGoToData={() => setActiveSection('classes')}
           onGoToTraining={() => setActiveSection('training')}
+          onGoToModel={() => setActiveSection('preview')}
         />
         
         {activeSection === 'classes' && (

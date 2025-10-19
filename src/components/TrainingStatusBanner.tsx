@@ -5,10 +5,12 @@ interface TrainingStatusBannerProps {
   projectId: string;
   classes: { name: string; images: string[] }[];
   currentTab: 'data' | 'training' | 'model';
+  onGoToData?: () => void;
   onGoToTraining?: () => void;
+  onGoToModel?: () => void;
 }
 
-export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToTraining }: TrainingStatusBannerProps) {
+export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToData, onGoToTraining, onGoToModel }: TrainingStatusBannerProps) {
   const { isTrained, currentProjectId, hasDataChanged, trainingSnapshot, isTraining } = useMLStore();
   
   const isProjectTrained = isTrained && currentProjectId === projectId;
@@ -72,7 +74,21 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToTra
             <div className="flex-1">
               <h4 className="font-semibold text-green-900 mb-1">Data Ready!</h4>
               <p className="text-sm text-green-700">
-                You have {classes.length} groups with {totalImages} {totalImages === 1 ? 'image' : 'images'}. Ready to train when you are.
+                You have {classes.length} groups with {totalImages} {totalImages === 1 ? 'image' : 'images'}.{' '}
+                {onGoToTraining ? (
+                  <>
+                    Ready to{' '}
+                    <button 
+                      onClick={onGoToTraining}
+                      className="font-semibold text-green-900 hover:text-green-950 underline cursor-pointer"
+                    >
+                      train
+                    </button>
+                    {' '}when you are.
+                  </>
+                ) : (
+                  'Ready to train when you are.'
+                )}
               </p>
             </div>
           </div>
@@ -91,7 +107,18 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToTra
             <div className="flex-1">
               <h4 className="font-semibold text-amber-900 mb-1">Data Changed</h4>
               <p className="text-sm text-amber-700">
-                You changed your images. Go to the Training tab to retrain your AI.
+                You changed your images. Go to the{' '}
+                {onGoToTraining ? (
+                  <button 
+                    onClick={onGoToTraining}
+                    className="font-semibold text-amber-900 hover:text-amber-950 underline cursor-pointer"
+                  >
+                    Training tab
+                  </button>
+                ) : (
+                  <span className="font-semibold">Training tab</span>
+                )}
+                {' '}to retrain your AI.
               </p>
             </div>
           </div>
@@ -149,7 +176,18 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToTra
             <div className="flex-1">
               <h4 className="font-semibold text-gray-900 mb-1">Add Data First</h4>
               <p className="text-sm text-gray-700">
-                Go to the Data tab to add images to your groups before training.
+                Go to the{' '}
+                {onGoToData ? (
+                  <button 
+                    onClick={onGoToData}
+                    className="font-semibold text-blue-600 hover:text-blue-700 underline cursor-pointer"
+                  >
+                    Data tab
+                  </button>
+                ) : (
+                  <span className="font-semibold">Data tab</span>
+                )}
+                {' '}to add images to your groups before training.
               </p>
             </div>
           </div>
@@ -168,7 +206,9 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToTra
             <div className="flex-1">
               <h4 className="font-semibold text-amber-900 mb-1">Your AI Needs to Be Retrained</h4>
               <p className="text-sm text-amber-700">
-                You changed your images. Click "Retrain Model" below to analyze the new pictures.
+                You changed your images. Click{' '}
+                <span className="font-semibold text-amber-900">"Retrain Model"</span>
+                {' '}below to analyze the new pictures.
               </p>
             </div>
           </div>
@@ -187,7 +227,18 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToTra
             <div className="flex-1">
               <h4 className="font-semibold text-green-900 mb-1">Your AI is Ready!</h4>
               <p className="text-sm text-green-700">
-                It analyzed {trainingSnapshot?.totalImages || 0} {(trainingSnapshot?.totalImages || 0) === 1 ? 'picture' : 'pictures'}. Go to the Model tab to test it.
+                It analyzed {trainingSnapshot?.totalImages || 0} {(trainingSnapshot?.totalImages || 0) === 1 ? 'picture' : 'pictures'}. Go to the{' '}
+                {onGoToModel ? (
+                  <button 
+                    onClick={onGoToModel}
+                    className="font-semibold text-green-900 hover:text-green-950 underline cursor-pointer"
+                  >
+                    Model tab
+                  </button>
+                ) : (
+                  <span className="font-semibold">Model tab</span>
+                )}
+                {' '}to test it.
               </p>
             </div>
           </div>
@@ -226,7 +277,18 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToTra
             <div className="flex-1">
               <h4 className="font-semibold text-gray-900 mb-1">Train Your AI First</h4>
               <p className="text-sm text-gray-700">
-                Go to the Training tab to train your AI before testing.
+                Go to the{' '}
+                {onGoToTraining ? (
+                  <button 
+                    onClick={onGoToTraining}
+                    className="font-semibold text-blue-600 hover:text-blue-700 underline cursor-pointer"
+                  >
+                    Training tab
+                  </button>
+                ) : (
+                  <span className="font-semibold">Training tab</span>
+                )}
+                {' '}to train your AI before testing.
               </p>
             </div>
           </div>
@@ -245,7 +307,18 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToTra
             <div className="flex-1">
               <h4 className="font-semibold text-amber-900 mb-1">Your AI Needs to Be Retrained</h4>
               <p className="text-sm text-amber-700">
-                You changed your images. Retrain your AI for accurate results.
+                You changed your images.{' '}
+                {onGoToTraining ? (
+                  <button 
+                    onClick={onGoToTraining}
+                    className="font-semibold text-amber-900 hover:text-amber-950 underline cursor-pointer"
+                  >
+                    Retrain your AI
+                  </button>
+                ) : (
+                  <span className="font-semibold">Retrain your AI</span>
+                )}
+                {' '}for accurate results.
               </p>
             </div>
           </div>

@@ -9,10 +9,23 @@ import {
 } from '../constants';
 import { processImage, prepareTrainingData } from './mlHelpers';
 
+// Simple hash function for image change detection
+// Compatible with old browsers (ES3+)
+function quickHash(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return hash.toString(36);
+}
+
 interface TrainingSnapshot {
   classNames: string[];
   imageCounts: number[];
   totalImages: number;
+  imageHashes: string[]; // Hashes of all image data URLs
 }
 
 interface MLState {
@@ -221,11 +234,12 @@ export const useMLStore = create<MLStore>()(
 
           console.log('Training completed successfully');
           
-          // Create training snapshot
+          // Create training snapshot with image hashes
           const snapshot: TrainingSnapshot = {
             classNames: classes.map(c => c.name),
             imageCounts: classes.map(c => c.images.length),
-            totalImages
+            totalImages,
+            imageHashes: classes.flatMap(c => c.images.map(img => quickHash(img))).sort()
           };
           
           set({ 
@@ -315,6 +329,11 @@ export const useMLStore = create<MLStore>()(
           if (snapshotIndex === -1) return true; // Class not in snapshot
           if (classes[i].images.length !== trainingSnapshot.imageCounts[snapshotIndex]) return true;
         }
+        
+        // Check if actual image content changed by comparing hashes
+        const currentHashes = classes.flatMap(c => c.images.map(img => quickHash(img))).sort();
+        const snapshotHashes = trainingSnapshot.imageHashes || []; // Fallback for old snapshots
+        if (JSON.stringify(currentHashes) !== JSON.stringify(snapshotHashes)) return true;
         
         return false;
       },
