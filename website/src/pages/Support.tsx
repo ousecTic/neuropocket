@@ -59,7 +59,7 @@ export function Support() {
                     Enhanced desktop experience with better performance
                   </p>
                   <a 
-                    href="https://github.com/ousecTic/neuropocket/releases/download/v1.1.0/Neuropocket-Setup-1.1.0.exe" 
+                    href="https://github.com/ousecTic/neuropocket/releases/download/v1.2.1/Neuropocket.Setup.exe" 
                     className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                   >
                     <Download size={16} />
@@ -77,7 +77,7 @@ export function Support() {
                     Full-featured mobile experience with better storage
                   </p>
                   <a 
-                    href="https://github.com/ousecTic/neuropocket/releases/download/v1.1.0/neuropocket-1.1.0.apk" 
+                    href="https://github.com/ousecTic/neuropocket/releases/download/v1.2.1/neuropocket.apk" 
                     className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                   >
                     <Download size={16} />
