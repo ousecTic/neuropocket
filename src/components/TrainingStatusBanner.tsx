@@ -74,21 +74,7 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
             <div className="flex-1">
               <h4 className="font-semibold text-green-900 mb-1">Data Ready!</h4>
               <p className="text-sm text-green-700">
-                You have {classes.length} groups with {totalImages} {totalImages === 1 ? 'image' : 'images'}.{' '}
-                {onGoToTraining ? (
-                  <>
-                    Ready to{' '}
-                    <button 
-                      onClick={onGoToTraining}
-                      className="font-semibold text-green-900 hover:text-green-950 underline cursor-pointer"
-                    >
-                      train
-                    </button>
-                    {' '}when you are.
-                  </>
-                ) : (
-                  'Ready to train when you are.'
-                )}
+                You have {classes.length} groups with {totalImages} {totalImages === 1 ? 'image' : 'images'}. Ready to train when you are.
               </p>
             </div>
           </div>

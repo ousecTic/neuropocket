@@ -558,14 +558,6 @@ export function Challenge() {
                         </button>
                       </div>
                     </div>
-
-                    {/* Continue to Model Button - Outside the box */}
-                    <button
-                      onClick={() => setActiveSection('testing')}
-                      className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-700 font-medium text-lg"
-                    >
-                      Continue to Model Testing →
-                    </button>
                   </div>
                 ) : (
                   <div className="bg-white rounded-lg shadow-sm p-8">

@@ -208,8 +208,7 @@ export function ProjectDetail() {
 
         {activeSection === 'training' && (
           <TrainingSection 
-            project={project} 
-            onContinueToModel={() => setActiveSection('preview')}
+            project={project}
           />
         )}
         {activeSection === 'preview' && (
