@@ -5,9 +5,10 @@ import { Project } from '../types/project';
 
 interface TrainingSectionProps {
   project: Project;
+  onTrainingComplete?: () => void;
 }
 
-export function TrainingSection({ project }: TrainingSectionProps) {
+export function TrainingSection({ project, onTrainingComplete }: TrainingSectionProps) {
   const { 
     mobilenet,
     isTraining, 
@@ -67,6 +68,11 @@ export function TrainingSection({ project }: TrainingSectionProps) {
     const success = await trainModel(project.id, trainingClasses);
     if (!success) {
       setError('Training failed. Please try again.');
+    } else {
+      // Navigate to Model tab after successful training
+      if (onTrainingComplete) {
+        onTrainingComplete();
+      }
     }
   };
 

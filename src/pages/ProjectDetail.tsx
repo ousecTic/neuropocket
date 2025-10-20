@@ -209,6 +209,7 @@ export function ProjectDetail() {
         {activeSection === 'training' && (
           <TrainingSection 
             project={project}
+            onTrainingComplete={() => setActiveSection('preview')}
           />
         )}
         {activeSection === 'preview' && (

@@ -208,6 +208,8 @@ export function Challenge() {
         // Clear test results when model is retrained
         setTestResults([]);
         setError(null);
+        // Navigate to Model tab after successful training
+        setActiveSection('testing');
       } else {
         setError('Training failed. Please try again with different images.');
         setTrainingResult(null);
