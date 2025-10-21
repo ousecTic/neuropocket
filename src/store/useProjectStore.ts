@@ -19,6 +19,20 @@ interface ProjectStore {
 const DB_NAME = 'learn-ai-anywhere-db';
 const STORE_NAME = 'projects';
 
+// UUID v4 polyfill for older browsers (Chrome 69+)
+// crypto.randomUUID() is only available in Chrome 92+
+const generateUUID = (): string => {
+  if (crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // RFC4122 version 4 UUID fallback using crypto.getRandomValues (Chrome 11+)
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (crypto.getRandomValues(new Uint8Array(1))[0] % 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+
 // Singleton DB instance
 let dbInstance: Awaited<ReturnType<typeof openDB>> | null = null;
 
@@ -87,7 +101,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
 
     const newProject: Project = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       name,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -136,7 +150,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
 
     const newClass: ClassData = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       name: className,
       createdAt: Date.now(),
       images: [],
@@ -190,7 +204,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
 
   addImageToClass: async (projectId: string, classId: string, dataUrls: string[]) => {
     const newImages: ClassImage[] = dataUrls.map(dataUrl => ({
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       dataUrl,
       createdAt: Date.now(),
     }));
