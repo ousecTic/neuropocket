@@ -63,8 +63,8 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
   }
 
   const dialog = (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg p-6 w-full max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto">
         <h2 className="text-xl font-semibold mb-4">Create New Project</h2>
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
