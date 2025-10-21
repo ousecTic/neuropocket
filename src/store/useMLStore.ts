@@ -239,7 +239,7 @@ export const useMLStore = create<MLStore>()(
             classNames: classes.map(c => c.name),
             imageCounts: classes.map(c => c.images.length),
             totalImages,
-            imageHashes: classes.flatMap(c => c.images.map(img => quickHash(img))).sort()
+            imageHashes: classes.reduce((acc, c) => [...acc, ...c.images.map(img => quickHash(img))], [] as string[]).sort()
           };
           
           set({ 
@@ -331,7 +331,7 @@ export const useMLStore = create<MLStore>()(
         }
         
         // Check if actual image content changed by comparing hashes
-        const currentHashes = classes.flatMap(c => c.images.map(img => quickHash(img))).sort();
+        const currentHashes = classes.reduce((acc, c) => [...acc, ...c.images.map(img => quickHash(img))], [] as string[]).sort();
         const snapshotHashes = trainingSnapshot.imageHashes || []; // Fallback for old snapshots
         if (JSON.stringify(currentHashes) !== JSON.stringify(snapshotHashes)) return true;
         
