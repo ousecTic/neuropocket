@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { ProjectHeader } from '../components/ProjectHeader';
 import { useMLStore } from '../store/useMLStore';
 import { ChallengeIntro } from '../components/ChallengeIntro';
-import { Brain, CheckCircle2 } from 'lucide-react';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { TrainingStatusBanner } from '../components/TrainingStatusBanner';
 
 type ChallengeType = 'bears-vs-dogs';

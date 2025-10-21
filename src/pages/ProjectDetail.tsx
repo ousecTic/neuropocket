@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Brain, Plus } from 'lucide-react';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import Plus from 'lucide-react/dist/esm/icons/plus';
 import { useProjectStore } from '../store/useProjectStore';
 import { useMLStore } from '../store/useMLStore';
 import { ClassCard } from '../components/ClassCard';

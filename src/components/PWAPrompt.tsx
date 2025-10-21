@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import X from 'lucide-react/dist/esm/icons/x';
 import { usePWA } from '../hooks/usePWA';
 
 export function PWAPrompt() {

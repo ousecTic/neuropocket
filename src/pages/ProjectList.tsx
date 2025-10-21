@@ -3,7 +3,7 @@ import { ProjectCard } from '../components/ProjectCard';
 import { ProjectHeader } from '../components/ProjectHeader';
 import { useProjectStore } from '../store/useProjectStore';
 import { CreateProjectDialog } from '../components/CreateProjectDialog';
-import { Brain } from 'lucide-react';
+import Brain from 'lucide-react/dist/esm/icons/brain';
 import { useNavigate } from 'react-router-dom';
 
 export function ProjectList() {

@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Brain, ArrowLeft, Plus, MoreVertical } from 'lucide-react';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
+import Plus from 'lucide-react/dist/esm/icons/plus';
+import MoreVertical from 'lucide-react/dist/esm/icons/more-vertical';
 import { useState } from 'react';
 
 interface ProjectHeaderProps {

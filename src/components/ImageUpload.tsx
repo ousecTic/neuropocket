@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Upload, X } from 'lucide-react';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import X from 'lucide-react/dist/esm/icons/x';
 import { ClassImage } from '../types/project';
 
 interface ImageUploadProps {

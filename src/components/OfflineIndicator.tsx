@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { WifiOff, X } from 'lucide-react';
+import WifiOff from 'lucide-react/dist/esm/icons/wifi-off';
+import X from 'lucide-react/dist/esm/icons/x';
 
 export function OfflineIndicator() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);

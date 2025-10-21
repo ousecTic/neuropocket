@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Upload, AlertCircle } from 'lucide-react';
+import Play from 'lucide-react/dist/esm/icons/play';
+import Upload from 'lucide-react/dist/esm/icons/upload';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import { useMLStore } from '../store/useMLStore';
 import { Project } from '../types/project';
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
+import Pencil from 'lucide-react/dist/esm/icons/pencil';
+import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { Project } from '../types/project';
 import { useProjectStore } from '../store/useProjectStore';
 import { Link } from 'react-router-dom';

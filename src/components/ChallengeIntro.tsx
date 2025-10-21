@@ -1,4 +1,5 @@
-import { Brain, Target } from 'lucide-react';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import Target from 'lucide-react/dist/esm/icons/target';
 
 interface ChallengeIntroProps {
   onDismiss: () => void;

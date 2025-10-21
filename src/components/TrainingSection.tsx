@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Brain, AlertCircle, CheckCircle2 } from 'lucide-react';
+import Brain from 'lucide-react/dist/esm/icons/brain';
+import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { useMLStore } from '../store/useMLStore';
 import { Project } from '../types/project';
 
