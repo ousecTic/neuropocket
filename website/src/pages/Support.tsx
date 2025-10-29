@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 
 export function Support() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 py-12">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-color)' }}>
+      <div className="mx-auto px-6 md:px-12 lg:px-16 py-12" style={{ maxWidth: 'var(--container-width)' }}>
         <div className="mb-8">
           <Link 
             to="/"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800"
+            className="inline-flex items-center gap-2"
+            style={{ color: 'var(--primary-color)', textDecoration: 'none' }}
           >
             <ArrowLeft size={20} />
             Back to Home
@@ -18,24 +19,27 @@ export function Support() {
         <div className="space-y-8">
           {/* Quick Start */}
           <div className="bg-white rounded-lg shadow-sm p-8">
-            <h2 className="text-2xl font-bold mb-6">Get Started with NeuroPocket</h2>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Get Started with NeuroPocket</h2>
             
             {/* Web Version */}
             <div className="mb-8">
-              <div className="bg-blue-50 rounded-lg p-6 mb-6">
+              <div className="rounded-lg p-6 mb-6" style={{ backgroundColor: '#EFF6FF' }}>
                 <div className="flex items-center gap-3 mb-6">
-                  <Globe className="w-5 h-5 text-blue-600" />
-                  <h4 className="text-lg font-semibold">Web App</h4>
+                  <Globe className="w-5 h-5" style={{ color: 'var(--primary-color)' }} />
+                  <h4 className="text-lg font-semibold" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Web App</h4>
                 </div>
                 <div className="space-y-4">
                   <a 
                     href="https://neuropocket.netlify.app"
-                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="inline-flex items-center gap-2 text-white px-4 py-2"
+                    style={{ backgroundColor: 'var(--primary-color)', borderRadius: '6px', textDecoration: 'none' }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-dark)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-color)'}
                   >
                     <Globe className="w-5 h-5" />
                     Open NeuroPocket
                   </a>
-                  <div className="flex items-start gap-2 text-blue-800 bg-blue-50 p-3 rounded-lg">
+                  <div className="flex items-start gap-2 p-3 rounded-lg" style={{ color: '#1e40af', backgroundColor: '#EFF6FF' }}>
                     <WifiOff className="w-5 h-5 mt-0.5 flex-shrink-0" />
                     <div className="text-sm">
                       <p>Need offline access? Install NeuroPocket on your device to use it without internet. See options below.</p>
@@ -47,20 +51,23 @@ export function Support() {
 
             {/* Native Apps */}
             <div>
-              <h3 className="text-xl font-semibold mb-4 text-gray-800">Native Apps for Better Performance</h3>
+              <h3 className="text-xl font-semibold mb-4" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Native Apps for Better Performance</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Windows */}
-                <div className="bg-gray-50 rounded-lg p-6">
+                <div className="rounded-lg p-6" style={{ backgroundColor: 'var(--bg-color)' }}>
                   <div className="flex items-center gap-3 mb-4">
-                    <Monitor className="w-6 h-6 text-blue-600" />
-                    <h4 className="text-lg font-semibold">Windows App</h4>
+                    <Monitor className="w-6 h-6" style={{ color: 'var(--primary-color)' }} />
+                    <h4 className="text-lg font-semibold" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Windows App</h4>
                   </div>
-                  <p className="text-gray-600 mb-4">
+                  <p className="mb-4" style={{ color: 'var(--subtext-color)' }}>
                     Enhanced desktop experience with better performance
                   </p>
                   <a 
                     href="https://github.com/ousecTic/neuropocket/releases/download/v1.2.1/Neuropocket.Setup.exe" 
-                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="inline-flex items-center gap-2 text-white px-4 py-2"
+                    style={{ backgroundColor: 'var(--primary-color)', borderRadius: '6px', textDecoration: 'none' }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-dark)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-color)'}
                   >
                     <Download size={16} />
                     Download for Windows
@@ -68,17 +75,20 @@ export function Support() {
                 </div>
 
                 {/* Android */}
-                <div className="bg-gray-50 rounded-lg p-6">
+                <div className="rounded-lg p-6" style={{ backgroundColor: 'var(--bg-color)' }}>
                   <div className="flex items-center gap-3 mb-4">
-                    <Smartphone className="w-6 h-6 text-blue-600" />
-                    <h4 className="text-lg font-semibold">Android App</h4>
+                    <Smartphone className="w-6 h-6" style={{ color: 'var(--primary-color)' }} />
+                    <h4 className="text-lg font-semibold" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Android App</h4>
                   </div>
-                  <p className="text-gray-600 mb-4">
+                  <p className="mb-4" style={{ color: 'var(--subtext-color)' }}>
                     Full-featured mobile experience with better storage
                   </p>
                   <a 
                     href="https://github.com/ousecTic/neuropocket/releases/download/v1.2.1/neuropocket.apk" 
-                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="inline-flex items-center gap-2 text-white px-4 py-2"
+                    style={{ backgroundColor: 'var(--primary-color)', borderRadius: '6px', textDecoration: 'none' }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-dark)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-color)'}
                   >
                     <Download size={16} />
                     Download APK
@@ -90,18 +100,18 @@ export function Support() {
 
           {/* Advanced Installation Options */}
           <div className="bg-white rounded-lg shadow-sm p-8">
-            <h2 className="text-2xl font-bold mb-6">Advanced Installation Options</h2>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Advanced Installation Options</h2>
             
             <div className="space-y-6">
               {/* PWA Installation */}
               <div>
-                <h3 className="text-xl font-semibold mb-4">Install as an App (PWA)</h3>
+                <h3 className="text-xl font-semibold mb-4" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Install as an App (PWA)</h3>
                 <div className="mt-12">
                   <div className="flex items-center gap-3 mb-4">
-                    <Download className="w-5 h-5 text-blue-600" />
-                    <h4 className="text-lg font-semibold">Install on Your Device</h4>
+                    <Download className="w-5 h-5" style={{ color: 'var(--primary-color)' }} />
+                    <h4 className="text-lg font-semibold" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Install on Your Device</h4>
                   </div>
-                  <p className="text-gray-600 mb-4">
+                  <p className="mb-4" style={{ color: 'var(--subtext-color)' }}>
                     After opening the web app, you can install it on your device to use it without internet and get quick access from your home screen:
                   </p>
                 </div>
@@ -109,21 +119,21 @@ export function Support() {
                 <div className="grid md:grid-cols-3 gap-6">
                   {/* Chrome/Android */}
                   <div className="bg-gray-50 rounded-lg p-6">
-                    <h4 className="font-semibold mb-3">Chrome/Android</h4>
+                    <h4 className="font-semibold mb-3" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Chrome/Android</h4>
                     <ol className="space-y-2 text-sm">
-                      <li className="text-gray-600">1. Open in Chrome</li>
-                      <li className="text-gray-600">2. Tap menu (⋮)</li>
-                      <li className="text-gray-600">3. "Install App"</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>1. Open in Chrome</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>2. Tap menu (⋮)</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>3. "Install App"</li>
                     </ol>
                   </div>
 
                   {/* Safari iOS */}
                   <div className="bg-gray-50 rounded-lg p-6">
-                    <h4 className="font-semibold mb-3">Safari (iOS/iPadOS)</h4>
+                    <h4 className="font-semibold mb-3" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Safari (iOS/iPadOS)</h4>
                     <ol className="space-y-2 text-sm">
-                      <li className="text-gray-600">1. Open in Safari</li>
-                      <li className="text-gray-600">2. Tap Share</li>
-                      <li className="text-gray-600">3. "Add to Home Screen"</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>1. Open in Safari</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>2. Tap Share</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>3. "Add to Home Screen"</li>
                     </ol>
                     <div className="mt-3">
                       <div className="flex items-start gap-2 text-amber-600 bg-amber-50 p-2 rounded text-sm">
@@ -135,11 +145,11 @@ export function Support() {
 
                   {/* Desktop Chrome */}
                   <div className="bg-gray-50 rounded-lg p-6">
-                    <h4 className="font-semibold mb-3">Desktop Chrome</h4>
+                    <h4 className="font-semibold mb-3" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Desktop Chrome</h4>
                     <ol className="space-y-2 text-sm">
-                      <li className="text-gray-600">1. Open in Chrome</li>
-                      <li className="text-gray-600">2. Click install icon in address bar</li>
-                      <li className="text-gray-600">3. "Install"</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>1. Open in Chrome</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>2. Click install icon in address bar</li>
+                      <li style={{ color: 'var(--subtext-color)' }}>3. "Install"</li>
                     </ol>
                   </div>
                 </div>
@@ -149,20 +159,20 @@ export function Support() {
 
           {/* Storage and Offline Support */}
           <div className="bg-white rounded-lg shadow-sm p-8">
-            <h2 className="text-2xl font-bold mb-6">Storage & Offline Support</h2>
+            <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Storage & Offline Support</h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
                 <div className="flex items-start gap-3">
-                  <Database className="w-6 h-6 text-blue-600 mt-1" />
+                  <Database className="w-6 h-6 mt-1" style={{ color: 'var(--primary-color)' }} />
                   <div>
-                    <h3 className="font-semibold mb-2">Storage Behavior</h3>
+                    <h3 className="font-semibold mb-2" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Storage Behavior</h3>
                     <ul className="space-y-3">
-                      <li className="flex items-start gap-2 text-gray-600">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
+                      <li className="flex items-start gap-2" style={{ color: 'var(--subtext-color)' }}>
+                        <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: 'var(--primary-color)' }} />
                         <span><strong>Native Apps:</strong> Best storage persistence</span>
                       </li>
-                      <li className="flex items-start gap-2 text-gray-600">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
+                      <li className="flex items-start gap-2" style={{ color: 'var(--subtext-color)' }}>
+                        <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: 'var(--primary-color)' }} />
                         <span><strong>Web/PWA:</strong> Storage may be cleared by browser</span>
                       </li>
                     </ul>
@@ -172,16 +182,16 @@ export function Support() {
 
               <div>
                 <div className="flex items-start gap-3">
-                  <WifiOff className="w-6 h-6 text-blue-600 mt-1" />
+                  <WifiOff className="w-6 h-6 mt-1" style={{ color: 'var(--primary-color)' }} />
                   <div>
-                    <h3 className="font-semibold mb-2">Offline Support</h3>
+                    <h3 className="font-semibold mb-2" style={{ color: 'var(--text-color)', fontWeight: '600' }}>Offline Support</h3>
                     <ul className="space-y-3">
-                      <li className="flex items-start gap-2 text-gray-600">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
+                      <li className="flex items-start gap-2" style={{ color: 'var(--subtext-color)' }}>
+                        <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: 'var(--primary-color)' }} />
                         <span>All versions work offline after first load</span>
                       </li>
-                      <li className="flex items-start gap-2 text-gray-600">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2" />
+                      <li className="flex items-start gap-2" style={{ color: 'var(--subtext-color)' }}>
+                        <div className="w-1.5 h-1.5 rounded-full mt-2" style={{ backgroundColor: 'var(--primary-color)' }} />
                         <span>Native apps provide the most reliable offline experience</span>
                       </li>
                     </ul>

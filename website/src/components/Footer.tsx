@@ -1,25 +1,36 @@
-
 export function Footer() {
   return (
-    <div className="border-t border-gray-200 bg-white">
-      <div className="max-w-6xl mx-auto px-6 py-8">
+    <div className="border-t bg-white" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--bg-color)' }}>
+      <div className="mx-auto px-6 py-8" style={{ maxWidth: 'var(--container-width)' }}>
         <div className="flex flex-col items-center gap-2">
-          <p className="text-center text-gray-600">
+          <p className="text-center text-sm" style={{ color: 'var(--subtext-color)' }}>
             Made with ❤️ by{' '}
             <a 
-              href="https://www.quacklearner.org" 
-              className="text-blue-600 hover:underline"
+              href="https://www.learnaianywhere.org" 
+              className="hover:underline"
+              style={{ color: 'var(--primary-color)', textDecoration: 'none' }}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Quacklearner
+              learnaianywhere.org
             </a>
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="text-center text-sm" style={{ color: 'var(--subtext-color)' }}>
+            Contact:{' '}
+            <a 
+              href="mailto:contact@learnaianywhere.org"
+              className="hover:underline"
+              style={{ color: 'var(--primary-color)', textDecoration: 'none' }}
+            >
+              contact@learnaianywhere.org
+            </a>
+          </p>
+          <p className="text-center text-sm" style={{ color: 'var(--subtext-color)' }}>
             Inspired by{' '}
             <a 
               href="https://teachablemachine.withgoogle.com/"
-              className="text-blue-600 hover:underline"
+              className="hover:underline"
+              style={{ color: 'var(--primary-color)', textDecoration: 'none' }}
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -6,10 +6,49 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  
+  /* Main brand colors - matching learnaianywhere */
+  --primary-color: #258EC2;
+  --primary-dark: #1c6e99;
+  --primary-light: #3ba3da;
+  
+  /* Text colors */
+  --text-color: #000000;
+  --text-color-light: #FFFFFF;
+  --subtext-color: #71717A;
+  
+  /* Background colors */
+  --bg-color: #F9FAFB;
+  --bg-color-white: #FFFFFF;
+  --light-bg: #F9FAFB;
+  
+  /* Border colors */
+  --border-color: #E5E7EB;
+  
+  /* Alert colors */
+  --success-color: #10B981;
+  --warning-color: #F59E0B;
+  --danger-color: #EF4444;
+  --info-color: #3B82F6;
+  
+  /* Layout variables */
+  --container-width: 1280px;
+  --max-width: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background: white;
+  overflow-x: hidden;
 }

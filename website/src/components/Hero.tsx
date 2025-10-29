@@ -1,62 +1,101 @@
-import { Link } from 'react-router-dom';
-import { Brain, Phone, Monitor, WifiOff, Cloud, ArrowRight } from 'lucide-react';
+import { Download, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 export function Hero() {
+  const [showDropdown, setShowDropdown] = useState(false);
+
   return (
-    <div className="bg-white">
-      <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-16 py-24">
+    <div className="bg-white" style={{ background: 'linear-gradient(180deg, #EFF6FF 0%, #FFFFFF 100%)' }}>
+      <div className="mx-auto px-6 md:px-12 lg:px-16 py-24" style={{ maxWidth: 'var(--container-width)' }}>
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <div className="flex items-center gap-3">
-              <Brain size={48} className="text-blue-600" />
-              <h1 className="text-4xl font-bold text-gray-900">NeuroPocket</h1>
+              <img src="/neuropocket-logo.png" alt="NeuroPocket Logo" style={{ height: '48px', width: 'auto' }} />
+              <h1 className="text-4xl font-bold" style={{ color: 'var(--text-color)' }}>NeuroPocket</h1>
             </div>
-            <p className="text-2xl text-gray-600">
-              Learn how AI works by teaching it to recognize images - works on mobile, desktop, and offline.
+            <p className="text-2xl" style={{ color: 'var(--subtext-color)', lineHeight: '1.5' }}>
+              Learn AI by building your own image recognition model. Works <strong>completely offline</strong> on mobile and desktop.
             </p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-2 text-gray-600">
-                <Phone size={20} className="text-blue-600" />
-                <span>Works on Mobile</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-600">
-                <Monitor size={20} className="text-blue-600" />
-                <span>Works on Desktop</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-600">
-                <WifiOff size={20} className="text-blue-600" />
-                <span>Works Offline</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-600">
-                <Cloud size={20} className="text-blue-600" />
-                <span>Keeps Data Private</span>
-              </div>
-            </div>
             <div className="flex flex-wrap gap-4">
               <a
                 href="https://neuropocket.netlify.app"
-                className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 text-white px-8 py-4 text-lg font-medium transition-colors"
+                style={{ 
+                  backgroundColor: 'var(--primary-color)', 
+                  borderRadius: '6px',
+                  textDecoration: 'none'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-dark)'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-color)'}
               >
-                Get Started
-                <Brain size={24} />
+                Try Online
               </a>
-              <Link
-                to="/install"
-                className="inline-flex items-center gap-2 bg-white border-2 border-gray-200 px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-50 transition-colors"
-              >
-                Install App
-                <ArrowRight size={24} />
-              </Link>
+              <div className="relative">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="inline-flex items-center gap-2 bg-white px-8 py-4 text-lg font-medium transition-colors"
+                  style={{ 
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '6px',
+                    color: 'var(--text-color)',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Download size={20} />
+                  Download for Offline
+                  <ChevronDown size={20} />
+                </button>
+                {showDropdown && (
+                  <div 
+                    className="absolute top-full mt-2 bg-white rounded-lg shadow-lg overflow-hidden"
+                    style={{ 
+                      border: '1px solid var(--border-color)',
+                      minWidth: '250px',
+                      zIndex: 50
+                    }}
+                  >
+                    <a
+                      href="https://github.com/ousecTic/neuropocket/releases/download/v1.2.1/Neuropocket.Setup.exe"
+                      className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors"
+                      style={{ 
+                        textDecoration: 'none',
+                        color: 'var(--text-color)',
+                        borderBottom: '1px solid var(--border-color)'
+                      }}
+                    >
+                      <Download size={20} style={{ color: 'var(--primary-color)' }} />
+                      <div>
+                        <div className="font-semibold">Windows Desktop App</div>
+                        <div className="text-sm" style={{ color: 'var(--subtext-color)' }}>Direct download (.exe file)</div>
+                      </div>
+                    </a>
+                    <a
+                      href="https://github.com/ousecTic/neuropocket/releases/download/v1.2.1/neuropocket.apk"
+                      className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors"
+                      style={{ 
+                        textDecoration: 'none',
+                        color: 'var(--text-color)'
+                      }}
+                    >
+                      <Download size={20} style={{ color: 'var(--primary-color)' }} />
+                      <div>
+                        <div className="font-semibold">Android Mobile App</div>
+                        <div className="text-sm" style={{ color: 'var(--subtext-color)' }}>Direct download (.apk file)</div>
+                      </div>
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className="space-y-4">
-          <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden shadow-lg">
-          <img
-            src="/offline-demo.png"
-            alt="Students from different schools exploring NeuroPocket as part of the offline-first AI curriculum at learnaianywhere.org"
-            className="w-full h-full object-cover"
-          />
-    </div>
+            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden shadow-lg">
+              <img
+                src="/offline-demo.png"
+                alt="Students from different schools exploring NeuroPocket as part of the offline-first AI curriculum at learnaianywhere.org"
+                className="w-full h-full object-cover"
+              />
+            </div>
             <p className="text-sm text-gray-600">
               Students exploring NeuroPocket at{' '}
               <a 
@@ -67,7 +106,6 @@ export function Hero() {
               >
                 learnaianywhere.org
               </a>
-              {' '}— part of our offline-first AI curriculum
             </p>
           </div>
         </div>
