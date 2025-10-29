@@ -63,7 +63,7 @@ export function Support() {
                     Enhanced desktop experience with better performance
                   </p>
                   <a 
-                    href="https://github.com/ousecTic/neuropocket/releases/download/v1.2.1/Neuropocket.Setup.exe" 
+                    href="https://github.com/ousecTic/neuropocket/releases/download/v1.2.1/Neuropocket.exe" 
                     className="inline-flex items-center gap-2 text-white px-4 py-2"
                     style={{ backgroundColor: 'var(--primary-color)', borderRadius: '6px', textDecoration: 'none' }}
                     onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--primary-dark)'}
