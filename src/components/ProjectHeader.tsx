@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import Brain from 'lucide-react/dist/esm/icons/brain';
 import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import MoreVertical from 'lucide-react/dist/esm/icons/more-vertical';
@@ -53,7 +52,7 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
                 )
               )}
               <div className="flex items-center gap-3 min-w-0">
-                <Brain size={24} className="text-blue-600 flex-shrink-0" />
+                <img src="/neuropocket-logo.png" alt="NeuroPocket" className="flex-shrink-0" style={{ height: '32px', width: 'auto' }} />
                 <h1 className="text-xl font-bold text-gray-900 truncate">{title}</h1>
               </div>
             </div>
