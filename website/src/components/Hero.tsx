@@ -1,4 +1,4 @@
-import { Download, ChevronDown, Lock } from 'lucide-react';
+import { Download, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
 export function Hero() {
