@@ -1,4 +1,4 @@
-import { Download, ChevronDown } from 'lucide-react';
+import { Download, ChevronDown, Lock } from 'lucide-react';
 import { useState } from 'react';
 
 export function Hero() {
@@ -15,6 +15,9 @@ export function Hero() {
             </div>
             <p className="text-2xl" style={{ color: 'var(--subtext-color)', lineHeight: '1.5' }}>
               Learn AI by building your own image recognition model. Works <strong>completely offline</strong> on mobile and desktop.
+            </p>
+            <p className="text-base" style={{ color: 'var(--subtext-color)' }}>
+              🔒 All your data stays private on your device
             </p>
             <div className="flex flex-wrap gap-4">
               <a
