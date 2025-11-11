@@ -289,8 +289,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
       {/* Camera Modal */}
       {showCamera && (
         <div className="fixed inset-0 bg-black bg-opacity-90 z-50">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] p-4">
-            <div className="bg-white rounded-lg flex flex-col max-h-full">
+          <div className="bg-white rounded-lg w-full max-w-4xl fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto flex flex-col">
             {/* Modal Header */}
             <div className="flex-shrink-0 bg-white border-b px-4 py-3 flex items-center justify-between rounded-t-lg">
               <h3 className="text-lg font-semibold">Take Photos</h3>
@@ -400,7 +399,6 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                 </button>
               </div>
             )}
-            </div>
           </div>
         </div>
       )}
