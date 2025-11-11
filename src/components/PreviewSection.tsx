@@ -374,8 +374,9 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
 
       {/* Camera Modal */}
       {showCamera && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] p-4">
+            <div className="bg-white rounded-lg flex flex-col max-h-full">
             {/* Modal Header */}
             <div className="flex-shrink-0 bg-white border-b px-4 py-3 flex items-center justify-between rounded-t-lg">
               <h3 className="text-lg font-semibold">Take Photo</h3>
@@ -444,6 +445,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                 </button>
               </div>
             )}
+            </div>
           </div>
         </div>
       )}
