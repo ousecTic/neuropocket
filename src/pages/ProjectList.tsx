@@ -3,7 +3,7 @@ import { ProjectCard } from '../components/ProjectCard';
 import { ProjectHeader } from '../components/ProjectHeader';
 import { useProjectStore } from '../store/useProjectStore';
 import { CreateProjectDialog } from '../components/CreateProjectDialog';
-import Brain from 'lucide-react/dist/esm/icons/brain';
+import Network from 'lucide-react/dist/esm/icons/network';
 import { useNavigate } from 'react-router-dom';
 
 export function ProjectList() {
@@ -45,7 +45,7 @@ export function ProjectList() {
           <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-sm px-4 py-16">
             <div className="w-full max-w-md text-center">
               <div className="bg-primary/10 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                <Brain size={48} className="text-primary" />
+                <Network size={48} className="text-primary" />
               </div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Create Your First Project</h2>
               <p className="text-gray-600 mb-8 text-lg">

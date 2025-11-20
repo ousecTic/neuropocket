@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ProjectHeader } from '../components/ProjectHeader';
 import { useMLStore } from '../store/useMLStore';
 import { ChallengeIntro } from '../components/ChallengeIntro';
-import Brain from 'lucide-react/dist/esm/icons/brain';
+import Network from 'lucide-react/dist/esm/icons/network';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { TrainingStatusBanner } from '../components/TrainingStatusBanner';
 
@@ -274,7 +274,7 @@ export function Challenge() {
         <div className="text-center">
           <div className="relative">
             <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto"></div>
-            <Brain className="w-8 h-8 text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <Network className="w-8 h-8 text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           </div>
           <p className="mt-6 text-xl font-medium text-gray-700">Loading AI Model...</p>
           <p className="mt-2 text-sm text-gray-500">This may take a few seconds on first load</p>
@@ -566,7 +566,7 @@ export function Challenge() {
                   <div className="bg-white rounded-lg shadow-sm p-8">
                     <div className="max-w-md mx-auto">
                       <div className="text-center mb-6">
-                        <Brain size={48} className="mx-auto text-primary mb-4" />
+                        <Network size={48} className="mx-auto text-primary mb-4" />
                         <h2 className="text-xl font-semibold mb-2">Train Your Model</h2>
                         <p className="text-gray-600">
                           Train your model to recognize the categories you've selected.

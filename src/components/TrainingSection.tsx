@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Brain from 'lucide-react/dist/esm/icons/brain';
+import Network from 'lucide-react/dist/esm/icons/network';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { useMLStore } from '../store/useMLStore';
@@ -174,7 +174,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
     <div className="bg-white rounded-lg shadow-sm p-8">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-6">
-          <Brain size={48} className="mx-auto text-primary mb-4" />
+          <Network size={48} className="mx-auto text-primary mb-4" />
           <h2 className="text-xl font-semibold mb-2">Train Your Model</h2>
           <p className="text-gray-600">
             Train your model to recognize the groups you've created.

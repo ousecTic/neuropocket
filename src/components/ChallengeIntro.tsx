@@ -1,4 +1,4 @@
-import Brain from 'lucide-react/dist/esm/icons/brain';
+import Network from 'lucide-react/dist/esm/icons/network';
 import Target from 'lucide-react/dist/esm/icons/target';
 
 interface ChallengeIntroProps {
@@ -15,7 +15,7 @@ export function ChallengeIntro({ onDismiss }: ChallengeIntroProps) {
       <div className="max-w-2xl mx-auto">
         <div className="flex items-start gap-6">
           <div className="bg-primary/10 rounded-full p-3 flex-shrink-0">
-            <Brain className="w-8 h-8 text-primary" />
+            <Network className="w-8 h-8 text-primary" />
           </div>
           <div>
             <h2 className="text-2xl font-semibold mb-4">Welcome to the AI Bias Challenge!</h2>

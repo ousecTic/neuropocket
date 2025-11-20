@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Brain from 'lucide-react/dist/esm/icons/brain';
+import Network from 'lucide-react/dist/esm/icons/network';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import { useProjectStore } from '../store/useProjectStore';
 import { useMLStore } from '../store/useMLStore';
@@ -159,7 +159,7 @@ export function ProjectDetail() {
             {project.classes.length === 0 ? (
               <div className="bg-white rounded-lg shadow-sm p-8 text-center">
                 <div className="max-w-md mx-auto">
-                  <Brain size={48} className="mx-auto text-primary mb-4" />
+                  <Network size={48} className="mx-auto text-primary mb-4" />
                   <h2 className="text-xl font-semibold mb-2">Create Your First Group</h2>
                   <p className="text-gray-600 mb-6">
                     Start by creating groups for different objects or categories you want to recognize

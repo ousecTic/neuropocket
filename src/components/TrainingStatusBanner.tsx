@@ -1,5 +1,5 @@
 import { useMLStore } from '../store/useMLStore';
-import Brain from 'lucide-react/dist/esm/icons/brain';
+import Network from 'lucide-react/dist/esm/icons/network';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
@@ -34,7 +34,7 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
         <div className="bg-gray-50 rounded-lg p-5 mb-6 shadow-sm">
           <div className="flex items-start gap-4">
             <div className="bg-gray-100 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-              <Brain className="w-6 h-6 text-gray-600" />
+              <Network className="w-6 h-6 text-gray-600" />
             </div>
             <div className="flex-1">
               <h4 className="font-semibold text-gray-900 mb-1">Add at Least 2 Groups</h4>
@@ -53,7 +53,7 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
         <div className="bg-gray-50 rounded-lg p-5 mb-6 shadow-sm">
           <div className="flex items-start gap-4">
             <div className="bg-gray-100 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-              <Brain className="w-6 h-6 text-gray-600" />
+              <Network className="w-6 h-6 text-gray-600" />
             </div>
             <div className="flex-1">
               <h4 className="font-semibold text-gray-900 mb-1">Add Images to Your Groups</h4>
@@ -160,7 +160,7 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
         <div className="bg-gray-50 rounded-lg p-5 mb-6 shadow-sm">
           <div className="flex items-start gap-4">
             <div className="bg-gray-100 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-              <Brain className="w-6 h-6 text-gray-600" />
+              <Network className="w-6 h-6 text-gray-600" />
             </div>
             <div className="flex-1">
               <h4 className="font-semibold text-gray-900 mb-1">Add Data First</h4>
@@ -240,7 +240,7 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
       <div className="bg-gray-50 rounded-lg p-5 mb-6 shadow-sm">
         <div className="flex items-start gap-4">
           <div className="bg-gray-100 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-            <Brain className="w-6 h-6 text-gray-600" />
+            <Network className="w-6 h-6 text-gray-600" />
           </div>
           <div className="flex-1">
             <h4 className="font-semibold text-gray-900 mb-1">Ready to Train Your AI</h4>
@@ -261,7 +261,7 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
         <div className="bg-gray-50 rounded-lg p-5 mb-6 shadow-sm">
           <div className="flex items-start gap-4">
             <div className="bg-gray-100 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-              <Brain className="w-6 h-6 text-gray-600" />
+              <Network className="w-6 h-6 text-gray-600" />
             </div>
             <div className="flex-1">
               <h4 className="font-semibold text-gray-900 mb-1">Train Your AI First</h4>
