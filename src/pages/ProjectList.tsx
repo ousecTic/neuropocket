@@ -17,9 +17,9 @@ export function ProjectList() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading projects...</p>
         </div>
       </div>
@@ -27,7 +27,7 @@ export function ProjectList() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <ProjectHeader 
         title="My Projects" 
         action={projects.length > 0 ? {
@@ -44,8 +44,8 @@ export function ProjectList() {
         {projects.length === 0 ? (
           <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-sm px-4 py-16">
             <div className="w-full max-w-md text-center">
-              <div className="bg-blue-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                <Brain size={48} className="text-blue-600" />
+              <div className="bg-primary/10 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                <Brain size={48} className="text-primary" />
               </div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-3">Create Your First Project</h2>
               <p className="text-gray-600 mb-8 text-lg">
@@ -56,7 +56,7 @@ export function ProjectList() {
                 <button
                   onClick={() => navigate('/challenge')}
                   className="w-full py-4 text-lg rounded-lg flex items-center justify-center gap-2
-                    border-2 border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors"
+                    border-2 border-primary/30 text-primary hover:bg-primary/10 transition-colors"
                 >
                   Or Try the Bias Challenge
                 </button>

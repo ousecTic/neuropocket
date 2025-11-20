@@ -253,14 +253,14 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
             type="button"
             onClick={handleOpenCamera}
             disabled={loading}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors font-medium"
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-60 disabled:cursor-not-allowed transition-colors font-medium"
           >
             <Camera size={20} />
             <span>Take Photos</span>
           </button>
 
           {/* Upload Button */}
-          <label className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors font-medium ${loading ? 'opacity-60 pointer-events-none' : ''}`}>
+          <label className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 cursor-pointer transition-colors font-medium ${loading ? 'opacity-60 pointer-events-none' : ''}`}>
             <Upload size={20} />
             <span>Upload Photos</span>
             <input
@@ -276,7 +276,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
         </div>
 
         {loading && (
-          <div className="flex items-center justify-center gap-2 text-blue-600">
+          <div className="flex items-center justify-center gap-2 text-primary">
             <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
@@ -326,7 +326,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                   <button
                     type="button"
                     onClick={() => startCamera()}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
                   >
                     Try Again
                   </button>
@@ -384,7 +384,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                 <button
                   type="button"
                   onClick={handleCapturePhoto}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors font-medium"
                 >
                   <Camera size={20} />
                   <span>Capture</span>
@@ -393,7 +393,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                   type="button"
                   onClick={handleSavePhotos}
                   disabled={capturedPhotos.length === 0}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                  className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                 >
                   Add Photos {capturedPhotos.length > 0 && `(${capturedPhotos.length})`}
                 </button>

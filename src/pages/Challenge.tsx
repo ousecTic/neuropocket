@@ -270,11 +270,11 @@ export function Challenge() {
   // Show loading screen while model is loading
   if (!mobilenet) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto"></div>
-            <Brain className="w-8 h-8 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto"></div>
+            <Brain className="w-8 h-8 text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           </div>
           <p className="mt-6 text-xl font-medium text-gray-700">Loading AI Model...</p>
           <p className="mt-2 text-sm text-gray-500">This may take a few seconds on first load</p>
@@ -284,7 +284,7 @@ export function Challenge() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <ProjectHeader 
         title="AI Bias Challenge" 
         backTo="/"
@@ -306,7 +306,7 @@ export function Challenge() {
                   onClick={() => setActiveSection('data')}
                   className={`px-4 py-4 font-medium border-b-2 transition-colors ${
                     activeSection === 'data'
-                      ? 'border-blue-600 text-blue-600'
+                      ? 'border-primary text-primary'
                       : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}
                 >
@@ -317,7 +317,7 @@ export function Challenge() {
                   disabled={!isDataComplete}
                   className={`px-4 py-4 font-medium border-b-2 transition-colors ${
                     activeSection === 'training'
-                      ? 'border-blue-600 text-blue-600'
+                      ? 'border-primary text-primary'
                       : !isDataComplete
                         ? 'border-transparent text-gray-300 cursor-not-allowed'
                         : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -330,7 +330,7 @@ export function Challenge() {
                   disabled={!isTrainingComplete}
                   className={`px-4 py-4 font-medium border-b-2 transition-colors ${
                     activeSection === 'testing'
-                      ? 'border-blue-600 text-blue-600'
+                      ? 'border-primary text-primary'
                       : !isTrainingComplete
                         ? 'border-transparent text-gray-300 cursor-not-allowed'
                         : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -395,7 +395,7 @@ export function Challenge() {
                               key={image.id}
                               className={`relative aspect-square rounded-lg overflow-hidden cursor-pointer border-2 transition-all hover:scale-105 ${
                                 selectedClass1.includes(image.id)
-                                  ? 'border-blue-500 shadow-lg'
+                                  ? 'border-primary-light shadow-lg'
                                   : 'border-transparent hover:border-gray-300'
                               }`}
                               onClick={() => handleImageSelect(image)}
@@ -406,8 +406,8 @@ export function Challenge() {
                                 className="w-full h-full object-cover"
                               />
                               {selectedClass1.includes(image.id) && (
-                                <div className="absolute inset-0 bg-blue-500 bg-opacity-10">
-                                  <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <div className="absolute inset-0 bg-primary-light bg-opacity-10">
+                                  <div className="absolute top-1 right-1 bg-primary-light rounded-full p-1">
                                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                     </svg>
@@ -443,7 +443,7 @@ export function Challenge() {
                               key={image.id}
                               className={`relative aspect-square rounded-lg overflow-hidden cursor-pointer border-2 transition-all hover:scale-105 ${
                                 selectedClass2.includes(image.id)
-                                  ? 'border-blue-500 shadow-lg'
+                                  ? 'border-primary-light shadow-lg'
                                   : 'border-transparent hover:border-gray-300'
                               }`}
                               onClick={() => handleImageSelect(image)}
@@ -454,8 +454,8 @@ export function Challenge() {
                                 className="w-full h-full object-cover"
                               />
                               {selectedClass2.includes(image.id) && (
-                                <div className="absolute inset-0 bg-blue-500 bg-opacity-10">
-                                  <div className="absolute top-1 right-1 bg-blue-500 rounded-full p-1">
+                                <div className="absolute inset-0 bg-primary-light bg-opacity-10">
+                                  <div className="absolute top-1 right-1 bg-primary-light rounded-full p-1">
                                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                     </svg>
@@ -469,8 +469,8 @@ export function Challenge() {
                   </div>
                 </div>
                 
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                  <div className="flex items-center gap-2 text-blue-700">
+                <div className="mt-6 p-4 bg-primary/10 rounded-lg">
+                  <div className="flex items-center gap-2 text-primary-dark">
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
@@ -487,7 +487,7 @@ export function Challenge() {
                     disabled={!isDataComplete}
                     className={`w-full px-6 py-3 rounded-lg font-medium text-white ${
                       isDataComplete
-                        ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                        ? 'bg-primary hover:bg-primary-dark cursor-pointer'
                         : 'bg-gray-400 cursor-not-allowed'
                     }`}
                   >
@@ -502,7 +502,7 @@ export function Challenge() {
                 {!mobilenet ? (
                   <div className="bg-white rounded-lg shadow-sm p-8">
                     <div className="max-w-md mx-auto text-center">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                       <p className="text-gray-600">Loading...</p>
                     </div>
                   </div>
@@ -528,7 +528,7 @@ export function Challenge() {
                               </div>
                               <div className="w-full bg-gray-200 rounded-full h-2">
                                 <div 
-                                  className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                                  className="bg-primary h-2 rounded-full transition-all duration-300" 
                                   style={{ width: `${((trainingProgress.epoch + 1) / 50) * 100}%` }}
                                 />
                               </div>
@@ -551,9 +551,9 @@ export function Challenge() {
                         <button
                           onClick={handleStartTraining}
                           disabled={selectedClass1.length === 0 || selectedClass2.length === 0}
-                          className={`w-full border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
+                          className={`w-full border-2 border-primary text-primary px-6 py-3 rounded-lg transition-colors ${
                             selectedClass1.length > 0 && selectedClass2.length > 0
-                              ? 'hover:bg-blue-50' 
+                              ? 'hover:bg-primary/10' 
                               : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
                           }`}
                         >
@@ -566,7 +566,7 @@ export function Challenge() {
                   <div className="bg-white rounded-lg shadow-sm p-8">
                     <div className="max-w-md mx-auto">
                       <div className="text-center mb-6">
-                        <Brain size={48} className="mx-auto text-blue-600 mb-4" />
+                        <Brain size={48} className="mx-auto text-primary mb-4" />
                         <h2 className="text-xl font-semibold mb-2">Train Your Model</h2>
                         <p className="text-gray-600">
                           Train your model to recognize the categories you've selected.
@@ -588,9 +588,9 @@ export function Challenge() {
                       <button
                         onClick={handleStartTraining}
                         disabled={selectedClass1.length === 0 || selectedClass2.length === 0 || isTraining}
-                        className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors ${
+                        className={`w-full bg-primary text-white px-6 py-3 rounded-lg transition-colors ${
                           selectedClass1.length > 0 && selectedClass2.length > 0 && !isTraining
-                            ? 'hover:bg-blue-700' 
+                            ? 'hover:bg-primary-dark' 
                             : 'opacity-50 cursor-not-allowed'
                         }`}
                       >
@@ -607,7 +607,7 @@ export function Challenge() {
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
                               <div 
-                                className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                                className="bg-primary h-2 rounded-full transition-all duration-300" 
                                 style={{ width: `${((trainingProgress.epoch + 1) / 50) * 100}%` }}
                               />
                             </div>
@@ -636,7 +636,7 @@ export function Challenge() {
                         className={`w-full max-w-md px-8 py-3 rounded-lg font-medium text-white ${
                           isTesting || !isChallengeTrained
                             ? 'bg-gray-400 cursor-not-allowed'
-                            : 'bg-blue-600 hover:bg-blue-700'
+                            : 'bg-primary hover:bg-primary-dark'
                         }`}
                       >
                         {isTesting ? 'Running Tests...' : 'Run All Tests'}
@@ -816,7 +816,7 @@ export function Challenge() {
                               </p>
                               <button
                                 onClick={() => setActiveSection('data')}
-                                className="w-full bg-blue-500 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-600 font-medium"
+                                className="w-full bg-primary-light text-white px-6 py-3 rounded-lg transition-colors hover:bg-primary font-medium"
                               >
                                 ← Go Back to Data
                               </button>

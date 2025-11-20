@@ -48,8 +48,8 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
           setError(null);
         }}
         className={`
-          flex items-center justify-center gap-2 bg-blue-600 text-white 
-          hover:bg-blue-700 transition-colors
+          flex items-center justify-center gap-2 bg-primary text-white 
+          hover:bg-primary-dark transition-colors
           ${variant === 'full-width' 
             ? 'w-full py-4 text-lg rounded-lg' 
             : 'px-6 py-3 rounded-lg text-base'
@@ -111,7 +111,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
             <button
               type="button"
               onClick={handleSubmit}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark"
               disabled={!projectName.trim()}
             >
               Create

@@ -103,7 +103,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+              className="bg-primary h-2 rounded-full transition-all duration-300" 
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -116,7 +116,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
     return (
       <div className="bg-white rounded-lg shadow-sm p-8">
         <div className="max-w-md mx-auto text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -132,7 +132,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
               <CheckCircle2 size={48} className="mx-auto text-green-600 mb-4" />
               <h2 className="text-xl font-semibold mb-2">Model Trained Successfully!</h2>
               <p className="text-gray-600 mb-6">
-                Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it out.
+                Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it.
               </p>
             </div>
 
@@ -156,9 +156,9 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
             <button
               onClick={handleTrainModel}
               disabled={!canTrain}
-              className={`w-full border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors ${
+              className={`w-full border-2 border-primary text-primary px-6 py-3 rounded-lg transition-colors ${
                 canTrain 
-                  ? 'hover:bg-blue-50' 
+                  ? 'hover:bg-primary/10' 
                   : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
               }`}
             >
@@ -174,7 +174,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
     <div className="bg-white rounded-lg shadow-sm p-8">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-6">
-          <Brain size={48} className="mx-auto text-blue-600 mb-4" />
+          <Brain size={48} className="mx-auto text-primary mb-4" />
           <h2 className="text-xl font-semibold mb-2">Train Your Model</h2>
           <p className="text-gray-600">
             Train your model to recognize the groups you've created.
@@ -199,9 +199,9 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
         <button
           onClick={handleTrainModel}
           disabled={!canTrain || isTraining}
-          className={`w-full bg-blue-600 text-white px-6 py-3 rounded-lg transition-colors ${
+          className={`w-full bg-primary text-white px-6 py-3 rounded-lg transition-colors ${
             canTrain && !isTraining
-              ? 'hover:bg-blue-700' 
+              ? 'hover:bg-primary-dark' 
               : 'opacity-50 cursor-not-allowed'
           }`}
         >

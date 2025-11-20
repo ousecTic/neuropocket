@@ -67,7 +67,7 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
               {action && (
                 <button
                   onClick={action.onClick}
-                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-base whitespace-nowrap"
+                  className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors text-base whitespace-nowrap"
                 >
                   <Plus size={18} className="flex-shrink-0" />
                   {action.label}
@@ -76,7 +76,7 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
               {secondaryAction && (
                 <button
                   onClick={secondaryAction.onClick}
-                  className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-base whitespace-nowrap"
+                  className="flex items-center gap-2 bg-primary-light text-white px-4 py-2 rounded-lg hover:bg-primary transition-colors text-base whitespace-nowrap"
                 >
                   {secondaryAction.label}
                 </button>
@@ -101,7 +101,7 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
               <div className="sm:hidden">
                 <button
                   onClick={action.onClick}
-                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-base whitespace-nowrap"
+                  className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors text-base whitespace-nowrap"
                 >
                   <Plus size={18} className="flex-shrink-0" />
                   {action.label}
@@ -118,7 +118,7 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
               {action && (
                 <button
                   onClick={() => handleActionClick(action.onClick)}
-                  className="flex items-center gap-2 w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-base"
+                  className="flex items-center gap-2 w-full bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors text-base"
                 >
                   <Plus size={18} className="flex-shrink-0" />
                   {action.label}
@@ -127,7 +127,7 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
               {secondaryAction && (
                 <button
                   onClick={() => handleActionClick(secondaryAction.onClick)}
-                  className="flex items-center gap-2 w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-base"
+                  className="flex items-center gap-2 w-full bg-primary-light text-white px-4 py-2 rounded-lg hover:bg-primary transition-colors text-base"
                 >
                   {secondaryAction.label}
                 </button>

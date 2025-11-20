@@ -138,14 +138,14 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
     // Training in progress
     if (isCurrentlyTraining) {
       return (
-        <div className="bg-blue-50 rounded-lg p-5 mb-6 shadow-sm">
+        <div className="bg-primary/10 rounded-lg p-5 mb-6 shadow-sm">
           <div className="flex items-start gap-4">
-            <div className="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-              <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+            <div className="bg-primary/20 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+              <Loader2 className="w-6 h-6 text-primary animate-spin" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-blue-900 mb-1">Training Your AI...</h4>
-              <p className="text-sm text-blue-700">
+              <h4 className="font-semibold text-primary-dark mb-1">Training Your AI...</h4>
+              <p className="text-sm text-primary-dark">
                 Your AI is analyzing the images and finding patterns. This may take a minute.
               </p>
             </div>
@@ -169,7 +169,7 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
                 {onGoToData ? (
                   <button 
                     onClick={onGoToData}
-                    className="font-semibold text-blue-600 hover:text-blue-700 underline cursor-pointer"
+                    className="font-semibold text-primary hover:text-primary-dark underline cursor-pointer"
                   >
                     Data tab
                   </button>
@@ -270,7 +270,7 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
                 {onGoToTraining ? (
                   <button 
                     onClick={onGoToTraining}
-                    className="font-semibold text-blue-600 hover:text-blue-700 underline cursor-pointer"
+                    className="font-semibold text-primary hover:text-primary-dark underline cursor-pointer"
                   >
                     Training tab
                   </button>

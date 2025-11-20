@@ -84,7 +84,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               <button
                 type="button"
                 onClick={handleRename}
-                className="text-blue-600 hover:text-blue-800 px-3 py-1"
+                className="text-primary hover:text-primary-dark px-3 py-1"
                 disabled={!newName.trim()}
               >
                 Save
@@ -106,7 +106,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       ) : (
         <>
           <Link to={`/project/${project.id}`} className="block">
-            <h3 className="text-lg font-semibold mb-2 hover:text-blue-600 truncate pr-8" title={project.name}>{project.name}</h3>
+            <h3 className="text-lg font-semibold mb-2 hover:text-primary truncate pr-8" title={project.name}>{project.name}</h3>
             <p className="text-sm text-gray-500">
               Created: {new Date(project.createdAt).toLocaleDateString()}
             </p>
@@ -122,7 +122,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                     <div className="absolute top-4 right-4 flex gap-2">
             <button
               onClick={() => setIsRenaming(true)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20 text-primary hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/40"
               title="Rename Project"
             >
               <Pencil size={20} />

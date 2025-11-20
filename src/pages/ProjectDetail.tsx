@@ -66,9 +66,9 @@ export function ProjectDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading project...</p>
         </div>
       </div>
@@ -77,7 +77,7 @@ export function ProjectDetail() {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-gray-50">
         <ProjectHeader title="Project Not Found" backTo="/" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
           <div className="bg-white rounded-lg shadow-sm p-8 text-center">
@@ -89,7 +89,7 @@ export function ProjectDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <ProjectHeader 
         title={project.name}
         backTo="/"
@@ -103,7 +103,7 @@ export function ProjectDetail() {
               onClick={() => setActiveSection('classes')}
               className={`px-4 py-4 font-medium border-b-2 transition-colors ${
                 activeSection === 'classes'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-primary text-primary'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -114,7 +114,7 @@ export function ProjectDetail() {
               disabled={!canTrain}
               className={`px-4 py-4 font-medium border-b-2 transition-colors ${
                 activeSection === 'training'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-primary text-primary'
                   : !canTrain
                     ? 'border-transparent text-gray-300 cursor-not-allowed'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -127,7 +127,7 @@ export function ProjectDetail() {
               disabled={!canTest}
               className={`px-4 py-4 font-medium border-b-2 transition-colors ${
                 activeSection === 'preview'
-                  ? 'border-blue-600 text-blue-600'
+                  ? 'border-primary text-primary'
                   : !canTest
                     ? 'border-transparent text-gray-300 cursor-not-allowed'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -159,7 +159,7 @@ export function ProjectDetail() {
             {project.classes.length === 0 ? (
               <div className="bg-white rounded-lg shadow-sm p-8 text-center">
                 <div className="max-w-md mx-auto">
-                  <Brain size={48} className="mx-auto text-blue-600 mb-4" />
+                  <Brain size={48} className="mx-auto text-primary mb-4" />
                   <h2 className="text-xl font-semibold mb-2">Create Your First Group</h2>
                   <p className="text-gray-600 mb-6">
                     Start by creating groups for different objects or categories you want to recognize
@@ -169,7 +169,7 @@ export function ProjectDetail() {
                       setIsAddingClass(true);
                       setClassError(null);
                     }}
-                    className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                    className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors"
                   >
                     <Plus size={20} />
                     Add Your First Group
@@ -195,7 +195,7 @@ export function ProjectDetail() {
                     <div className="text-center">
                       <button
                         onClick={() => setActiveSection('training')}
-                        className="w-full bg-blue-500 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-600 font-medium"
+                        className="w-full bg-primary-light text-white px-6 py-3 rounded-lg transition-colors hover:bg-primary font-medium"
                       >
                         Continue to Training →
                       </button>
@@ -228,7 +228,7 @@ export function ProjectDetail() {
             setIsAddingClass(true);
             setClassError(null);
           }}
-          className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-40 flex items-center gap-2"
+          className="fixed bottom-6 right-6 bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-40 flex items-center gap-2"
           title="Add Group"
         >
           <Plus size={24} />
@@ -283,7 +283,7 @@ export function ProjectDetail() {
                 <button
                   type="button"
                   onClick={handleAddClass}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark"
                   disabled={!newClassName.trim()}
                 >
                   Create

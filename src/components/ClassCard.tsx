@@ -79,7 +79,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
               <button
                 type="button"
                 onClick={handleRename}
-                className="text-blue-600 hover:text-blue-800 px-3 py-1"
+                className="text-primary hover:text-primary-dark px-3 py-1"
                 disabled={!newName.trim()}
               >
                 Save
@@ -103,7 +103,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
             <div className="flex gap-2">
               <button
                 onClick={() => setIsRenaming(true)}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20 text-primary hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/40"
                 title="Rename Class"
               >
                 <Pencil size={20} />

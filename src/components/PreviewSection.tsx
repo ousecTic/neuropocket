@@ -252,7 +252,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
     <div className="bg-white rounded-lg shadow-sm p-8">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <Play size={48} className="mx-auto text-blue-600 mb-4" />
+          <Play size={48} className="mx-auto text-primary mb-4" />
           <h2 className="text-xl font-semibold mb-2">Test Your Model</h2>
           <p className="text-gray-600">
             Upload an image to see how well your model performs
@@ -272,14 +272,14 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
               />
               <button
                 onClick={handleOpenCamera}
-                className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="w-full flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors font-medium"
               >
                 <Camera size={20} />
                 Take Photo
               </button>
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full flex items-center justify-center gap-2 border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors font-medium"
+                className="w-full flex items-center justify-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium"
               >
                 <Upload size={20} />
                 Upload Photo
@@ -301,7 +301,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
           <div className="flex flex-col justify-center">
             {isProcessing ? (
               <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
                 <p className="text-gray-600">Processing image...</p>
               </div>
             ) : prediction ? (
@@ -323,7 +323,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                       <div className="overflow-hidden h-2 text-xs flex rounded bg-gray-200">
                         <div
                           style={{ width: `${prediction.probability * 100}%` }}
-                          className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-600"
+                          className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"
                         ></div>
                       </div>
                     </div>
@@ -364,7 +364,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
             </p>
             <button
               onClick={onGoBackToData}
-              className="w-full bg-blue-500 text-white px-6 py-3 rounded-lg transition-colors hover:bg-blue-600 font-medium"
+              className="w-full bg-primary-light text-white px-6 py-3 rounded-lg transition-colors hover:bg-primary font-medium"
             >
               ← Go Back to Data
             </button>
@@ -412,7 +412,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                   <button
                     type="button"
                     onClick={() => startCamera()}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
                   >
                     Try Again
                   </button>
@@ -437,7 +437,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                 <button
                   type="button"
                   onClick={handleCapturePhoto}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
                 >
                   <Camera size={20} />
                   <span>Capture Photo</span>

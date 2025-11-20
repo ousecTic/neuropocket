@@ -37,7 +37,7 @@ export function PWAPrompt() {
                 New content available, click on reload button to update.
               </p>
               <button
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark"
                 onClick={() => window.location.reload()}
               >
                 Reload

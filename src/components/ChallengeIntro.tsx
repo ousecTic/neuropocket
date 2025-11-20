@@ -14,8 +14,8 @@ export function ChallengeIntro({ onDismiss }: ChallengeIntroProps) {
     <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
       <div className="max-w-2xl mx-auto">
         <div className="flex items-start gap-6">
-          <div className="bg-blue-50 rounded-full p-3 flex-shrink-0">
-            <Brain className="w-8 h-8 text-blue-600" />
+          <div className="bg-primary/10 rounded-full p-3 flex-shrink-0">
+            <Brain className="w-8 h-8 text-primary" />
           </div>
           <div>
             <h2 className="text-2xl font-semibold mb-4">Welcome to the AI Bias Challenge!</h2>
@@ -44,7 +44,7 @@ export function ChallengeIntro({ onDismiss }: ChallengeIntroProps) {
 
             <button
               onClick={onDismiss}
-              className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="mt-6 bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-dark transition-colors"
             >
               Start Challenge
             </button>
