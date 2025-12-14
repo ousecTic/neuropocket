@@ -3,6 +3,7 @@ import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import MoreVertical from 'lucide-react/dist/esm/icons/more-vertical';
 import { useState } from 'react';
+import logo from '/neuropocket-logo.png';
 
 interface ProjectHeaderProps {
   title: string;
@@ -52,7 +53,7 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
                 )
               )}
               <div className="flex items-center gap-3 min-w-0">
-                <img src="/neuropocket-logo.png" alt="NeuroPocket" className="flex-shrink-0" style={{ height: '32px', width: 'auto' }} />
+                <img src={logo} alt="NeuroPocket" className="flex-shrink-0" style={{ height: '32px', width: 'auto' }} />
                 <h1 className="text-xl font-bold text-gray-900 truncate">{title}</h1>
               </div>
             </div>

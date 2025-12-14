@@ -1,5 +1,6 @@
 import { Download, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export function Hero() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -17,7 +18,14 @@ export function Hero() {
               Learn AI by building your own image recognition model. Works <strong>completely offline</strong> on mobile and desktop.
             </p>
             <p className="text-base" style={{ color: 'var(--subtext-color)' }}>
-              🔒 All your data stays private on your device
+              🔒 Your data never leaves your device{' '}
+              <Link 
+                to="/privacy" 
+                className="underline hover:no-underline"
+                style={{ color: 'var(--primary-color)' }}
+              >
+                Learn more
+              </Link>
             </p>
             <div className="flex flex-wrap gap-4">
               <a
