@@ -4,6 +4,7 @@ import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { useMLStore } from '../store/useMLStore';
 import { Project } from '../types/project';
+import { useTranslation } from 'react-i18next';
 
 interface TrainingSectionProps {
   project: Project;
@@ -11,7 +12,8 @@ interface TrainingSectionProps {
 }
 
 export function TrainingSection({ project, onTrainingComplete }: TrainingSectionProps) {
-  const { 
+  const { t } = useTranslation();
+  const {
     mobilenet,
     isTraining, 
     isTrained,
@@ -57,7 +59,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
     // Require at least one image per class
     const emptyClasses = project.classes.filter(c => c.images.length === 0);
     if (emptyClasses.length > 0) {
-      setError(`Each group must have at least one image to train the model. Please add images to: ${emptyClasses.map(c => c.name).join(', ')}`);
+      setError(t('training.emptyClassesError', { classes: emptyClasses.map(c => c.name).join(', ') }));
       return;
     }
 
@@ -69,7 +71,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
 
     const success = await trainModel(project.id, trainingClasses);
     if (!success) {
-      setError('Training failed. Please try again.');
+      setError(t('training.trainingFailed'));
     } else {
       // Navigate to Model tab after successful training
       if (onTrainingComplete) {
@@ -98,8 +100,8 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
         {/* Progress Bar and Metrics */}
         <div className="space-y-4">
           <div className="flex justify-between text-sm text-gray-600">
-            <span>Rounds of Training</span>
-            <span>Round {currentEpoch + 1} of 50</span>
+            <span>{t('training.roundsOfTraining')}</span>
+            <span>{t('training.roundOf', { current: currentEpoch + 1, total: 50 })}</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
@@ -117,7 +119,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
       <div className="bg-white rounded-lg shadow-sm p-8">
         <div className="max-w-md mx-auto text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">{t('training.loading')}</p>
         </div>
       </div>
     );
@@ -130,9 +132,9 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
           <div className="max-w-md mx-auto">
             <div className="text-center">
               <CheckCircle2 size={48} className="mx-auto text-green-600 mb-4" />
-              <h2 className="text-xl font-semibold mb-2">Model Trained Successfully!</h2>
+              <h2 className="text-xl font-semibold mb-2">{t('training.successTitle')}</h2>
               <p className="text-gray-600 mb-6">
-                Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it.
+                {t('training.successBody')}
               </p>
             </div>
 
@@ -143,10 +145,10 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
                 <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
                 <div className="text-red-600 text-sm text-left">
                   {!hasMinimumClasses && (
-                    <p className="mb-1">Need at least 2 groups to train the model.</p>
+                    <p className="mb-1">{t('training.need2Groups')}</p>
                   )}
                   {!hasImagesInAllClasses && !error && (
-                    <p className="mb-1">Each group must have at least one image to train the model.</p>
+                    <p className="mb-1">{t('training.needImagesAll')}</p>
                   )}
                   {error && <p>{error}</p>}
                 </div>
@@ -162,7 +164,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
                   : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
               }`}
             >
-              Retrain Model
+              {t('training.retrainModel')}
             </button>
           </div>
         </div>
@@ -175,9 +177,9 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
       <div className="max-w-md mx-auto">
         <div className="text-center mb-6">
           <Network size={48} className="mx-auto text-primary mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Train Your Model</h2>
+          <h2 className="text-xl font-semibold mb-2">{t('training.trainTitle')}</h2>
           <p className="text-gray-600">
-            Train your model to recognize the groups you've created.
+            {t('training.trainBody')}
           </p>
         </div>
 
@@ -189,7 +191,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
                 <p className="mb-1">Need at least 2 groups to train the model.</p>
               )}
               {hasMinimumClasses && !hasImagesInAllClasses && (
-                <p className="mb-1">Each group must have at least one image to train the model.</p>
+                <p className="mb-1">{t('training.needImagesAll')}</p>
               )}
               {error && <p>{error}</p>}
             </div>
@@ -205,7 +207,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
               : 'opacity-50 cursor-not-allowed'
           }`}
         >
-          {isTraining ? 'Training...' : 'Train Model'}
+          {isTraining ? t('training.trainingInProgress') : t('training.trainModel')}
         </button>
 
         {renderTrainingMetrics()}

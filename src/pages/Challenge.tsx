@@ -5,6 +5,7 @@ import { ChallengeIntro } from '../components/ChallengeIntro';
 import Network from 'lucide-react/dist/esm/icons/network';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { TrainingStatusBanner } from '../components/TrainingStatusBanner';
+import { useTranslation, Trans } from 'react-i18next';
 
 type ChallengeType = 'bears-vs-dogs';
 
@@ -24,8 +25,11 @@ interface TestResult {
 }
 
 export function Challenge() {
+  const { t } = useTranslation();
   const { mobilenet, isTraining, isTrained, trainingProgress, currentProjectId, loadModel, trainModel, predict } = useMLStore();
   const challengeType: ChallengeType = 'bears-vs-dogs';
+  // Map the model's internal class names ("Bear"/"Dog") to localized display labels.
+  const labelFor = (name: string) => t(`challenge.label${name}`, name);
   const [selectedClass1, setSelectedClass1] = useState<string[]>([]);
   const [selectedClass2, setSelectedClass2] = useState<string[]>([]);
   const [images, setImages] = useState<ImageItem[]>([]);
@@ -54,16 +58,16 @@ export function Challenge() {
       try {
         const success = await loadModel();
         if (!success) {
-          setError('Failed to load the model. Please refresh the page and try again.');
+          setError(t('challenge.errorLoadModel'));
         }
       } catch (err) {
         console.error('Error loading model:', err);
-        setError('Failed to load the model. Please refresh the page and try again.');
+        setError(t('challenge.errorLoadModel'));
       }
     };
 
     initModel();
-  }, [loadModel]);
+  }, [loadModel, t]);
 
   // Load images when challenge type changes
   useEffect(() => {
@@ -120,7 +124,7 @@ export function Challenge() {
         setActiveSection('data');
       } catch (error) {
         console.error('Error loading images:', error);
-        setError('Failed to load challenge images. Please refresh the page and try again.');
+        setError(t('challenge.errorLoadImages'));
       }
     };
 
@@ -148,12 +152,12 @@ export function Challenge() {
 
   const handleStartTraining = async () => {
     if (!mobilenet) {
-      setError('Model is not loaded yet. Please wait.');
+      setError(t('challenge.errorModelNotLoaded'));
       return;
     }
 
     if (selectedClass1.length === 0 || selectedClass2.length === 0) {
-      setError('Please select at least one image for each category.');
+      setError(t('challenge.errorSelectOneEach'));
       return;
     }
 
@@ -170,7 +174,7 @@ export function Challenge() {
 
     // Validate we have images for both classes
     if (class1Images.length === 0 || class2Images.length === 0) {
-      setError('Failed to prepare training data. Please try selecting different images.');
+      setError(t('challenge.errorPrepareFailed'));
       return;
     }
 
@@ -212,19 +216,19 @@ export function Challenge() {
         // Navigate to Model tab after successful training
         setActiveSection('testing');
       } else {
-        setError('Training failed. Please try again with different images.');
+        setError(t('challenge.errorTrainingFailed'));
         setTrainingResult(null);
       }
     } catch (err) {
       console.error('Training error:', err);
-      setError('An error occurred during training. Please try again with different images.');
+      setError(t('challenge.errorTrainingGeneric'));
       setTrainingResult(null);
     }
   };
 
   const handleStartTesting = async () => {
     if (!isChallengeTrained) {
-      setError('Please train the model first before testing.');
+      setError(t('challenge.errorTrainFirst'));
       return;
     }
 
@@ -255,7 +259,7 @@ export function Challenge() {
       }
     } catch (err) {
       console.error('Testing error:', err);
-      setError('An error occurred during testing. Please try again.');
+      setError(t('challenge.errorTesting'));
     } finally {
       setIsTesting(false);
     }
@@ -276,8 +280,8 @@ export function Challenge() {
             <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto"></div>
             <Network className="w-8 h-8 text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
           </div>
-          <p className="mt-6 text-xl font-medium text-gray-700">Loading AI Model...</p>
-          <p className="mt-2 text-sm text-gray-500">This may take a few seconds on first load</p>
+          <p className="mt-6 text-xl font-medium text-gray-700">{t('challenge.loadingTitle')}</p>
+          <p className="mt-2 text-sm text-gray-500">{t('challenge.loadingSubtext')}</p>
         </div>
       </div>
     );
@@ -285,8 +289,8 @@ export function Challenge() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <ProjectHeader 
-        title="AI Bias Challenge" 
+      <ProjectHeader
+        title={t('challenge.title')}
         backTo="/"
       />
 
@@ -310,7 +314,7 @@ export function Challenge() {
                       : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}
                 >
-                  1. Data
+                  {t('common.tabData')}
                 </button>
                 <button
                   onClick={() => setActiveSection('training')}
@@ -323,7 +327,7 @@ export function Challenge() {
                         : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}
                 >
-                  2. Training
+                  {t('common.tabTraining')}
                 </button>
                 <button
                   onClick={() => setActiveSection('testing')}
@@ -336,7 +340,7 @@ export function Challenge() {
                         : 'border-transparent text-gray-500 hover:text-gray-700'
                   }`}
                 >
-                  3. Model
+                  {t('common.tabModel')}
                 </button>
               </nav>
             </div>
@@ -376,9 +380,9 @@ export function Challenge() {
                   <div className="border rounded-lg p-4 bg-white shadow-sm flex flex-col">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-medium text-gray-800">{classTypes.class1Name}</h3>
+                        <h3 className="text-lg font-medium text-gray-800">{t('challenge.bears')}</h3>
                         <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
-                          Selected: {selectedClass1.length}/10
+                          {t('challenge.selected', { count: selectedClass1.length })}
                         </span>
                       </div>
                     </div>
@@ -402,7 +406,7 @@ export function Challenge() {
                             >
                               <img
                                 src={image.src}
-                                alt={classTypes.class1Name}
+                                alt={t('challenge.bears')}
                                 className="w-full h-full object-cover"
                               />
                               {selectedClass1.includes(image.id) && (
@@ -424,9 +428,9 @@ export function Challenge() {
                   <div className="border rounded-lg p-4 bg-white shadow-sm flex flex-col">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-lg font-medium text-gray-800">{classTypes.class2Name}</h3>
+                        <h3 className="text-lg font-medium text-gray-800">{t('challenge.dogs')}</h3>
                         <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
-                          Selected: {selectedClass2.length}/10
+                          {t('challenge.selected', { count: selectedClass2.length })}
                         </span>
                       </div>
                     </div>
@@ -450,7 +454,7 @@ export function Challenge() {
                             >
                               <img
                                 src={image.src}
-                                alt={classTypes.class2Name}
+                                alt={t('challenge.dogs')}
                                 className="w-full h-full object-cover"
                               />
                               {selectedClass2.includes(image.id) && (
@@ -475,7 +479,7 @@ export function Challenge() {
                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
                     <p className="text-sm">
-                      Select up to 10 images for each category. Click an image to select/deselect it.
+                      {t('challenge.selectInstruction')}
                     </p>
                   </div>
                 </div>
@@ -491,7 +495,14 @@ export function Challenge() {
                         : 'bg-gray-400 cursor-not-allowed'
                     }`}
                   >
-                    {isDataComplete ? 'Continue to Training →' : 'Select images from both categories'}
+                    {isDataComplete ? (
+                      <>
+                        {t('challenge.continueToTraining')}{' '}
+                        <span className="inline-block rtl:rotate-180">→</span>
+                      </>
+                    ) : (
+                      t('challenge.selectFromBoth')
+                    )}
                   </button>
                 </div>
               </div>
@@ -503,7 +514,7 @@ export function Challenge() {
                   <div className="bg-white rounded-lg shadow-sm p-8">
                     <div className="max-w-md mx-auto text-center">
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                      <p className="text-gray-600">Loading...</p>
+                      <p className="text-gray-600">{t('challenge.loading')}</p>
                     </div>
                   </div>
                 ) : isChallengeTrained ? (
@@ -512,9 +523,9 @@ export function Challenge() {
                       <div className="max-w-md mx-auto">
                         <div className="text-center">
                           <CheckCircle2 size={48} className="mx-auto text-green-600 mb-4" />
-                          <h2 className="text-xl font-semibold mb-2">Model Trained Successfully!</h2>
+                          <h2 className="text-xl font-semibold mb-2">{t('challenge.successTitle')}</h2>
                           <p className="text-gray-600 mb-6">
-                            Your model is ready to use. Go to the <span className="font-semibold text-gray-800">Model tab</span> to test it out.
+                            {t('challenge.successBody')}
                           </p>
                         </div>
 
@@ -523,8 +534,8 @@ export function Challenge() {
                           <div className="mt-6 mb-8 space-y-6">
                             <div className="space-y-4">
                               <div className="flex justify-between text-sm text-gray-600">
-                                <span>Rounds of Training</span>
-                                <span>Round {trainingProgress.epoch + 1} of 50</span>
+                                <span>{t('challenge.roundsOfTraining')}</span>
+                                <span>{t('challenge.roundOf', { current: trainingProgress.epoch + 1, total: 50 })}</span>
                               </div>
                               <div className="w-full bg-gray-200 rounded-full h-2">
                                 <div 
@@ -543,7 +554,7 @@ export function Challenge() {
                               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                             </svg>
                             <div className="text-red-600 text-sm text-left">
-                              <p>Need at least one image from each category to train the model.</p>
+                              <p>{t('challenge.needOneEach')}</p>
                             </div>
                           </div>
                         )}
@@ -557,7 +568,7 @@ export function Challenge() {
                               : 'opacity-50 cursor-not-allowed border-gray-300 text-gray-400'
                           }`}
                         >
-                          Retrain Model
+                          {t('challenge.retrainModel')}
                         </button>
                       </div>
                     </div>
@@ -567,9 +578,9 @@ export function Challenge() {
                     <div className="max-w-md mx-auto">
                       <div className="text-center mb-6">
                         <Network size={48} className="mx-auto text-primary mb-4" />
-                        <h2 className="text-xl font-semibold mb-2">Train Your Model</h2>
+                        <h2 className="text-xl font-semibold mb-2">{t('challenge.trainTitle')}</h2>
                         <p className="text-gray-600">
-                          Train your model to recognize the categories you've selected.
+                          {t('challenge.trainBody')}
                         </p>
                       </div>
 
@@ -594,7 +605,7 @@ export function Challenge() {
                             : 'opacity-50 cursor-not-allowed'
                         }`}
                       >
-                        {isTraining ? 'Training...' : 'Train Model'}
+                        {isTraining ? t('challenge.training') : t('challenge.trainModel')}
                       </button>
 
                       {/* Training Metrics */}
@@ -602,8 +613,8 @@ export function Challenge() {
                         <div className="mt-6 mb-8 space-y-6">
                           <div className="space-y-4">
                             <div className="flex justify-between text-sm text-gray-600">
-                              <span>Rounds of Training</span>
-                              <span>Round {trainingProgress.epoch + 1} of 50</span>
+                              <span>{t('challenge.roundsOfTraining')}</span>
+                              <span>{t('challenge.roundOf', { current: trainingProgress.epoch + 1, total: 50 })}</span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2">
                               <div 
@@ -624,7 +635,7 @@ export function Challenge() {
               <div className="bg-white rounded-lg shadow-sm p-8">
                 {!isChallengeTrained ? (
                   <p className="text-gray-600 text-center">
-                    Train your model first before testing.
+                    {t('challenge.trainFirst')}
                   </p>
                 ) : (
                   <div className="space-y-6">
@@ -639,7 +650,7 @@ export function Challenge() {
                             : 'bg-primary hover:bg-primary-dark'
                         }`}
                       >
-                        {isTesting ? 'Running Tests...' : 'Run All Tests'}
+                        {isTesting ? t('challenge.runningTests') : t('challenge.runAllTests')}
                       </button>
                     </div>
 
@@ -652,12 +663,12 @@ export function Challenge() {
                             <div className="min-w-[800px]">
                               {/* Header */}
                               <div className="grid grid-cols-6 gap-4 p-3 font-medium bg-gray-50">
-                                <div>Test Case</div>
-                                <div>Image</div>
-                                <div>Expected</div>
-                                <div>Predicted</div>
-                                <div>Confidence in Prediction</div>
-                                <div>Result</div>
+                                <div>{t('challenge.thTestCase')}</div>
+                                <div>{t('challenge.thImage')}</div>
+                                <div>{t('challenge.thExpected')}</div>
+                                <div>{t('challenge.thPredicted')}</div>
+                                <div>{t('challenge.thConfidence')}</div>
+                                <div>{t('challenge.thResult')}</div>
                               </div>
 
                               {/* Test Cases */}
@@ -673,7 +684,7 @@ export function Challenge() {
                                   }`}
                                 >
                                   <div>
-                                    Test {index + 1}
+                                    {t('challenge.testN', { index: index + 1 })}
                                   </div>
                                   <div>
                                     <img 
@@ -683,20 +694,20 @@ export function Challenge() {
                                     />
                                   </div>
                                   <div className="text-sm">
-                                    {result.expected}
+                                    {labelFor(result.expected)}
                                   </div>
                                   <div className={`text-sm font-medium ${
-                                    result.expected === result.predicted 
-                                      ? 'text-green-600' 
+                                    result.expected === result.predicted
+                                      ? 'text-green-600'
                                       : 'text-red-600'
                                   }`}>
-                                    {result.predicted}
+                                    {labelFor(result.predicted)}
                                   </div>
                                   <div className="text-sm">
                                     <div className="flex flex-col">
-                                      <span>Model is</span>
-                                      <span className="font-medium">{(result.confidence * 100).toFixed(1)}% confident</span>
-                                      <span>this is a {result.predicted}</span>
+                                      <span>{t('challenge.modelIs')}</span>
+                                      <span className="font-medium">{t('challenge.confidentPercent', { percent: (result.confidence * 100).toFixed(1) })}</span>
+                                      <span>{t('challenge.thisIsA', { label: labelFor(result.predicted) })}</span>
                                     </div>
                                   </div>
                                   <div>
@@ -705,14 +716,14 @@ export function Challenge() {
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                                         </svg>
-                                        <span className="ml-1 font-medium">Correct</span>
+                                        <span className="ml-1 font-medium">{t('challenge.correct')}</span>
                                       </div>
                                     ) : (
                                       <div className="flex items-center text-red-600">
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                           <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                                         </svg>
-                                        <span className="ml-1 font-medium">Wrong</span>
+                                        <span className="ml-1 font-medium">{t('challenge.wrong')}</span>
                                       </div>
                                     )}
                                   </div>
@@ -734,18 +745,18 @@ export function Challenge() {
                               }`}
                             >
                               <div className="flex justify-between items-start mb-3">
-                                <span className="font-medium">Test {index + 1}</span>
+                                <span className="font-medium">{t('challenge.testN', { index: index + 1 })}</span>
                                 {result.expected === result.predicted ? (
                                   <div className="flex items-center text-green-600">
                                     <CheckCircle2 className="w-5 h-5" />
-                                    <span className="ml-1 font-medium">Correct</span>
+                                    <span className="ml-1 font-medium">{t('challenge.correct')}</span>
                                   </div>
                                 ) : (
                                   <div className="flex items-center text-red-600">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                       <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                                     </svg>
-                                    <span className="ml-1 font-medium">Wrong</span>
+                                    <span className="ml-1 font-medium">{t('challenge.wrong')}</span>
                                   </div>
                                 )}
                               </div>
@@ -758,24 +769,28 @@ export function Challenge() {
                                 />
                                 <div className="flex-1 space-y-2">
                                   <div>
-                                    <span className="text-sm text-gray-600">Expected:</span>
-                                    <div className="font-medium">{result.expected}</div>
+                                    <span className="text-sm text-gray-600">{t('challenge.expectedLabel')}</span>
+                                    <div className="font-medium">{labelFor(result.expected)}</div>
                                   </div>
                                   <div>
-                                    <span className="text-sm text-gray-600">Predicted:</span>
+                                    <span className="text-sm text-gray-600">{t('challenge.predictedLabel')}</span>
                                     <div className={`font-medium ${
-                                      result.expected === result.predicted 
-                                        ? 'text-green-600' 
+                                      result.expected === result.predicted
+                                        ? 'text-green-600'
                                         : 'text-red-600'
                                     }`}>
-                                      {result.predicted}
+                                      {labelFor(result.predicted)}
                                     </div>
                                   </div>
                                 </div>
                               </div>
 
                               <div className="text-sm text-gray-600">
-                                Model is <span className="font-medium">{(result.confidence * 100).toFixed(1)}% confident</span> this is a {result.predicted}
+                                <Trans
+                                  i18nKey="challenge.modelConfidentInline"
+                                  values={{ percent: (result.confidence * 100).toFixed(1), label: labelFor(result.predicted) }}
+                                  components={{ b: <span className="font-medium" /> }}
+                                />
                               </div>
                             </div>
                           ))}
@@ -788,14 +803,14 @@ export function Challenge() {
                             : 'bg-gray-50 text-gray-700'
                         }`}>
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                            <span className="font-medium">Summary:</span>
+                            <span className="font-medium">{t('challenge.summary')}</span>
                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                               <div className="flex items-center gap-2">
                                 <span className="font-medium">
-                                  Passed: {testResults.filter(r => r.expected === r.predicted).length}/{testResults.length}
+                                  {t('challenge.passed', { passed: testResults.filter(r => r.expected === r.predicted).length, total: testResults.length })}
                                 </span>
                                 <span>
-                                  ({((testResults.filter(r => r.expected === r.predicted).length / testResults.length) * 100).toFixed(1)}%)
+                                  {t('challenge.percent', { percent: ((testResults.filter(r => r.expected === r.predicted).length / testResults.length) * 100).toFixed(1) })}
                                 </span>
                               </div>
                               {testResults.every(r => r.expected === r.predicted) && (
@@ -812,13 +827,14 @@ export function Challenge() {
                           {!testResults.every(r => r.expected === r.predicted) && (
                             <div className="text-center">
                               <p className="text-sm text-gray-600 mb-4">
-                                Not all tests passed. Try selecting different training images to improve your model.
+                                {t('challenge.notAllPassed')}
                               </p>
                               <button
                                 onClick={() => setActiveSection('data')}
                                 className="w-full bg-primary-light text-white px-6 py-3 rounded-lg transition-colors hover:bg-primary font-medium"
                               >
-                                ← Go Back to Data
+                                <span className="inline-block rtl:rotate-180">←</span>{' '}
+                                {t('challenge.goBackToData')}
                               </button>
                             </div>
                           )}
@@ -826,7 +842,7 @@ export function Challenge() {
                           {testResults.every(r => r.expected === r.predicted) && (
                             <div className="text-center">
                               <p className="text-sm text-green-600 mb-4">
-                                🎉 Perfect! Your model passed all test cases.
+                                {t('challenge.perfect')}
                               </p>
                             </div>
                           )}

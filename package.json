@@ -20,10 +20,12 @@
     "@capacitor/cli": "^6.2.0",
     "@capacitor/core": "^6.2.0",
     "@tensorflow/tfjs": "^4.17.0",
+    "i18next": "^26.3.3",
     "idb": "^8.0.0",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-i18next": "^17.0.8",
     "react-router-dom": "^6.22.3",
     "workbox-window": "^7.0.0",
     "zustand": "^4.5.2"

@@ -3,6 +3,7 @@ import Upload from 'lucide-react/dist/esm/icons/upload';
 import X from 'lucide-react/dist/esm/icons/x';
 import Camera from 'lucide-react/dist/esm/icons/camera';
 import SwitchCamera from 'lucide-react/dist/esm/icons/switch-camera';
+import { useTranslation } from 'react-i18next';
 import { ClassImage } from '../types/project';
 
 interface ImageUploadProps {
@@ -12,6 +13,7 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProps) {
+  const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -82,13 +84,13 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
       
       // Provide helpful error messages based on the error type
       if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-        setCameraError('Camera access was denied. Please allow camera access when prompted, or check your browser settings.');
+        setCameraError(t('imageUpload.errorDenied'));
       } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-        setCameraError('No camera found on your device.');
+        setCameraError(t('imageUpload.errorNotFound'));
       } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-        setCameraError('Camera is already in use by another application.');
+        setCameraError(t('imageUpload.errorInUse'));
       } else {
-        setCameraError('Unable to access camera. Please check your browser settings and try again.');
+        setCameraError(t('imageUpload.errorGeneric'));
       }
     }
   };
@@ -185,7 +187,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
     for (const file of files) {
       // Check file type more strictly
       if (!file.type.startsWith('image/') || !['image/png', 'image/jpg', 'image/jpeg'].includes(file.type)) {
-        alert(`"${file.name}" is not a valid image file. Please upload only PNG or JPG files.`);
+        alert(t('imageUpload.invalidFile', { name: file.name }));
         continue;
       }
 
@@ -203,7 +205,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
         validFiles.push(resizedDataUrl);
       } catch (error) {
         console.error('Error processing file:', error);
-        alert(`Error processing file ${file.name}`);
+        alert(t('imageUpload.errorProcessingFile', { name: file.name }));
       }
     }
 
@@ -228,14 +230,14 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                 <div key={image.id} className="relative group aspect-square">
                   <img
                     src={image.dataUrl}
-                    alt="Class example"
+                    alt={t('imageUpload.altClassExample')}
                     className="w-full h-full object-cover rounded-lg"
                   />
                   {onDelete && (
                     <button
                       onClick={() => onDelete(image.id)}
                       className="absolute top-2 right-2 p-1.5 bg-red-500 bg-opacity-70 hover:bg-opacity-100 rounded-full text-white shadow transition-all hover:scale-110"
-                      title="Delete image"
+                      title={t('imageUpload.deleteImage')}
                     >
                       <X size={16} />
                     </button>
@@ -256,13 +258,13 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
             className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-60 disabled:cursor-not-allowed transition-colors font-medium"
           >
             <Camera size={20} />
-            <span>Take Photos</span>
+            <span>{t('imageUpload.takePhotos')}</span>
           </button>
 
           {/* Upload Button */}
           <label className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 cursor-pointer transition-colors font-medium ${loading ? 'opacity-60 pointer-events-none' : ''}`}>
             <Upload size={20} />
-            <span>Upload Photos</span>
+            <span>{t('imageUpload.uploadPhotos')}</span>
             <input
               ref={fileInputRef}
               type="file"
@@ -281,7 +283,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
             </svg>
-            <span className="text-sm font-medium">Processing images...</span>
+            <span className="text-sm font-medium">{t('imageUpload.processing')}</span>
           </div>
         )}
       </div>
@@ -292,14 +294,14 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
           <div className="bg-white rounded-lg w-full max-w-4xl fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto flex flex-col">
             {/* Modal Header */}
             <div className="flex-shrink-0 bg-white border-b px-4 py-3 flex items-center justify-between rounded-t-lg">
-              <h3 className="text-lg font-semibold">Take Photos</h3>
+              <h3 className="text-lg font-semibold">{t('imageUpload.modalTitle')}</h3>
               <div className="flex items-center gap-2">
                 {!cameraError && (
                   <button
                     type="button"
                     onClick={handleFlipCamera}
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                    title="Flip camera"
+                    title={t('imageUpload.flipCamera')}
                   >
                     <SwitchCamera size={20} />
                   </button>
@@ -308,7 +310,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                   type="button"
                   onClick={handleCloseCamera}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  title="Close"
+                  title={t('imageUpload.close')}
                 >
                   <X size={20} />
                 </button>
@@ -321,14 +323,14 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                 <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                   <p className="text-red-600 font-medium mb-3">{cameraError}</p>
                   <p className="text-sm text-gray-600 mb-4">
-                    Please allow camera access when prompted, or check your device settings to enable camera permissions for this app.
+                    {t('imageUpload.permissionHelp')}
                   </p>
                   <button
                     type="button"
                     onClick={() => startCamera()}
                     className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
                   >
-                    Try Again
+                    {t('imageUpload.tryAgain')}
                   </button>
                 </div>
               ) : (
@@ -350,7 +352,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium text-gray-700">
-                          Captured Photos ({capturedPhotos.length})
+                          {t('imageUpload.capturedPhotos', { count: capturedPhotos.length })}
                         </h4>
                       </div>
                       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
@@ -358,14 +360,14 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                           <div key={index} className="relative aspect-square group">
                             <img
                               src={photo}
-                              alt={`Captured ${index + 1}`}
+                              alt={t('imageUpload.altCaptured', { index: index + 1 })}
                               className="w-full h-full object-cover rounded-lg"
                             />
                             <button
                               type="button"
                               onClick={() => handleDeleteCapturedPhoto(index)}
                               className="absolute top-1 right-1 p-1 bg-red-500 bg-opacity-70 hover:bg-opacity-100 rounded-full text-white shadow transition-all"
-                              title="Delete photo"
+                              title={t('imageUpload.deletePhoto')}
                             >
                               <X size={14} />
                             </button>
@@ -387,7 +389,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                   className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors font-medium"
                 >
                   <Camera size={20} />
-                  <span>Capture</span>
+                  <span>{t('imageUpload.capture')}</span>
                 </button>
                 <button
                   type="button"
@@ -395,7 +397,9 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                   disabled={capturedPhotos.length === 0}
                   className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
                 >
-                  Add Photos {capturedPhotos.length > 0 && `(${capturedPhotos.length})`}
+                  {capturedPhotos.length > 0
+                    ? t('imageUpload.addPhotosCount', { count: capturedPhotos.length })
+                    : t('imageUpload.addPhotos')}
                 </button>
               </div>
             )}

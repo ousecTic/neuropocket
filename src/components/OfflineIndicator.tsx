@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import WifiOff from 'lucide-react/dist/esm/icons/wifi-off';
 import X from 'lucide-react/dist/esm/icons/x';
+import { useTranslation } from 'react-i18next';
 
 export function OfflineIndicator() {
+  const { t } = useTranslation();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showOffline, setShowOffline] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -37,16 +39,13 @@ export function OfflineIndicator() {
         <div className="flex items-center gap-2">
           <WifiOff className="w-5 h-5 text-gray-600" />
           <p className="text-gray-700">
-            {isOnline 
-              ? 'Back online'
-              : 'You\'re offline - but don\'t worry, the app works offline!'
-            }
+            {isOnline ? t('offline.backOnline') : t('offline.offline')}
           </p>
         </div>
         <button
           onClick={() => setDismissed(true)}
           className="text-gray-400 hover:text-gray-600 p-1 -mt-1 -mr-1"
-          aria-label="Dismiss"
+          aria-label={t('offline.dismiss')}
         >
           <X size={16} />
         </button>

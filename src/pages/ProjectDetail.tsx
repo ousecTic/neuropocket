@@ -10,9 +10,11 @@ import { PreviewSection } from '../components/PreviewSection';
 import { ProjectHeader } from '../components/ProjectHeader';
 import { TrainingStatusBanner } from '../components/TrainingStatusBanner';
 import { MAX_CLASS_NAME_LENGTH } from '../constants';
+import { useTranslation } from 'react-i18next';
 
 export function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
+  const { t } = useTranslation();
   const { projects, loading, loadProjects, addClass } = useProjectStore();
   const { isTrained, currentProjectId } = useMLStore();
   const project = projects.find(p => p.id === id);
@@ -53,7 +55,7 @@ export function ProjectDetail() {
         }
       }, 100);
     } else {
-      setClassError(result.error || 'Error adding class');
+      setClassError(result.error || t('projectDetail.addClassError'));
     }
   };
 
@@ -69,7 +71,7 @@ export function ProjectDetail() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading project...</p>
+          <p className="mt-4 text-gray-600">{t('projectDetail.loading')}</p>
         </div>
       </div>
     );
@@ -78,10 +80,10 @@ export function ProjectDetail() {
   if (!project) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <ProjectHeader title="Project Not Found" backTo="/" />
+        <ProjectHeader title={t('projectDetail.notFoundTitle')} backTo="/" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
           <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-            <p className="text-red-600 text-lg">Project not found</p>
+            <p className="text-red-600 text-lg">{t('projectDetail.notFound')}</p>
           </div>
         </div>
       </div>
@@ -107,7 +109,7 @@ export function ProjectDetail() {
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              1. Data
+              {t('common.tabData')}
             </button>
             <button
               onClick={() => canTrain && setActiveSection('training')}
@@ -120,7 +122,7 @@ export function ProjectDetail() {
                     : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              2. Training
+              {t('common.tabTraining')}
             </button>
             <button
               onClick={() => canTest && setActiveSection('preview')}
@@ -133,7 +135,7 @@ export function ProjectDetail() {
                     : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
-              3. Model
+              {t('common.tabModel')}
             </button>
           </nav>
         </div>
@@ -160,9 +162,9 @@ export function ProjectDetail() {
               <div className="bg-white rounded-lg shadow-sm p-8 text-center">
                 <div className="max-w-md mx-auto">
                   <Network size={48} className="mx-auto text-primary mb-4" />
-                  <h2 className="text-xl font-semibold mb-2">Create Your First Group</h2>
+                  <h2 className="text-xl font-semibold mb-2">{t('projectDetail.emptyTitle')}</h2>
                   <p className="text-gray-600 mb-6">
-                    Start by creating groups for different objects or categories you want to recognize
+                    {t('projectDetail.emptyDescription')}
                   </p>
                   <button
                     onClick={() => {
@@ -172,7 +174,7 @@ export function ProjectDetail() {
                     className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors"
                   >
                     <Plus size={20} />
-                    Add Your First Group
+                    {t('projectDetail.addFirstGroup')}
                   </button>
                 </div>
               </div>
@@ -197,7 +199,8 @@ export function ProjectDetail() {
                         onClick={() => setActiveSection('training')}
                         className="w-full bg-primary-light text-white px-6 py-3 rounded-lg transition-colors hover:bg-primary font-medium"
                       >
-                        Continue to Training →
+                        {t('projectDetail.continueToTraining')}{' '}
+                        <span className="inline-block rtl:rotate-180">→</span>
                       </button>
                     </div>
                   </div>
@@ -229,10 +232,10 @@ export function ProjectDetail() {
             setClassError(null);
           }}
           className="fixed bottom-6 right-6 bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-40 flex items-center gap-2"
-          title="Add Group"
+          title={t('projectDetail.addGroup')}
         >
           <Plus size={24} />
-          <span className="hidden sm:inline font-medium">Add Group</span>
+          <span className="hidden sm:inline font-medium">{t('projectDetail.addGroup')}</span>
         </button>
       )}
 
@@ -240,7 +243,7 @@ export function ProjectDetail() {
       {isAddingClass && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-4">Add New Group</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('projectDetail.addNewGroup')}</h2>
             <form onSubmit={(e) => e.preventDefault()}>
               <div className="mb-4">
                 <input
@@ -254,7 +257,7 @@ export function ProjectDetail() {
                     }
                   }}
                   onKeyPress={handleKeyPress}
-                  placeholder="Enter group name"
+                  placeholder={t('projectDetail.enterGroupName')}
                   className={`w-full px-3 py-2 border rounded-lg mb-1 ${
                     classError ? 'border-red-500' : ''
                   }`}
@@ -278,7 +281,7 @@ export function ProjectDetail() {
                   }}
                   className="px-4 py-2 text-gray-600 hover:text-gray-800"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="button"
@@ -286,7 +289,7 @@ export function ProjectDetail() {
                   className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark"
                   disabled={!newClassName.trim()}
                 >
-                  Create
+                  {t('common.create')}
                 </button>
               </div>
             </form>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useProjectStore } from '../store/useProjectStore';
 
 const MAX_PROJECT_NAME_LENGTH = 50;
@@ -15,6 +16,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
   const [projectName, setProjectName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const createProject = useProjectStore(state => state.createProject);
 
   const handleSubmit = async () => {
@@ -29,7 +31,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
       // Navigate to the new project
       navigate(`/project/${result.projectId}`);
     } else {
-      setError(result.error || 'Error creating project');
+      setError(result.error || t('createProject.error'));
     }
   };
 
@@ -57,7 +59,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
         `}
       >
         <Plus size={variant === 'full-width' ? 24 : 20} />
-        Create Project
+        {t('createProject.button')}
       </button>
     );
   }
@@ -65,7 +67,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
   const dialog = (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-semibold mb-4">Create New Project</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('createProject.dialogTitle')}</h2>
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="relative">
             <input
@@ -79,7 +81,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
                 }
               }}
               onKeyPress={handleKeyPress}
-              placeholder="Enter project name"
+              placeholder={t('createProject.placeholder')}
               className={`w-full px-3 py-2 border rounded-lg mb-1 ${
                 error ? 'border-red-500' : ''
               }`}
@@ -106,7 +108,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
               }}
               className="px-4 py-2 text-gray-600 hover:text-gray-800"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="button"
@@ -114,7 +116,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
               className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark"
               disabled={!projectName.trim()}
             >
-              Create
+              {t('common.create')}
             </button>
           </div>
         </form>
