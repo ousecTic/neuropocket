@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import X from 'lucide-react/dist/esm/icons/x';
+import { useTranslation } from 'react-i18next';
 import { usePWA } from '../hooks/usePWA';
 
 export function PWAPrompt() {
+  const { t } = useTranslation();
   const { needRefresh, offlineReady } = usePWA();
   const [dismissed, setDismissed] = useState(false);
   const [showOfflineMessage, setShowOfflineMessage] = useState(false);
@@ -28,19 +30,19 @@ export function PWAPrompt() {
         <div className="flex-1">
           {showOfflineMessage && (
             <p className="text-green-600 mb-2">
-              App ready to work offline
+              {t('pwa.offlineReady')}
             </p>
           )}
           {needRefresh && (
             <div className="flex flex-col gap-2">
               <p className="text-gray-700">
-                New content available, click on reload button to update.
+                {t('pwa.newContent')}
               </p>
               <button
                 className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark"
                 onClick={() => window.location.reload()}
               >
-                Reload
+                {t('pwa.reload')}
               </button>
             </div>
           )}
@@ -48,7 +50,7 @@ export function PWAPrompt() {
         <button
           onClick={() => setDismissed(true)}
           className="text-gray-400 hover:text-gray-600 p-1 -mt-1 -mr-1"
-          aria-label="Dismiss"
+          aria-label={t('pwa.dismiss')}
         >
           <X size={16} />
         </button>

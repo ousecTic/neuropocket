@@ -5,6 +5,7 @@ import { ClassData } from '../types/project';
 import { ImageUpload } from './ImageUpload';
 import { useProjectStore } from '../store/useProjectStore';
 import { MAX_CLASS_NAME_LENGTH } from '../constants';
+import { useTranslation } from 'react-i18next';
 import { ConfirmDialog } from './ConfirmDialog';
 
 interface ClassCardProps {
@@ -19,6 +20,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   const { renameClass, deleteClass, addImageToClass, deleteImageFromClass } = useProjectStore();
+  const { t } = useTranslation();
 
   const handleRename = async () => {
     if (!newName.trim()) {
@@ -34,7 +36,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
       setIsRenaming(false);
       setRenameError(null);
     } else {
-      setRenameError(result.error || 'Error renaming class');
+      setRenameError(result.error || t('classCard.renameError'));
     }
   };
 
@@ -82,7 +84,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
                 className="text-primary hover:text-primary-dark px-3 py-1"
                 disabled={!newName.trim()}
               >
-                Save
+                {t('common.save')}
               </button>
               <button
                 type="button"
@@ -93,7 +95,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
                 }}
                 className="text-gray-600 hover:text-gray-800 px-3 py-1"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
             </div>
           </form>
@@ -104,14 +106,14 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
               <button
                 onClick={() => setIsRenaming(true)}
                 className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20 text-primary hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/40"
-                title="Rename Class"
+                title={t('classCard.rename')}
               >
                 <Pencil size={20} />
               </button>
               <button
                 onClick={() => setShowDeleteConfirm(true)}
                 className="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-400"
-                title="Delete Class"
+                title={t('classCard.delete')}
               >
                 <Trash2 size={20} />
               </button>
@@ -128,10 +130,10 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
       
       <ConfirmDialog
         isOpen={showDeleteConfirm}
-        title="Delete Group"
-        message={`Are you sure you want to delete the "${classData.name}" group? This action cannot be undone and will remove all images in this group.`}
-        confirmText="Delete"
-        cancelText="Cancel"
+        title={t('classCard.deleteConfirmTitle')}
+        message={t('classCard.deleteConfirmMessage', { name: classData.name })}
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
         variant="danger"
         onConfirm={() => {
           deleteClass(projectId, classData.id);

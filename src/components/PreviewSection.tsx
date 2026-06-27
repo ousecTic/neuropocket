@@ -7,6 +7,7 @@ import X from 'lucide-react/dist/esm/icons/x';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import { useMLStore } from '../store/useMLStore';
 import { Project } from '../types/project';
+import { useTranslation } from 'react-i18next';
 
 interface PreviewSectionProps {
   project: Project;
@@ -14,6 +15,7 @@ interface PreviewSectionProps {
 }
 
 export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps) {
+  const { t } = useTranslation();
   const { mobilenet, isTrained, currentProjectId, predict, resetTrainingState } = useMLStore();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [prediction, setPrediction] = useState<{ className: string; probability: number } | null>(null);
@@ -133,13 +135,13 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
       
       // Provide helpful error messages based on the error type
       if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
-        setCameraError('Camera access was denied. Please allow camera access when prompted, or check your browser settings.');
+        setCameraError(t('imageUpload.errorDenied'));
       } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
-        setCameraError('No camera found on your device.');
+        setCameraError(t('imageUpload.errorNotFound'));
       } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
-        setCameraError('Camera is already in use by another application.');
+        setCameraError(t('imageUpload.errorInUse'));
       } else {
-        setCameraError('Unable to access camera. Please check your browser settings and try again.');
+        setCameraError(t('imageUpload.errorGeneric'));
       }
     }
   };
@@ -235,13 +237,13 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
       <div className="bg-white rounded-lg shadow-sm p-8">
         <div className="max-w-md mx-auto text-center">
           <AlertCircle size={48} className="mx-auto text-amber-500 mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Model hasn't been trained yet</h2>
+          <h2 className="text-xl font-semibold mb-2">{t('preview.notTrainedTitle')}</h2>
           <p className="text-gray-600">
-            {!mobilenet 
-              ? "Loading model..."
+            {!mobilenet
+              ? t('preview.loadingModel')
               : !isProjectTrained
-              ? "Please go to the Training tab to train your model before using this Model tab."
-              : "You need at least 2 classes to use the model. Please add more classes."}
+              ? t('preview.goTrain')
+              : t('preview.needClasses')}
           </p>
         </div>
       </div>
@@ -253,9 +255,9 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <Play size={48} className="mx-auto text-primary mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Test Your Model</h2>
+          <h2 className="text-xl font-semibold mb-2">{t('preview.title')}</h2>
           <p className="text-gray-600">
-            Upload an image to see how well your model performs
+            {t('preview.subtitle')}
           </p>
         </div>
 
@@ -275,14 +277,14 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                 className="w-full flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors font-medium"
               >
                 <Camera size={20} />
-                Take Photo
+                {t('preview.takePhoto')}
               </button>
               <button
                 onClick={() => fileInputRef.current?.click()}
                 className="w-full flex items-center justify-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium"
               >
                 <Upload size={20} />
-                Upload Photo
+                {t('preview.uploadPhoto')}
               </button>
             </div>
 
@@ -290,7 +292,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
               <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
                 <img
                   src={selectedImage}
-                  alt="Preview"
+                  alt={t('preview.altPreview')}
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -302,18 +304,18 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
             {isProcessing ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                <p className="text-gray-600">Processing image...</p>
+                <p className="text-gray-600">{t('preview.processing')}</p>
               </div>
             ) : prediction ? (
               <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="font-semibold mb-4">Prediction Results</h3>
+                <h3 className="font-semibold mb-4">{t('preview.predictionResults')}</h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-gray-600 mb-1">Group</p>
+                    <p className="text-gray-600 mb-1">{t('preview.group')}</p>
                     <p className="text-xl font-semibold">{prediction.className}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600 mb-1">Confidence</p>
+                    <p className="text-gray-600 mb-1">{t('preview.confidence')}</p>
                     <div className="relative pt-1">
                       <div className="flex items-center justify-between mb-2">
                         <div className="text-xl font-semibold">
@@ -332,24 +334,24 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
               </div>
             ) : selectedImage ? (
               <div className="text-center py-8 text-gray-500">
-                Processing prediction...
+                {t('preview.processingPrediction')}
               </div>
             ) : (
               <div className="bg-gray-50 rounded-lg p-6 border-2 border-dashed border-gray-200">
-                <h3 className="font-semibold mb-4 text-gray-400">Prediction Results</h3>
+                <h3 className="font-semibold mb-4 text-gray-400">{t('preview.predictionResults')}</h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-gray-400 mb-1">Group</p>
+                    <p className="text-gray-400 mb-1">{t('preview.group')}</p>
                     <div className="h-7 bg-gray-100 rounded w-32"></div>
                   </div>
                   <div>
-                    <p className="text-gray-400 mb-1">Confidence</p>
+                    <p className="text-gray-400 mb-1">{t('preview.confidence')}</p>
                     <div className="h-7 bg-gray-100 rounded w-24"></div>
                     <div className="mt-2 h-2 bg-gray-100 rounded"></div>
                   </div>
                 </div>
                 <p className="text-sm text-gray-400 mt-4 text-center">
-                  Upload an image to see the prediction
+                  {t('preview.uploadToSee')}
                 </p>
               </div>
             )}
@@ -360,13 +362,14 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
         {onGoBackToData && prediction && (
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-600 mb-4">
-              Not the results you expected? Try selecting different training images to improve your model.
+              {t('preview.notExpected')}
             </p>
             <button
               onClick={onGoBackToData}
               className="w-full bg-primary-light text-white px-6 py-3 rounded-lg transition-colors hover:bg-primary font-medium"
             >
-              ← Go Back to Data
+              <span className="inline-block rtl:rotate-180">←</span>{' '}
+              {t('preview.goBackToData')}
             </button>
           </div>
         )}
@@ -378,14 +381,14 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
           <div className="bg-white rounded-lg w-full max-w-2xl fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-h-[90vh] overflow-y-auto flex flex-col">
             {/* Modal Header */}
             <div className="flex-shrink-0 bg-white border-b px-4 py-3 flex items-center justify-between rounded-t-lg">
-              <h3 className="text-lg font-semibold">Take Photo</h3>
+              <h3 className="text-lg font-semibold">{t('preview.modalTitle')}</h3>
               <div className="flex items-center gap-2">
                 {!cameraError && (
                   <button
                     type="button"
                     onClick={handleFlipCamera}
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                    title="Flip camera"
+                    title={t('imageUpload.flipCamera')}
                   >
                     <SwitchCamera size={20} />
                   </button>
@@ -394,7 +397,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                   type="button"
                   onClick={handleCloseCamera}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  title="Close"
+                  title={t('imageUpload.close')}
                 >
                   <X size={20} />
                 </button>
@@ -407,14 +410,14 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                 <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                   <p className="text-red-600 font-medium mb-3">{cameraError}</p>
                   <p className="text-sm text-gray-600 mb-4">
-                    Please allow camera access when prompted, or check your device settings to enable camera permissions for this app.
+                    {t('imageUpload.permissionHelp')}
                   </p>
                   <button
                     type="button"
                     onClick={() => startCamera()}
                     className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
                   >
-                    Try Again
+                    {t('imageUpload.tryAgain')}
                   </button>
                 </div>
               ) : (
@@ -440,7 +443,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
                 >
                   <Camera size={20} />
-                  <span>Capture Photo</span>
+                  <span>{t('preview.capturePhoto')}</span>
                 </button>
               </div>
             )}

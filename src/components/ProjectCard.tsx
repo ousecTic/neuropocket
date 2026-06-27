@@ -4,6 +4,7 @@ import Trash2 from 'lucide-react/dist/esm/icons/trash-2';
 import { Project } from '../types/project';
 import { useProjectStore } from '../store/useProjectStore';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ConfirmDialog } from './ConfirmDialog';
 
 const MAX_PROJECT_NAME_LENGTH = 50; // Same limit as CreateProjectDialog
@@ -20,6 +21,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   const { deleteProject, renameProject } = useProjectStore();
+  const { t } = useTranslation();
 
   const handleRename = async () => {
     if (!newName.trim()) {
@@ -35,7 +37,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       setIsRenaming(false);
       setError(null);
     } else {
-      setError(result.error || 'Error renaming project');
+      setError(result.error || t('projectCard.renameError'));
     }
   };
 
@@ -87,7 +89,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 className="text-primary hover:text-primary-dark px-3 py-1"
                 disabled={!newName.trim()}
               >
-                Save
+                {t('common.save')}
               </button>
               <button
                 type="button"
@@ -98,7 +100,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 }}
                 className="text-gray-600 hover:text-gray-800 px-3 py-1"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
             </div>
           </div>
@@ -108,14 +110,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <Link to={`/project/${project.id}`} className="block">
             <h3 className="text-lg font-semibold mb-2 hover:text-primary truncate pr-8" title={project.name}>{project.name}</h3>
             <p className="text-sm text-gray-500">
-              Created: {new Date(project.createdAt).toLocaleDateString()}
+              {t('projectCard.created', { date: new Date(project.createdAt).toLocaleDateString() })}
             </p>
             <div className="flex gap-3 mt-1">
               <p className="text-sm text-gray-500">
-                Groups: {project.classes.length}
+                {t('projectCard.groups', { count: project.classes.length })}
               </p>
               <p className="text-sm text-gray-500">
-                Images: {totalImages}
+                {t('projectCard.images', { count: totalImages })}
               </p>
             </div>
           </Link>
@@ -123,14 +125,14 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <button
               onClick={() => setIsRenaming(true)}
               className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20 text-primary hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/40"
-              title="Rename Project"
+              title={t('projectCard.rename')}
             >
               <Pencil size={20} />
             </button>
             <button
               onClick={() => setShowDeleteConfirm(true)}
               className="w-10 h-10 flex items-center justify-center rounded-full bg-red-100 text-red-600 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-400"
-              title="Delete Project"
+              title={t('projectCard.delete')}
             >
               <Trash2 size={20} />
             </button>
@@ -140,10 +142,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
       
       <ConfirmDialog
         isOpen={showDeleteConfirm}
-        title="Delete Project"
-        message={`Are you sure you want to delete the "${project.name}" project? This action cannot be undone and will remove all groups, images, and training data.`}
-        confirmText="Delete"
-        cancelText="Cancel"
+        title={t('projectCard.deleteConfirmTitle')}
+        message={t('projectCard.deleteConfirmMessage', { name: project.name })}
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
         variant="danger"
         onConfirm={() => {
           deleteProject(project.id);

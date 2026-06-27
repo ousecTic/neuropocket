@@ -3,6 +3,8 @@ import ArrowLeft from 'lucide-react/dist/esm/icons/arrow-left';
 import Plus from 'lucide-react/dist/esm/icons/plus';
 import MoreVertical from 'lucide-react/dist/esm/icons/more-vertical';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import logo from '/neuropocket-logo.png';
 
 interface ProjectHeaderProps {
@@ -22,6 +24,7 @@ interface ProjectHeaderProps {
 
 export function ProjectHeader({ title, backTo, backToExternal, action, secondaryAction, customContent }: ProjectHeaderProps) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const { t } = useTranslation();
   const hasMultipleActions = action && secondaryAction;
 
   const handleActionClick = (callback: () => void) => {
@@ -53,62 +56,67 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
                 )
               )}
               <div className="flex items-center gap-3 min-w-0">
-                <img src={logo} alt="NeuroPocket" className="flex-shrink-0" style={{ height: '32px', width: 'auto' }} />
+                <img src={logo} alt={t('header.logoAlt')} className="flex-shrink-0" style={{ height: '32px', width: 'auto' }} />
                 <h1 className="text-xl font-bold text-gray-900 truncate">{title}</h1>
               </div>
             </div>
 
-            {/* Custom Content or Desktop Actions */}
-            {customContent ? (
-              <div className="flex items-center gap-2 flex-shrink-0">
-                {customContent}
-              </div>
-            ) : (
-            <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
-              {action && (
-                <button
-                  onClick={action.onClick}
-                  className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors text-base whitespace-nowrap"
-                >
-                  <Plus size={18} className="flex-shrink-0" />
-                  {action.label}
-                </button>
+            {/* Right-side cluster: language switcher is always present, alongside any actions */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <LanguageSwitcher />
+
+              {/* Custom Content or Desktop Actions */}
+              {customContent ? (
+                <div className="flex items-center gap-2">
+                  {customContent}
+                </div>
+              ) : (
+                <div className="hidden sm:flex items-center gap-2">
+                  {action && (
+                    <button
+                      onClick={action.onClick}
+                      className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors text-base whitespace-nowrap"
+                    >
+                      <Plus size={18} className="flex-shrink-0" />
+                      {action.label}
+                    </button>
+                  )}
+                  {secondaryAction && (
+                    <button
+                      onClick={secondaryAction.onClick}
+                      className="flex items-center gap-2 bg-primary-light text-white px-4 py-2 rounded-lg hover:bg-primary transition-colors text-base whitespace-nowrap"
+                    >
+                      {secondaryAction.label}
+                    </button>
+                  )}
+                </div>
               )}
-              {secondaryAction && (
-                <button
-                  onClick={secondaryAction.onClick}
-                  className="flex items-center gap-2 bg-primary-light text-white px-4 py-2 rounded-lg hover:bg-primary transition-colors text-base whitespace-nowrap"
-                >
-                  {secondaryAction.label}
-                </button>
+
+              {/* Mobile Menu Button - Only show if there are multiple actions */}
+              {hasMultipleActions && (
+                <div className="sm:hidden">
+                  <button
+                    onClick={() => setShowMobileMenu(!showMobileMenu)}
+                    className="p-2 text-gray-600 hover:text-gray-900"
+                  >
+                    <MoreVertical size={20} />
+                  </button>
+                </div>
+              )}
+
+              {/* Single Mobile Action - Show directly if there's only one action */}
+              {!hasMultipleActions && action && (
+                <div className="sm:hidden">
+                  <button
+                    onClick={action.onClick}
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors text-base whitespace-nowrap"
+                  >
+                    <Plus size={18} className="flex-shrink-0" />
+                    {action.label}
+                  </button>
+                </div>
               )}
             </div>
-            )}
-
-            {/* Mobile Menu Button - Only show if there are multiple actions */}
-            {hasMultipleActions && (
-              <div className="sm:hidden">
-                <button
-                  onClick={() => setShowMobileMenu(!showMobileMenu)}
-                  className="p-2 text-gray-600 hover:text-gray-900"
-                >
-                  <MoreVertical size={20} />
-                </button>
-              </div>
-            )}
-
-            {/* Single Mobile Action - Show directly if there's only one action */}
-            {!hasMultipleActions && action && (
-              <div className="sm:hidden">
-                <button
-                  onClick={action.onClick}
-                  className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors text-base whitespace-nowrap"
-                >
-                  <Plus size={18} className="flex-shrink-0" />
-                  {action.label}
-                </button>
-              </div>
-            )}
           </div>
         </div>
 

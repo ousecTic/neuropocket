@@ -3,6 +3,7 @@ import Network from 'lucide-react/dist/esm/icons/network';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
+import { useTranslation, Trans } from 'react-i18next';
 
 interface TrainingStatusBannerProps {
   projectId: string;
@@ -14,6 +15,7 @@ interface TrainingStatusBannerProps {
 }
 
 export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToData, onGoToTraining, onGoToModel }: TrainingStatusBannerProps) {
+  const { t } = useTranslation();
   const { isTrained, currentProjectId, hasDataChanged, trainingSnapshot, isTraining } = useMLStore();
   
   const isProjectTrained = isTrained && currentProjectId === projectId;
@@ -37,9 +39,9 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <Network className="w-6 h-6 text-gray-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-gray-900 mb-1">Add at Least 2 Groups</h4>
+              <h4 className="font-semibold text-gray-900 mb-1">{t('statusBanner.need2GroupsTitle')}</h4>
               <p className="text-sm text-gray-700">
-                Create groups for different categories you want your AI to recognize.
+                {t('statusBanner.need2GroupsBody')}
               </p>
             </div>
           </div>
@@ -56,9 +58,9 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <Network className="w-6 h-6 text-gray-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-gray-900 mb-1">Add Images to Your Groups</h4>
+              <h4 className="font-semibold text-gray-900 mb-1">{t('statusBanner.addImagesTitle')}</h4>
               <p className="text-sm text-gray-700">
-                Each group needs at least one image before you can train.
+                {t('statusBanner.addImagesBody')}
               </p>
             </div>
           </div>
@@ -75,9 +77,9 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <CheckCircle2 className="w-6 h-6 text-green-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-green-900 mb-1">Data Ready!</h4>
+              <h4 className="font-semibold text-green-900 mb-1">{t('statusBanner.dataReadyTitle')}</h4>
               <p className="text-sm text-green-700">
-                You have {classes.length} groups with {totalImages} {totalImages === 1 ? 'image' : 'images'}. Ready to train when you are.
+                {t('statusBanner.dataReadyBody', { count: totalImages, groups: classes.length })}
               </p>
             </div>
           </div>
@@ -94,20 +96,21 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <AlertCircle className="w-6 h-6 text-amber-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-amber-900 mb-1">Data Changed</h4>
+              <h4 className="font-semibold text-amber-900 mb-1">{t('statusBanner.dataChangedTitle')}</h4>
               <p className="text-sm text-amber-700">
-                You changed your images. Go to the{' '}
-                {onGoToTraining ? (
-                  <button 
-                    onClick={onGoToTraining}
-                    className="font-semibold text-amber-900 hover:text-amber-950 underline cursor-pointer"
-                  >
-                    Training tab
-                  </button>
-                ) : (
-                  <span className="font-semibold">Training tab</span>
-                )}
-                {' '}to retrain your AI.
+                <Trans
+                  i18nKey="statusBanner.dataChangedBody"
+                  components={{
+                    tab: onGoToTraining ? (
+                      <button
+                        onClick={onGoToTraining}
+                        className="font-semibold text-amber-900 hover:text-amber-950 underline cursor-pointer"
+                      />
+                    ) : (
+                      <span className="font-semibold" />
+                    ),
+                  }}
+                />
               </p>
             </div>
           </div>
@@ -123,9 +126,9 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
             <CheckCircle2 className="w-6 h-6 text-green-600" />
           </div>
           <div className="flex-1">
-            <h4 className="font-semibold text-green-900 mb-1">Your AI is Ready!</h4>
+            <h4 className="font-semibold text-green-900 mb-1">{t('statusBanner.aiReadyTitle')}</h4>
             <p className="text-sm text-green-700">
-              It analyzed {trainingSnapshot?.totalImages || 0} {(trainingSnapshot?.totalImages || 0) === 1 ? 'picture' : 'pictures'}. Your AI is up-to-date.
+              {t('statusBanner.aiReadyBodyData', { count: trainingSnapshot?.totalImages || 0 })}
             </p>
           </div>
         </div>
@@ -144,9 +147,9 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <Loader2 className="w-6 h-6 text-primary animate-spin" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-primary-dark mb-1">Training Your AI...</h4>
+              <h4 className="font-semibold text-primary-dark mb-1">{t('statusBanner.trainingTitle')}</h4>
               <p className="text-sm text-primary-dark">
-                Your AI is analyzing the images and finding patterns. This may take a minute.
+                {t('statusBanner.trainingBody')}
               </p>
             </div>
           </div>
@@ -163,20 +166,21 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <Network className="w-6 h-6 text-gray-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-gray-900 mb-1">Add Data First</h4>
+              <h4 className="font-semibold text-gray-900 mb-1">{t('statusBanner.addDataTitle')}</h4>
               <p className="text-sm text-gray-700">
-                Go to the{' '}
-                {onGoToData ? (
-                  <button 
-                    onClick={onGoToData}
-                    className="font-semibold text-primary hover:text-primary-dark underline cursor-pointer"
-                  >
-                    Data tab
-                  </button>
-                ) : (
-                  <span className="font-semibold">Data tab</span>
-                )}
-                {' '}to add images to your groups before training.
+                <Trans
+                  i18nKey="statusBanner.addDataBody"
+                  components={{
+                    tab: onGoToData ? (
+                      <button
+                        onClick={onGoToData}
+                        className="font-semibold text-primary hover:text-primary-dark underline cursor-pointer"
+                      />
+                    ) : (
+                      <span className="font-semibold" />
+                    ),
+                  }}
+                />
               </p>
             </div>
           </div>
@@ -193,11 +197,12 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <AlertCircle className="w-6 h-6 text-amber-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-amber-900 mb-1">Your AI Needs to Be Retrained</h4>
+              <h4 className="font-semibold text-amber-900 mb-1">{t('statusBanner.needRetrainTitle')}</h4>
               <p className="text-sm text-amber-700">
-                You changed your images. Click{' '}
-                <span className="font-semibold text-amber-900">"Retrain Model"</span>
-                {' '}below to analyze the new pictures.
+                <Trans
+                  i18nKey="statusBanner.needRetrainBodyTraining"
+                  components={{ b: <span className="font-semibold text-amber-900" /> }}
+                />
               </p>
             </div>
           </div>
@@ -214,20 +219,22 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <CheckCircle2 className="w-6 h-6 text-green-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-green-900 mb-1">Your AI is Ready!</h4>
+              <h4 className="font-semibold text-green-900 mb-1">{t('statusBanner.aiReadyTitle')}</h4>
               <p className="text-sm text-green-700">
-                It analyzed {trainingSnapshot?.totalImages || 0} {(trainingSnapshot?.totalImages || 0) === 1 ? 'picture' : 'pictures'}. Go to the{' '}
-                {onGoToModel ? (
-                  <button 
-                    onClick={onGoToModel}
-                    className="font-semibold text-green-900 hover:text-green-950 underline cursor-pointer"
-                  >
-                    Model tab
-                  </button>
-                ) : (
-                  <span className="font-semibold">Model tab</span>
-                )}
-                {' '}to test it.
+                <Trans
+                  i18nKey="statusBanner.aiReadyBodyTraining"
+                  count={trainingSnapshot?.totalImages || 0}
+                  components={{
+                    tab: onGoToModel ? (
+                      <button
+                        onClick={onGoToModel}
+                        className="font-semibold text-green-900 hover:text-green-950 underline cursor-pointer"
+                      />
+                    ) : (
+                      <span className="font-semibold" />
+                    ),
+                  }}
+                />
               </p>
             </div>
           </div>
@@ -243,9 +250,9 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
             <Network className="w-6 h-6 text-gray-600" />
           </div>
           <div className="flex-1">
-            <h4 className="font-semibold text-gray-900 mb-1">Ready to Train Your AI</h4>
+            <h4 className="font-semibold text-gray-900 mb-1">{t('statusBanner.readyToTrainTitle')}</h4>
             <p className="text-sm text-gray-700">
-              Train your AI to recognize your groups.
+              {t('statusBanner.readyToTrainBody')}
             </p>
           </div>
         </div>
@@ -264,20 +271,21 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <Network className="w-6 h-6 text-gray-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-gray-900 mb-1">Train Your AI First</h4>
+              <h4 className="font-semibold text-gray-900 mb-1">{t('statusBanner.trainFirstTitle')}</h4>
               <p className="text-sm text-gray-700">
-                Go to the{' '}
-                {onGoToTraining ? (
-                  <button 
-                    onClick={onGoToTraining}
-                    className="font-semibold text-primary hover:text-primary-dark underline cursor-pointer"
-                  >
-                    Training tab
-                  </button>
-                ) : (
-                  <span className="font-semibold">Training tab</span>
-                )}
-                {' '}to train your AI before testing.
+                <Trans
+                  i18nKey="statusBanner.trainFirstBody"
+                  components={{
+                    tab: onGoToTraining ? (
+                      <button
+                        onClick={onGoToTraining}
+                        className="font-semibold text-primary hover:text-primary-dark underline cursor-pointer"
+                      />
+                    ) : (
+                      <span className="font-semibold" />
+                    ),
+                  }}
+                />
               </p>
             </div>
           </div>
@@ -294,20 +302,21 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
               <AlertCircle className="w-6 h-6 text-amber-600" />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-amber-900 mb-1">Your AI Needs to Be Retrained</h4>
+              <h4 className="font-semibold text-amber-900 mb-1">{t('statusBanner.needRetrainTitle')}</h4>
               <p className="text-sm text-amber-700">
-                You changed your images.{' '}
-                {onGoToTraining ? (
-                  <button 
-                    onClick={onGoToTraining}
-                    className="font-semibold text-amber-900 hover:text-amber-950 underline cursor-pointer"
-                  >
-                    Retrain your AI
-                  </button>
-                ) : (
-                  <span className="font-semibold">Retrain your AI</span>
-                )}
-                {' '}for accurate results.
+                <Trans
+                  i18nKey="statusBanner.needRetrainBodyModel"
+                  components={{
+                    tab: onGoToTraining ? (
+                      <button
+                        onClick={onGoToTraining}
+                        className="font-semibold text-amber-900 hover:text-amber-950 underline cursor-pointer"
+                      />
+                    ) : (
+                      <span className="font-semibold" />
+                    ),
+                  }}
+                />
               </p>
             </div>
           </div>
@@ -323,9 +332,9 @@ export function TrainingStatusBanner({ projectId, classes, currentTab, onGoToDat
             <CheckCircle2 className="w-6 h-6 text-green-600" />
           </div>
           <div className="flex-1">
-            <h4 className="font-semibold text-green-900 mb-1">Your AI is Ready!</h4>
+            <h4 className="font-semibold text-green-900 mb-1">{t('statusBanner.aiReadyTitle')}</h4>
             <p className="text-sm text-green-700">
-              Test your AI with new images to see how well it recognizes your groups.
+              {t('statusBanner.aiReadyTestBody')}
             </p>
           </div>
         </div>

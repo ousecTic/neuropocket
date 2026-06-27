@@ -5,11 +5,13 @@ import { useProjectStore } from '../store/useProjectStore';
 import { CreateProjectDialog } from '../components/CreateProjectDialog';
 import Network from 'lucide-react/dist/esm/icons/network';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export function ProjectList() {
   const { projects, loading, loadProjects } = useProjectStore();
   const [isCreating, setIsCreating] = React.useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadProjects();
@@ -20,7 +22,7 @@ export function ProjectList() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading projects...</p>
+          <p className="mt-4 text-gray-600">{t('projectList.loading')}</p>
         </div>
       </div>
     );
@@ -28,14 +30,14 @@ export function ProjectList() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <ProjectHeader 
-        title="My Projects" 
+      <ProjectHeader
+        title={t('projectList.title')}
         action={projects.length > 0 ? {
-          label: "Create Project",
+          label: t('projectList.createProject'),
           onClick: () => setIsCreating(true)
         } : undefined}
         secondaryAction={projects.length > 0 ? {
-          label: "Try Bias Challenge",
+          label: t('projectList.tryBiasChallenge'),
           onClick: () => navigate('/challenge')
         } : undefined}
       />
@@ -47,9 +49,9 @@ export function ProjectList() {
               <div className="bg-primary/10 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
                 <Network size={48} className="text-primary" />
               </div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-3">Create Your First Project</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-3">{t('projectList.emptyTitle')}</h2>
               <p className="text-gray-600 mb-8 text-lg">
-                Start your AI journey by creating a new project
+                {t('projectList.emptyDescription')}
               </p>
               <div className="space-y-4">
                 <CreateProjectDialog variant="full-width" />
@@ -58,7 +60,7 @@ export function ProjectList() {
                   className="w-full py-4 text-lg rounded-lg flex items-center justify-center gap-2
                     border-2 border-primary/30 text-primary hover:bg-primary/10 transition-colors"
                 >
-                  Or Try the Bias Challenge
+                  {t('projectList.orTryChallenge')}
                 </button>
               </div>
             </div>
