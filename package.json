@@ -1,7 +1,7 @@
 {
   "name": "neuropocket",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.5.0",
   "type": "module",
   "description": "Train and use AI models anywhere - works completely offline",
   "scripts": {
