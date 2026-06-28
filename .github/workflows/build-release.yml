@@ -130,6 +130,12 @@ jobs:
         with:
           path: artifacts
       - run: ls -R artifacts
+      - name: Add stable-named copies
+        # Version-less names so the website can link to
+        # releases/latest/download/<name> and never need updating per release.
+        run: |
+          cp artifacts/apk/*.apk neuropocket-android.apk
+          cp artifacts/exe/*.exe neuropocket-windows.exe
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
@@ -142,3 +148,5 @@ jobs:
           files: |
             artifacts/apk/*.apk
             artifacts/exe/*.exe
+            neuropocket-android.apk
+            neuropocket-windows.exe

@@ -77,7 +77,7 @@ export function Hero() {
                     }}
                   >
                     <a
-                      href="https://github.com/ousecTic/neuropocket/releases/download/v1.5.0/neuropocket.1.5.0.exe"
+                      href="https://github.com/ousecTic/neuropocket/releases/latest/download/neuropocket-windows.exe"
                       className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors"
                       style={{ 
                         textDecoration: 'none',
@@ -92,7 +92,7 @@ export function Hero() {
                       </div>
                     </a>
                     <a
-                      href="https://github.com/ousecTic/neuropocket/releases/download/v1.5.0/neuropocket.1.5.0.apk"
+                      href="https://github.com/ousecTic/neuropocket/releases/latest/download/neuropocket-android.apk"
                       className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors"
                       style={{ 
                         textDecoration: 'none',
