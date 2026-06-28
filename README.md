@@ -192,6 +192,20 @@ dist
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## 🚀 Releasing
+
+Releases are automated. Open a pull request into `main`; once the CI gate
+passes, the PR is auto-merged (squash), the patch version is bumped
+automatically, and a new GitHub release is published with the Windows
+installer (`.exe`) and Android app (`.apk`) attached.
+
+- Bump the **minor** or **major** version by including `[minor]` or `[major]`
+  in the PR title.
+- Merge a change **without** cutting an app release by including
+  `[skip release]` in the PR title (useful for docs/CI-only changes).
+- To release manually, push a tag like `v1.6.0`, or use the **Release
+  (manual)** workflow's "Run workflow" button for a draft test build.
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
