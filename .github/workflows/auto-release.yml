@@ -1,0 +1,87 @@
+name: Auto Release (PR)
+
+# Day-to-day flow: open a PR into main. Once the CI gate passes, the PR is
+# auto-merged (squash), the patch version is bumped automatically, and a new
+# release is built and PUBLISHED with the APK + EXE attached.
+#
+# - Bump higher by putting [minor] or [major] in the PR title.
+# - Skip the app release (merge only) with [skip release] in the PR title.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check:
+    name: CI gate
+    # Only for same-repo PRs (forks get a read-only token and can't auto-merge).
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Type-check
+        run: npx tsc --noEmit
+      - name: Build web
+        run: npm run build
+
+  merge:
+    name: Auto-merge
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Squash-merge the PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge ${{ github.event.pull_request.number }} -R ${{ github.repository }} --squash --delete-branch
+
+  version:
+    name: Compute version
+    needs: merge
+    if: ${{ !contains(github.event.pull_request.title, '[skip release]') }}
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+      tag: ${{ steps.bump.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - id: bump
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        shell: bash
+        run: |
+          git fetch --tags --force
+          LATEST=$(git tag -l 'v*' --sort=-v:refname | head -1)
+          [ -z "$LATEST" ] && LATEST="v0.0.0"
+          IFS='.' read -r MA MI PA <<< "${LATEST#v}"
+          if echo "$PR_TITLE" | grep -qiE '\[major\]'; then
+            MA=$((MA + 1)); MI=0; PA=0
+          elif echo "$PR_TITLE" | grep -qiE '\[minor\]'; then
+            MI=$((MI + 1)); PA=0
+          else
+            PA=$((PA + 1))
+          fi
+          echo "version=$MA.$MI.$PA" >> "$GITHUB_OUTPUT"
+          echo "tag=v$MA.$MI.$PA" >> "$GITHUB_OUTPUT"
+          echo "Next release: v$MA.$MI.$PA (from $LATEST)"
+
+  build:
+    name: Build & publish
+    needs: version
+    uses: ./.github/workflows/build-release.yml
+    with:
+      version: ${{ needs.version.outputs.version }}
+      tag: ${{ needs.version.outputs.tag }}
+      ref: main
+      publish: true
