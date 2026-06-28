@@ -5,7 +5,7 @@ import MoreVertical from 'lucide-react/dist/esm/icons/more-vertical';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import logo from '/neuropocket-logo.png';
+import logo from '../assets/neuropocket-logo.png';
 
 interface ProjectHeaderProps {
   title: string;

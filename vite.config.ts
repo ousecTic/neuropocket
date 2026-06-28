@@ -15,6 +15,7 @@ const stripOnlineOnlyHeadLinks = () => ({
     return html
       .replace(/\s*<link rel="preconnect"[^>]*>/g, '')
       .replace(/\s*<link[^>]*fonts\.googleapis\.com[^>]*>/g, '')
+      .replace(/\s*<link rel="icon"[^>]*>/g, '')
       .replace(/\s*<link rel="apple-touch-icon"[^>]*>/g, '')
       .replace(/\s*<link rel="mask-icon"[^>]*>/g, '');
   },
