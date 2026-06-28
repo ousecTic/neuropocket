@@ -30,12 +30,60 @@ jobs:
       - run: npm ci
       - name: Type-check
         run: npx tsc --noEmit
+      - name: Old-browser compatibility check
+        run: npm run lint:compat
       - name: Build web
         run: npm run build
 
+  android-smoke:
+    name: Old-Android smoke test
+    # API 27 (Android 8.1, a 2018 OS) with the google_apis image, which ships an
+    # era-correct WebView. The bare AOSP "default" image has NO WebView, so the app
+    # can't render there. A strong free proxy for a 2018 Android device, not a
+    # guarantee for any specific handset.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: npm ci
+      - run: npm run build
+      - run: npx cap sync android
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+      - name: Smoke test on Android 8 emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 27
+          target: google_apis
+          arch: x86
+          force-avd-creation: true
+          emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          disable-animations: true
+          script: bash .github/scripts/android-smoke.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-smoke-screenshot
+          path: smoke.png
+          if-no-files-found: warn
+
   merge:
     name: Auto-merge
-    needs: check
+    needs: [check, android-smoke]
     runs-on: ubuntu-latest
     steps:
       - name: Squash-merge the PR
