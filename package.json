@@ -4,10 +4,18 @@
   "version": "1.5.0",
   "type": "module",
   "description": "Train and use AI models anywhere - works completely offline",
+  "browserslist": [
+    "Chrome >= 64",
+    "Firefox >= 60",
+    "Edge >= 79",
+    "Safari >= 12",
+    "and_chr >= 64"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "lint:compat": "eslint -c eslint.compat.config.js src",
     "preview": "vite preview",
     "cap:android": "cap add android",
     "cap:sync": "cap sync",
@@ -38,6 +46,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.18",
     "eslint": "^9.9.1",
+    "eslint-plugin-compat": "^7.0.2",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
     "globals": "^15.9.0",

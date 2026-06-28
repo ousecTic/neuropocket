@@ -1,4 +1,5 @@
-# Keep the Gradle wrapper script LF so it runs on Linux CI runners
+# Keep shell scripts LF so they run on Linux CI runners
 gradlew text eol=lf
+*.sh text eol=lf
 # Wrapper jar and other binaries must not be line-ending normalized
 *.jar binary
