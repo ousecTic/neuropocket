@@ -61,6 +61,8 @@
     "renameError": "Erro ao renomear o grupo"
   },
   "imageUpload": {
+    "cameraUnavailableTitle": "Não é possível abrir a câmera aqui",
+    "cameraUnavailableBody": "Este aplicativo não consegue acessar a câmera aqui. Para adicionar fotos, abra o aplicativo de Câmera do seu telefone, tire suas fotos e depois volte e toque em Enviar para adicioná-las.",
     "takePhotos": "Tirar fotos",
     "uploadPhotos": "Enviar fotos",
     "processing": "Processando imagens...",

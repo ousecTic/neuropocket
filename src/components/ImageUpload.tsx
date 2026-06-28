@@ -14,14 +14,13 @@ interface ImageUploadProps {
 
 // The live camera (getUserMedia) needs a secure context + browser permission, which
 // fails in in-app browsers (WhatsApp/Gmail) and on mobile file://. When it's
-// unavailable we fall back to a native-camera file input (capture=environment).
+// unavailable we show guidance to use the phone's camera app + Upload instead.
 const liveCameraSupported =
   typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getUserMedia;
 
 export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProps) {
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -120,12 +119,10 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
     await startCamera(newMode);
   };
 
-  // Open camera modal (or fall back to the native camera where getUserMedia isn't available)
+  // Open the camera modal. When the live camera isn't available (in-app browsers /
+  // mobile file://), the modal shows guidance to use the phone's camera app + Upload.
   const handleOpenCamera = () => {
-    if (!liveCameraSupported) {
-      cameraInputRef.current?.click();
-      return;
-    }
+    setCameraError('');
     setShowCamera(true);
     setCapturedPhotos([]);
   };
@@ -180,7 +177,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
 
   // Start camera when modal opens
   useEffect(() => {
-    if (showCamera) {
+    if (showCamera && liveCameraSupported) {
       startCamera();
     }
     return () => {
@@ -272,17 +269,6 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
             <Camera size={20} />
             <span>{t('imageUpload.takePhotos')}</span>
           </button>
-          {/* Native-camera fallback for in-app browsers / mobile file:// (no getUserMedia) */}
-          <input
-            ref={cameraInputRef}
-            type="file"
-            className="hidden"
-            accept="image/png,image/jpeg,image/jpg"
-            capture="environment"
-            multiple
-            onChange={handleFileChange}
-            disabled={loading}
-          />
 
           {/* Upload Button */}
           <label className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 cursor-pointer transition-colors font-medium ${loading ? 'opacity-60 pointer-events-none' : ''}`}>
@@ -342,7 +328,21 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
 
             {/* Modal Content */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {cameraError ? (
+              {!liveCameraSupported ? (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                  <Camera className="mx-auto text-primary mb-3" size={40} />
+                  <p className="text-gray-800 font-semibold mb-2">{t('imageUpload.cameraUnavailableTitle')}</p>
+                  <p className="text-sm text-gray-600 mb-5" dir="auto">{t('imageUpload.cameraUnavailableBody')}</p>
+                  <button
+                    type="button"
+                    onClick={() => { handleCloseCamera(); fileInputRef.current?.click(); }}
+                    className="inline-flex items-center justify-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
+                  >
+                    <Upload size={18} />
+                    {t('imageUpload.uploadPhotos')}
+                  </button>
+                </div>
+              ) : cameraError ? (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                   <p className="text-red-600 font-medium mb-3">{cameraError}</p>
                   <p className="text-sm text-gray-600 mb-4">
@@ -403,8 +403,8 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
               )}
             </div>
 
-            {/* Modal Footer - Only show when camera is working */}
-            {!cameraError && (
+            {/* Modal Footer - Only show when the live camera is working */}
+            {liveCameraSupported && !cameraError && (
               <div className="flex-shrink-0 bg-white border-t px-4 py-3 flex gap-3 rounded-b-lg">
                 <button
                   type="button"

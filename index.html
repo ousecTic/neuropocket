@@ -12,9 +12,66 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
     <link rel="mask-icon" href="/mask-icon.svg" color="#258EC2">
+    <style>
+      /* Instant loading screen shown before the JS bundle parses + React mounts.
+         Critical for the large single-file build, where the browser would otherwise
+         show a blank page for several seconds. React replaces #root on first render,
+         which removes this automatically. */
+      .np-boot {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: #ffffff;
+        color: #1f2937;
+        padding: 24px;
+        text-align: center;
+      }
+      .np-boot__spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid rgba(37, 142, 194, 0.2);
+        border-top-color: #258EC2;
+        border-radius: 50%;
+        animation: np-spin 0.9s linear infinite;
+      }
+      @keyframes np-spin { to { transform: rotate(360deg); } }
+      .np-boot__name { font-size: 1.5rem; font-weight: 700; color: #258EC2; }
+      .np-boot__msg { font-size: 0.9rem; color: #6b7280; max-width: 320px; line-height: 1.5; }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="np-boot">
+        <div class="np-boot__spinner"></div>
+        <div class="np-boot__name">NeuroPocket</div>
+        <div class="np-boot__msg" id="np-boot-msg" dir="auto">Loading&hellip; the first load can take a moment.</div>
+      </div>
+    </div>
+    <script>
+      // Localize the loading message before i18next is available (the JS bundle
+      // hasn't parsed yet). Keyed by the base language code; falls back to English.
+      (function () {
+        var msgs = {
+          en: 'Loading… the first load can take a moment.',
+          es: 'Cargando… la primera carga puede tardar un momento.',
+          fr: 'Chargement… le premier chargement peut prendre un moment.',
+          pt: 'Carregando… o primeiro carregamento pode demorar um pouco.',
+          ar: 'جارٍ التحميل… قد يستغرق التحميل الأول لحظة.',
+          hi: 'लोड हो रहा है… पहली बार लोड होने में कुछ समय लग सकता है।',
+          sw: 'Inapakia… upakiaji wa kwanza unaweza kuchukua muda kidogo.'
+        };
+        try {
+          var lang = (navigator.language || 'en').slice(0, 2).toLowerCase();
+          var el = document.getElementById('np-boot-msg');
+          if (el && msgs[lang]) el.textContent = msgs[lang];
+        } catch (e) {}
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

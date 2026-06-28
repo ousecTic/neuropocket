@@ -16,7 +16,7 @@ interface PreviewSectionProps {
 
 // The live camera (getUserMedia) needs a secure context + browser permission, which
 // fails in in-app browsers (WhatsApp/Gmail) and on mobile file://. When it's
-// unavailable we fall back to a native-camera file input (capture=environment).
+// unavailable we show guidance to use the phone's camera app + Upload instead.
 const liveCameraSupported =
   typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getUserMedia;
 
@@ -33,7 +33,6 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
   // Check if this specific project has been trained
   const isProjectTrained = isTrained && currentProjectId === project.id;
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -170,12 +169,10 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
     await startCamera(newMode);
   };
 
+  // Open the camera modal. When the live camera isn't available (in-app browsers /
+  // mobile file://), the modal shows guidance to use the phone's camera app + Upload.
   const handleOpenCamera = () => {
-    // Fall back to the native camera where getUserMedia isn't available.
-    if (!liveCameraSupported) {
-      cameraInputRef.current?.click();
-      return;
-    }
+    setCameraError('');
     setShowCamera(true);
   };
 
@@ -232,7 +229,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
 
   // Start camera when modal opens
   useEffect(() => {
-    if (showCamera) {
+    if (showCamera && liveCameraSupported) {
       startCamera();
     }
     return () => {
@@ -282,15 +279,6 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-              />
-              {/* Native-camera fallback for in-app browsers / mobile file:// (no getUserMedia) */}
-              <input
-                ref={cameraInputRef}
-                type="file"
-                accept="image/*"
-                capture="environment"
                 onChange={handleImageUpload}
                 className="hidden"
               />
@@ -428,7 +416,21 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
 
             {/* Modal Content */}
             <div className="flex-1 overflow-y-auto p-4">
-              {cameraError ? (
+              {!liveCameraSupported ? (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+                  <Camera className="mx-auto text-primary mb-3" size={40} />
+                  <p className="text-gray-800 font-semibold mb-2">{t('imageUpload.cameraUnavailableTitle')}</p>
+                  <p className="text-sm text-gray-600 mb-5" dir="auto">{t('imageUpload.cameraUnavailableBody')}</p>
+                  <button
+                    type="button"
+                    onClick={() => { handleCloseCamera(); fileInputRef.current?.click(); }}
+                    className="inline-flex items-center justify-center gap-2 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium"
+                  >
+                    <Upload size={18} />
+                    {t('preview.uploadPhoto')}
+                  </button>
+                </div>
+              ) : cameraError ? (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
                   <p className="text-red-600 font-medium mb-3">{cameraError}</p>
                   <p className="text-sm text-gray-600 mb-4">
@@ -457,7 +459,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
             </div>
 
             {/* Modal Footer */}
-            {!cameraError && (
+            {liveCameraSupported && !cameraError && (
               <div className="flex-shrink-0 bg-white border-t px-4 py-3 rounded-b-lg">
                 <button
                   type="button"

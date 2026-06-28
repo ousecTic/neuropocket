@@ -61,6 +61,8 @@
     "renameError": "Hitilafu wakati wa kubadilisha jina la kundi"
   },
   "imageUpload": {
+    "cameraUnavailableTitle": "Haiwezi kufungua kamera hapa",
+    "cameraUnavailableBody": "Programu hii haiwezi kutumia kamera hapa. Ili kuongeza picha, fungua programu ya Kamera kwenye simu yako, piga picha zako, kisha urudi na uguse Pakia ili kuziongeza.",
     "takePhotos": "Piga Picha",
     "uploadPhotos": "Pakia Picha",
     "processing": "Inachakata picha...",

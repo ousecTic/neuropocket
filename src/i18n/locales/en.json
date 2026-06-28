@@ -60,6 +60,8 @@
     "renameError": "Error renaming class"
   },
   "imageUpload": {
+    "cameraUnavailableTitle": "Can't open the camera here",
+    "cameraUnavailableBody": "This app can't access the camera here. To add pictures, open your phone's Camera app, take your photos, then come back and tap Upload to add them.",
     "takePhotos": "Take Photos",
     "uploadPhotos": "Upload Photos",
     "processing": "Processing images...",

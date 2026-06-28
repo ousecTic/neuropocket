@@ -61,6 +61,8 @@
     "renameError": "Erreur lors du renommage du groupe"
   },
   "imageUpload": {
+    "cameraUnavailableTitle": "Impossible d'ouvrir la caméra ici",
+    "cameraUnavailableBody": "Cette application ne peut pas accéder à la caméra ici. Pour ajouter des photos, ouvrez l'application Appareil photo de votre téléphone, prenez vos photos, puis revenez et appuyez sur Importer pour les ajouter.",
     "takePhotos": "Prendre des photos",
     "uploadPhotos": "Importer des photos",
     "processing": "Traitement des images...",
