@@ -69,6 +69,41 @@ export function Home() {
         </div>
       </div>
 
+      {/* Languages Section */}
+      <div className="py-24" style={{ backgroundColor: '#EFF6FF' }}>
+        <div className="mx-auto px-6 md:px-12 lg:px-16 text-center" style={{ maxWidth: 'var(--container-width)' }}>
+          <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--text-color)', fontWeight: '600' }}>
+            Now Available in Your Language
+          </h2>
+          <p className="mb-12 text-lg mx-auto" style={{ color: 'var(--subtext-color)', maxWidth: '640px' }}>
+            NeuroPocket now speaks 7 languages, with full right-to-left support for Arabic. Pick your language right inside the app — your choice is remembered, and it all works offline.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {[
+              'English',
+              'Español',
+              'Français',
+              'Português',
+              'العربية',
+              'हिन्दी',
+              'Kiswahili',
+            ].map((lang) => (
+              <span
+                key={lang}
+                className="px-5 py-2 text-base font-medium bg-white"
+                style={{
+                  border: '1px solid var(--border-color)',
+                  borderRadius: '9999px',
+                  color: 'var(--text-color)',
+                }}
+              >
+                {lang}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Footer */}
       <Footer />
     </div>
