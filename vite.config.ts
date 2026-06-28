@@ -1,12 +1,48 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { viteSingleFile } from 'vite-plugin-singlefile';
+import { fileURLToPath } from 'node:url';
 
-export default defineConfig({
+// `--mode offline` produces a single self-contained index.html that runs straight
+// from the filesystem (file://): JS/CSS inlined and the model embedded in-memory.
+// All other modes keep the normal multi-file PWA build untouched.
+// Strips head links that only make failed network requests over file:// (external
+// Google Fonts and absolute-path PWA icons), so the offline build's console is clean.
+const stripOnlineOnlyHeadLinks = () => ({
+  name: 'strip-online-only-head-links',
+  transformIndexHtml(html: string) {
+    return html
+      .replace(/\s*<link rel="preconnect"[^>]*>/g, '')
+      .replace(/\s*<link[^>]*fonts\.googleapis\.com[^>]*>/g, '')
+      .replace(/\s*<link rel="apple-touch-icon"[^>]*>/g, '')
+      .replace(/\s*<link rel="mask-icon"[^>]*>/g, '');
+  },
+});
+
+export default defineConfig(({ mode }) => {
+  const offline = mode === 'offline';
+
+  return {
   base: './',
+  // Inline as a literal so the offline-only code paths (embedded model + challenge
+  // images) are dead-code-eliminated from the normal build.
+  define: { 'import.meta.env.VITE_OFFLINE_BUILD': offline ? 'true' : 'false' },
+  // The offline build omits VitePWA, so stub its virtual module (no service worker
+  // over file://).
+  resolve: offline
+    ? {
+        alias: {
+          'virtual:pwa-register': fileURLToPath(
+            new URL('./src/offline/pwa-register-stub.ts', import.meta.url)
+          ),
+        },
+      }
+    : {},
   plugins: [
     react(),
-    VitePWA({
+    ...(offline ? [stripOnlineOnlyHeadLinks(), viteSingleFile()] : []),
+    ...(offline ? [] : [VitePWA({
       registerType: 'autoUpdate',
       includeAssets: [
         'favicon.ico', 
@@ -75,15 +111,16 @@ export default defineConfig({
           }
         ]
       }
-    })
+    })])
   ],
   optimizeDeps: {
     exclude: ['lucide-react']
   },
   build: {
-    outDir: 'dist',
+    outDir: offline ? 'dist-offline' : 'dist',
     assetsDir: 'assets',
     emptyOutDir: true,
     target: 'es2018'
   }
+  };
 });

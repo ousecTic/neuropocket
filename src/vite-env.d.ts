@@ -1,5 +1,13 @@
 /// <reference types="vite/client" />
 
+interface ImportMetaEnv {
+  readonly VITE_OFFLINE_BUILD?: boolean;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 declare module 'virtual:pwa-register' {
     export interface RegisterSWOptions {
       immediate?: boolean;
