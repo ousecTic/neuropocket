@@ -24,7 +24,8 @@ dist-ssr
 *.sw?
 
 # Capacitor
-android/
+# android/ is committed so CI can build the APK; android/.gitignore keeps
+# machine-specific files (local.properties, build/, copied web assets) out.
 ios/
 
 # Keep capacitor config
