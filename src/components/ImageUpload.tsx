@@ -12,9 +12,16 @@ interface ImageUploadProps {
   images?: ClassImage[];
 }
 
+// The live camera (getUserMedia) needs a secure context + browser permission, which
+// fails in in-app browsers (WhatsApp/Gmail) and on mobile file://. When it's
+// unavailable we fall back to a native-camera file input (capture=environment).
+const liveCameraSupported =
+  typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getUserMedia;
+
 export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProps) {
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -113,8 +120,12 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
     await startCamera(newMode);
   };
 
-  // Open camera modal
+  // Open camera modal (or fall back to the native camera where getUserMedia isn't available)
   const handleOpenCamera = () => {
+    if (!liveCameraSupported) {
+      cameraInputRef.current?.click();
+      return;
+    }
     setShowCamera(true);
     setCapturedPhotos([]);
   };
@@ -181,7 +192,8 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
-    const files = Array.from(e.target.files || []);
+    const input = e.target;
+    const files = Array.from(input.files || []);
     const validFiles: string[] = [];
     
     for (const file of files) {
@@ -213,9 +225,9 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
       onUpload(validFiles);
     }
 
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+    // Reset the input that fired so the same photo can be re-selected (works for
+    // both the upload picker and the native-camera input).
+    input.value = '';
     setLoading(false);
   };
 
@@ -260,6 +272,17 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
             <Camera size={20} />
             <span>{t('imageUpload.takePhotos')}</span>
           </button>
+          {/* Native-camera fallback for in-app browsers / mobile file:// (no getUserMedia) */}
+          <input
+            ref={cameraInputRef}
+            type="file"
+            className="hidden"
+            accept="image/png,image/jpeg,image/jpg"
+            capture="environment"
+            multiple
+            onChange={handleFileChange}
+            disabled={loading}
+          />
 
           {/* Upload Button */}
           <label className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 cursor-pointer transition-colors font-medium ${loading ? 'opacity-60 pointer-events-none' : ''}`}>
