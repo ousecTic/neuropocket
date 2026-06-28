@@ -1,0 +1,144 @@
+name: Build & Release
+
+# Reusable pipeline: builds the Android APK and Windows Electron installer for a
+# given version, then creates a GitHub release (draft or published) with both
+# attached. Called by release.yml (manual tag) and auto-release.yml (PR flow).
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version without the v prefix, e.g. 1.5.1'
+        required: true
+        type: string
+      tag:
+        description: 'Release tag, e.g. v1.5.1'
+        required: true
+        type: string
+      ref:
+        description: 'Git ref to build from (branch, tag, or sha)'
+        required: true
+        type: string
+      publish:
+        description: 'true = publish the release; false = create a draft'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Compute versionCode
+        id: code
+        shell: bash
+        run: |
+          IFS='.' read -r MA MI PA <<< "${{ inputs.version }}"
+          echo "code=$((10#${MA:-0} * 10000 + 10#${MI:-0} * 100 + 10#${PA:-0}))" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - run: npm ci
+      - run: npm run build
+      - run: npx cap sync android
+
+      - name: Stamp version into build.gradle
+        shell: bash
+        run: |
+          sed -i "s/versionName \".*\"/versionName \"${{ inputs.version }}\"/" android/app/build.gradle
+          sed -i "s/versionCode [0-9]*/versionCode ${{ steps.code.outputs.code }}/" android/app/build.gradle
+          grep -E "versionName|versionCode" android/app/build.gradle
+
+      - name: Assemble debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Rename APK
+        shell: bash
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk "neuropocket.${{ inputs.version }}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: neuropocket.*.apk
+          if-no-files-found: error
+
+  electron:
+    name: Windows installer
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+      - run: npx cap copy electron
+
+      - name: Stamp Electron version
+        shell: bash
+        run: npm --prefix electron version "${{ inputs.version }}" --no-git-tag-version --allow-same-version
+
+      - name: Install Electron deps
+        working-directory: electron
+        run: npm ci
+      - name: Compile Electron
+        working-directory: electron
+        run: npm run build
+      - name: Package NSIS installer
+        working-directory: electron
+        run: npx electron-builder build -c ./electron-builder.config.json --publish never
+
+      - name: Rename EXE
+        shell: bash
+        run: cp "electron/dist/Neuropocket Setup ${{ inputs.version }}.exe" "neuropocket.${{ inputs.version }}.exe"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exe
+          path: neuropocket.*.exe
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    needs: [android, electron]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - run: ls -R artifacts
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          target_commitish: ${{ inputs.ref }}
+          name: "Neuropocket ${{ inputs.tag }}"
+          draft: ${{ !inputs.publish }}
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            artifacts/apk/*.apk
+            artifacts/exe/*.exe
