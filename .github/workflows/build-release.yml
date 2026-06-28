@@ -121,9 +121,35 @@ jobs:
           path: neuropocket.*.exe
           if-no-files-found: error
 
+  web-offline:
+    name: Offline single-file
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build:offline
+
+      - name: Rename offline HTML
+        shell: bash
+        run: cp dist-offline/index.html neuropocket-offline.html
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: offline
+          path: neuropocket-offline.html
+          if-no-files-found: error
+
   release:
     name: Publish release
-    needs: [android, electron]
+    needs: [android, electron, web-offline]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -148,5 +174,6 @@ jobs:
           files: |
             artifacts/apk/*.apk
             artifacts/exe/*.exe
+            artifacts/offline/neuropocket-offline.html
             neuropocket-android.apk
             neuropocket-windows.exe

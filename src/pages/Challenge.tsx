@@ -6,6 +6,7 @@ import Network from 'lucide-react/dist/esm/icons/network';
 import CheckCircle2 from 'lucide-react/dist/esm/icons/check-circle-2';
 import { TrainingStatusBanner } from '../components/TrainingStatusBanner';
 import { useTranslation, Trans } from 'react-i18next';
+import { getEmbeddedChallengeImages } from '../offline/embeddedAssets';
 
 type ChallengeType = 'bears-vs-dogs';
 
@@ -113,7 +114,15 @@ export function Challenge() {
             { name: 'dog-validation-2', src: './challenge/bears-vs-dogs/validation/dog-validation-2.jpg' }
           ];
         }
-        
+
+        // In the offline build, swap the "./challenge/..." paths for embedded data:
+        // URLs so the images can be read through a <canvas> over file:// (no-op
+        // otherwise).
+        const embedded = await getEmbeddedChallengeImages();
+        const mapSrc = (s: string) => embedded[s] ?? s;
+        loadedImages = loadedImages.map((img) => ({ ...img, src: mapSrc(img.src) }));
+        validationImageData = validationImageData.map((v) => ({ ...v, src: mapSrc(v.src) }));
+
         setImages(loadedImages);
         setValidationImages(validationImageData);
         // Reset all state when changing challenge type

@@ -70,8 +70,15 @@ export const useMLStore = create<MLStore>()(
         if (get().mobilenet) return true;
 
         try {
-          const modelUrl = './model/model.json';
-          const mobilenet = await tf.loadGraphModel(modelUrl);
+          // In the offline (single-file) build the model is embedded and loaded
+          // from memory, since fetch() of local files is blocked over file://.
+          let mobilenet: tf.GraphModel;
+          if (import.meta.env.VITE_OFFLINE_BUILD) {
+            const { loadEmbeddedModel } = await import('../offline/loadEmbeddedModel');
+            mobilenet = await loadEmbeddedModel();
+          } else {
+            mobilenet = await tf.loadGraphModel('./model/model.json');
+          }
           
           // Warmup the model
           tf.tidy(() => {
