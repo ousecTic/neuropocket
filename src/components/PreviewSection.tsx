@@ -14,6 +14,12 @@ interface PreviewSectionProps {
   onGoBackToData?: () => void;
 }
 
+// The live camera (getUserMedia) needs a secure context + browser permission, which
+// fails in in-app browsers (WhatsApp/Gmail) and on mobile file://. When it's
+// unavailable we fall back to a native-camera file input (capture=environment).
+const liveCameraSupported =
+  typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getUserMedia;
+
 export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps) {
   const { t } = useTranslation();
   const { mobilenet, isTrained, currentProjectId, predict, resetTrainingState } = useMLStore();
@@ -27,6 +33,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
   // Check if this specific project has been trained
   const isProjectTrained = isTrained && currentProjectId === project.id;
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -73,7 +80,8 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const input = e.target;
+    const file = input.files?.[0];
     if (!file) return;
 
     // Reset states
@@ -104,9 +112,9 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
       console.error('Error processing image:', error);
     } finally {
       setIsProcessing(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      // Reset the input that fired so the same photo can be re-selected (works for
+      // both the upload picker and the native-camera input).
+      input.value = '';
     }
   };
 
@@ -163,6 +171,11 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
   };
 
   const handleOpenCamera = () => {
+    // Fall back to the native camera where getUserMedia isn't available.
+    if (!liveCameraSupported) {
+      cameraInputRef.current?.click();
+      return;
+    }
     setShowCamera(true);
   };
 
@@ -269,6 +282,15 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              {/* Native-camera fallback for in-app browsers / mobile file:// (no getUserMedia) */}
+              <input
+                ref={cameraInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
                 onChange={handleImageUpload}
                 className="hidden"
               />
