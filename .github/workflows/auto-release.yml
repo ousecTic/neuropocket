@@ -37,8 +37,10 @@ jobs:
 
   android-smoke:
     name: Old-Android smoke test
-    # API 26 (Android 8) AOSP image = era-correct old WebView. A strong free proxy
-    # for an old Android device, not a guarantee for any specific handset.
+    # API 27 (Android 8.1, a 2018 OS) with the google_apis image, which ships an
+    # era-correct WebView. The bare AOSP "default" image has NO WebView, so the app
+    # can't render there. A strong free proxy for a 2018 Android device, not a
+    # guarantee for any specific handset.
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
@@ -65,9 +67,9 @@ jobs:
       - name: Smoke test on Android 8 emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 26
-          target: default
-          arch: x86_64
+          api-level: 27
+          target: google_apis
+          arch: x86
           force-avd-creation: true
           emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
           disable-animations: true

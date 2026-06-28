@@ -25,9 +25,15 @@ for _ in $(seq 1 40); do
 done
 
 adb exec-out screencap -p > smoke.png 2>/dev/null || true
+adb shell uiautomator dump /sdcard/ui.xml >/dev/null 2>&1 || true
+UI=$(adb shell cat /sdcard/ui.xml 2>/dev/null || true)
 
 if [ -z "$FOUND" ]; then
-  echo "::error::App did not render expected home-screen content (possible white screen)."
+  if echo "$UI" | grep -qi "requires a WebView"; then
+    echo "::error::No usable WebView on this image (Capacitor fallback shown). Use a google_apis image."
+  else
+    echo "::error::App did not render expected home-screen content (possible white screen on this WebView)."
+  fi
   echo "--- last 120 logcat lines ---"
   adb logcat -d | tail -120 || true
   exit 1
