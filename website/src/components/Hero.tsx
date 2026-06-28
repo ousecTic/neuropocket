@@ -17,6 +17,17 @@ export function Hero() {
             <p className="text-2xl" style={{ color: 'var(--subtext-color)', lineHeight: '1.5' }}>
               Learn AI by building your own image recognition model. Works <strong>completely offline</strong> on mobile and desktop.
             </p>
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium"
+              style={{
+                backgroundColor: '#EFF6FF',
+                color: 'var(--primary-dark)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '9999px',
+              }}
+            >
+              🌍 New: now available in 7 languages
+            </div>
             <p className="text-base" style={{ color: 'var(--subtext-color)' }}>
               🔒 Your data never leaves your device{' '}
               <Link 
@@ -66,7 +77,7 @@ export function Hero() {
                     }}
                   >
                     <a
-                      href="https://github.com/ousecTic/neuropocket/releases/download/1.4.1/neuropocket.1.4.1.exe"
+                      href="https://github.com/ousecTic/neuropocket/releases/download/v1.5.0/neuropocket.1.5.0.exe"
                       className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors"
                       style={{ 
                         textDecoration: 'none',
@@ -81,7 +92,7 @@ export function Hero() {
                       </div>
                     </a>
                     <a
-                      href="https://github.com/ousecTic/neuropocket/releases/download/1.4.1/neuropocket.1.4.1.apk"
+                      href="https://github.com/ousecTic/neuropocket/releases/download/v1.5.0/neuropocket.1.5.0.apk"
                       className="flex items-center gap-3 px-6 py-4 hover:bg-gray-50 transition-colors"
                       style={{ 
                         textDecoration: 'none',
