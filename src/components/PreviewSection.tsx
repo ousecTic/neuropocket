@@ -5,9 +5,11 @@ import Camera from 'lucide-react/dist/esm/icons/camera';
 import SwitchCamera from 'lucide-react/dist/esm/icons/switch-camera';
 import X from 'lucide-react/dist/esm/icons/x';
 import AlertCircle from 'lucide-react/dist/esm/icons/alert-circle';
+import Images from 'lucide-react/dist/esm/icons/images';
 import { useMLStore } from '../store/useMLStore';
 import { Project } from '../types/project';
 import { useTranslation } from 'react-i18next';
+import { LibraryPicker } from './LibraryPicker';
 
 interface PreviewSectionProps {
   project: Project;
@@ -29,6 +31,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
   const [showCamera, setShowCamera] = useState(false);
   const [cameraError, setCameraError] = useState<string>('');
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const [showLibrary, setShowLibrary] = useState(false);
   
   // Check if this specific project has been trained
   const isProjectTrained = isTrained && currentProjectId === project.id;
@@ -79,6 +82,27 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
     });
   };
 
+  // Show an image and run the model on it (shared by upload, camera and examples).
+  const runPrediction = async (dataUrl: string) => {
+    setPrediction(null);
+    setIsProcessing(true);
+    setSelectedImage(dataUrl);
+
+    try {
+      const result = await predict(dataUrl);
+      if (result) {
+        setPrediction({
+          className: result.className,
+          probability: result.probability
+        });
+      }
+    } catch (error) {
+      console.error('Error processing image:', error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
     const file = input.files?.[0];
@@ -96,16 +120,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
         
         // Center crop and resize to 300x300 for consistency
         const processedDataUrl = await centerCropImage(originalDataUrl, 300);
-        setSelectedImage(processedDataUrl);
-
-        // Make prediction
-        const result = await predict(processedDataUrl);
-        if (result) {
-          setPrediction({
-            className: result.className,
-            probability: result.probability
-          });
-        }
+        await runPrediction(processedDataUrl);
       };
       reader.readAsDataURL(file);
     } catch (error) {
@@ -210,24 +225,7 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
 
     // Close camera and process image
     handleCloseCamera();
-    setPrediction(null);
-    setIsProcessing(true);
-    setSelectedImage(photoDataUrl);
-
-    try {
-      // Make prediction
-      const result = await predict(photoDataUrl);
-      if (result) {
-        setPrediction({
-          className: result.className,
-          probability: result.probability
-        });
-      }
-    } catch (error) {
-      console.error('Error processing image:', error);
-    } finally {
-      setIsProcessing(false);
-    }
+    await runPrediction(photoDataUrl);
   };
 
   // Start camera when modal opens
@@ -307,6 +305,13 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
               >
                 <Upload size={20} />
                 {t('preview.uploadPhoto')}
+              </button>
+              <button
+                onClick={() => setShowLibrary(true)}
+                className="w-full flex items-center justify-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded-lg hover:bg-primary/10 transition-colors font-medium"
+              >
+                <Images size={20} />
+                {t('library.pickExample')}
               </button>
             </div>
 
@@ -396,6 +401,14 @@ export function PreviewSection({ project, onGoBackToData }: PreviewSectionProps)
           </div>
         )}
       </div>
+
+      {showLibrary && (
+        <LibraryPicker
+          mode="single"
+          onPick={runPrediction}
+          onClose={() => setShowLibrary(false)}
+        />
+      )}
 
       {/* Camera Modal */}
       {showCamera && (

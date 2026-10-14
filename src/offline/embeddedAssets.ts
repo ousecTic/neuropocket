@@ -7,3 +7,11 @@ export async function getEmbeddedChallengeImages(): Promise<Record<string, strin
   const m = await import('./embeddedAssets.generated');
   return m.challengeImages;
 }
+
+// Library sprites (best-pick classes only) as data: URLs, keyed by class slug, for
+// the offline build. Empty in every other build, where sprites load from ./library/.
+export async function getEmbeddedLibrarySprites(): Promise<Record<string, string>> {
+  if (!import.meta.env.VITE_OFFLINE_BUILD) return {};
+  const m = await import('./embeddedLibrary.generated');
+  return m.librarySprites;
+}

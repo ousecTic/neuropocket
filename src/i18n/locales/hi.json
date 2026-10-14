@@ -226,5 +226,23 @@
     "newContent": "नई सामग्री उपलब्ध है, अपडेट करने के लिए रीलोड बटन पर क्लिक करें।",
     "reload": "रीलोड करें",
     "dismiss": "खारिज करें"
+  },
+  "library": {
+    "pickExamples": "उदाहरण चुनें",
+    "titleImages": "उदाहरण चित्र",
+    "searchPlaceholder": "खोजें, जैसे lion, banana, bus",
+    "bestPicks": "सबसे अच्छे विकल्प",
+    "allClasses": "सभी समूह",
+    "noResults": "\"{{query}}\" से कोई समूह मेल नहीं खाता",
+    "back": "वापस",
+    "selectAll": "सभी चुनें",
+    "clearSelection": "हटाएँ",
+    "tapToSelect": "जो चित्र जोड़ने हैं उन पर टैप करें।",
+    "addImages": "फ़ोटो जोड़ें ({{count}})",
+    "checkFirst": "पहले जाँचें",
+    "loading": "उदाहरण लोड हो रहे हैं...",
+    "error": "उदाहरण चित्र लोड नहीं हो सके।",
+    "pickExample": "उदाहरण चुनें",
+    "tapToTest": "अपने AI को परखने के लिए किसी चित्र पर टैप करें।"
   }
 }

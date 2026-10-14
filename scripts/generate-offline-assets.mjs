@@ -2,6 +2,7 @@
 //
 //   src/offline/embeddedModel.generated.ts   — MobileNet topology + weights
 //   src/offline/embeddedAssets.generated.ts  — challenge images as data: URLs
+//   src/offline/embeddedLibrary.generated.ts — best-pick library sprites as data: URLs
 //
 // Over file:// the app can neither fetch() the model nor read the bundled challenge
 // JPEGs through a <canvas> (local images taint the canvas). Embedding both as data
@@ -9,7 +10,7 @@
 //
 // Run as part of `npm run build:offline`.
 
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { dirname, join, relative, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -75,9 +76,31 @@ writeFileSync(
   'utf8'
 );
 
-const modelMb = (weightDataB64.length / (1024 * 1024)).toFixed(1);
-const imgMb = (Object.values(images).reduce((n, s) => n + s.length, 0) / (1024 * 1024)).toFixed(1);
+// --- Example library -------------------------------------------------------
+// Only the "best pick" classes are embedded, to keep the single file small. The
+// full library ships as regular files in every other build.
+const manifestPath = join(root, 'src', 'library', 'libraryManifest.json');
+const librarySprites = {};
+if (existsSync(manifestPath)) {
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+  for (const c of manifest.classes) {
+    if (c.flag !== 'best_pick') continue;
+    const file = join(publicDir, 'library', `${c.slug}.jpg`);
+    librarySprites[c.slug] = `data:image/jpeg;base64,${readFileSync(file).toString('base64')}`;
+  }
+}
+
+writeFileSync(
+  join(outDir, 'embeddedLibrary.generated.ts'),
+  header('generate-offline-assets.mjs') +
+    `export const librarySprites: Record<string, string> = ${JSON.stringify(librarySprites)};\n`,
+  'utf8'
+);
+
+const mb = (strings) => (strings.reduce((n, s) => n + s.length, 0) / (1024 * 1024)).toFixed(1);
+const modelMb = mb([weightDataB64]);
 console.log(
   `Wrote embeddedModel.generated.ts (${weightSpecs.length} specs, ${buffers.length} shard(s), ${modelMb} MB base64)\n` +
-    `Wrote embeddedAssets.generated.ts (${Object.keys(images).length} challenge images, ${imgMb} MB base64)`
+    `Wrote embeddedAssets.generated.ts (${Object.keys(images).length} challenge images, ${mb(Object.values(images))} MB base64)\n` +
+    `Wrote embeddedLibrary.generated.ts (${Object.keys(librarySprites).length} library classes, ${mb(Object.values(librarySprites))} MB base64)`
 );
