@@ -96,9 +96,6 @@ export function LibraryPicker(props: LibraryPickerProps) {
       <div className="aspect-square rounded-md bg-gray-100" style={tileStyle(cls, 0)} />
       <div className="px-1 py-1.5">
         <p className="text-sm font-medium text-gray-900 truncate" title={cls.name}>{cls.name}</p>
-        {cls.flag === 'borderline' && (
-          <p className="text-xs text-amber-700">{t('library.checkFirst')}</p>
-        )}
       </div>
     </button>
   );
@@ -117,26 +114,7 @@ export function LibraryPicker(props: LibraryPickerProps) {
     if (filtered.length === 0) {
       return <p className="text-center text-gray-500 py-8">{t('library.noResults', { query })}</p>;
     }
-    if (query.trim()) return grid(filtered);
-
-    const best = filtered.filter((c) => c.flag === 'best_pick');
-    const rest = filtered.filter((c) => c.flag !== 'best_pick');
-    return (
-      <div className="space-y-6">
-        {best.length > 0 && (
-          <section>
-            <h4 className="font-semibold text-gray-700 mb-2">{t('library.bestPicks')}</h4>
-            {grid(best)}
-          </section>
-        )}
-        {rest.length > 0 && (
-          <section>
-            <h4 className="font-semibold text-gray-700 mb-2">{t('library.allClasses')}</h4>
-            {grid(rest)}
-          </section>
-        )}
-      </div>
-    );
+    return grid(filtered);
   };
 
   const renderClassTiles = (cls: LibraryClass) => (

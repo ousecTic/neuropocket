@@ -23,8 +23,8 @@ export const LIBRARY_COLS = manifest.cols;
 
 let classesPromise: Promise<LibraryClass[]> | null = null;
 
-// Best picks first, then everything else A→Z. The offline (single-file) build only
-// embeds the best-pick sprites, so it only lists those.
+// All classes A→Z. The offline (single-file) build only embeds the best-pick
+// sprites, so it only lists those.
 export function getLibraryClasses(): Promise<LibraryClass[]> {
   if (!classesPromise) {
     classesPromise = getEmbeddedLibrarySprites().then((embedded) => {
@@ -38,11 +38,7 @@ export function getLibraryClasses(): Promise<LibraryClass[]> {
           count: c.count,
           sprite: embedded[c.slug] ?? `./library/${c.slug}.jpg`,
         }))
-        .sort((a, b) => {
-          const pa = a.flag === 'best_pick' ? 0 : 1;
-          const pb = b.flag === 'best_pick' ? 0 : 1;
-          return pa - pb || a.name.localeCompare(b.name);
-        });
+        .sort((a, b) => a.name.localeCompare(b.name));
     });
   }
   return classesPromise;
