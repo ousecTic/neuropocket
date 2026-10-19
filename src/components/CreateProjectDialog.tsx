@@ -88,7 +88,7 @@ export function CreateProjectDialog({ variant = 'default', onClose }: CreateProj
               maxLength={MAX_PROJECT_NAME_LENGTH}
               autoFocus
             />
-            <div className="text-right text-sm text-gray-500 mb-2">
+            <div className="text-end text-sm text-gray-500 mb-2">
               {projectName.length}/{MAX_PROJECT_NAME_LENGTH}
             </div>
           </div>

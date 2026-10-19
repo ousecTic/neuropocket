@@ -42,16 +42,16 @@ export function ProjectHeader({ title, backTo, backToExternal, action, secondary
                 backToExternal ? (
                   <a
                     href={backTo}
-                    className="mr-4 p-2 text-gray-600 hover:text-gray-900 -ml-2"
+                    className="me-4 p-2 text-gray-600 hover:text-gray-900 -ms-2"
                   >
-                    <ArrowLeft size={20} />
+                    <ArrowLeft size={20} className="rtl:rotate-180" />
                   </a>
                 ) : (
                   <Link
                     to={backTo}
-                    className="mr-4 p-2 text-gray-600 hover:text-gray-900 -ml-2"
+                    className="me-4 p-2 text-gray-600 hover:text-gray-900 -ms-2"
                   >
-                    <ArrowLeft size={20} />
+                    <ArrowLeft size={20} className="rtl:rotate-180" />
                   </Link>
                 )
               )}

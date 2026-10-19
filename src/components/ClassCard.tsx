@@ -70,7 +70,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
                 maxLength={MAX_CLASS_NAME_LENGTH}
                 autoFocus
               />
-              <div className="text-right text-sm text-gray-500 mt-1">
+              <div className="text-end text-sm text-gray-500 mt-1">
                 {newName.length}/{MAX_CLASS_NAME_LENGTH}
               </div>
               {renameError && (
@@ -101,7 +101,7 @@ export function ClassCard({ projectId, classData }: ClassCardProps) {
           </form>
         ) : (
           <>
-            <h3 className="text-lg font-semibold truncate pr-8" title={classData.name}>{classData.name}</h3>
+            <h3 className="text-lg font-semibold truncate pe-8" title={classData.name}>{classData.name}</h3>
             <div className="flex gap-2">
               <button
                 onClick={() => setIsRenaming(true)}

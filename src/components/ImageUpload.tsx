@@ -248,7 +248,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                   {onDelete && (
                     <button
                       onClick={() => onDelete(image.id)}
-                      className="absolute top-2 right-2 p-1.5 bg-red-500 bg-opacity-70 hover:bg-opacity-100 rounded-full text-white shadow transition-all hover:scale-110"
+                      className="absolute top-2 end-2 p-1.5 bg-red-500 bg-opacity-70 hover:bg-opacity-100 rounded-full text-white shadow transition-all hover:scale-110"
                       title={t('imageUpload.deleteImage')}
                     >
                       <X size={16} />
@@ -389,7 +389,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
                             <button
                               type="button"
                               onClick={() => handleDeleteCapturedPhoto(index)}
-                              className="absolute top-1 right-1 p-1 bg-red-500 bg-opacity-70 hover:bg-opacity-100 rounded-full text-white shadow transition-all"
+                              className="absolute top-1 end-1 p-1 bg-red-500 bg-opacity-70 hover:bg-opacity-100 rounded-full text-white shadow transition-all"
                               title={t('imageUpload.deletePhoto')}
                             >
                               <X size={14} />

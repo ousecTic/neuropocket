@@ -49,13 +49,18 @@ export function LanguageSwitcher() {
     };
     // The menu is positioned at open time; scrolling/resizing would make it drift, so close it.
     const handleReposition = () => setIsOpen(false);
+    // Scrolling the (scrollable) menu list itself must not close it.
+    const handleScroll = (event: Event) => {
+      if (event.target instanceof Node && menuRef.current?.contains(event.target)) return;
+      handleReposition();
+    };
 
     document.addEventListener('mousedown', handleClickOutside);
-    window.addEventListener('scroll', handleReposition, true);
+    window.addEventListener('scroll', handleScroll, true);
     window.addEventListener('resize', handleReposition);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      window.removeEventListener('scroll', handleReposition, true);
+      window.removeEventListener('scroll', handleScroll, true);
       window.removeEventListener('resize', handleReposition);
     };
   }, [isOpen]);

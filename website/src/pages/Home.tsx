@@ -76,7 +76,7 @@ export function Home() {
             Now Available in Your Language
           </h2>
           <p className="mb-12 text-lg mx-auto" style={{ color: 'var(--subtext-color)', maxWidth: '640px' }}>
-            NeuroPocket now speaks 7 languages, with full right-to-left support for Arabic. Pick your language right inside the app — your choice is remembered, and it all works offline.
+            NeuroPocket now speaks 10 languages, with right-to-left support for Arabic, Dari, Pashto and Urdu. Pick your language right inside the app — your choice is remembered, and it all works offline.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
@@ -87,6 +87,9 @@ export function Home() {
               'العربية',
               'हिन्दी',
               'Kiswahili',
+              'دری',
+              'پښتو',
+              'اردو',
             ].map((lang) => (
               <span
                 key={lang}

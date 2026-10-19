@@ -231,7 +231,7 @@ export function ProjectDetail() {
             setIsAddingClass(true);
             setClassError(null);
           }}
-          className="fixed bottom-6 right-6 bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-40 flex items-center gap-2"
+          className="fixed bottom-6 end-6 bg-primary hover:bg-primary-dark text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 z-40 flex items-center gap-2"
           title={t('projectDetail.addGroup')}
         >
           <Plus size={24} />
@@ -264,7 +264,7 @@ export function ProjectDetail() {
                   maxLength={MAX_CLASS_NAME_LENGTH}
                   autoFocus
                 />
-                <div className="text-right text-sm text-gray-500">
+                <div className="text-end text-sm text-gray-500">
                   {newClassName.length}/{MAX_CLASS_NAME_LENGTH}
                 </div>
                 {classError && (

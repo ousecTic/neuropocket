@@ -26,7 +26,7 @@ export function Hero() {
                 borderRadius: '9999px',
               }}
             >
-              🌍 New: now available in 7 languages
+              🌍 New: now available in 10 languages
             </div>
             <p className="text-base" style={{ color: 'var(--subtext-color)' }}>
               🔒 Your data never leaves your device{' '}
