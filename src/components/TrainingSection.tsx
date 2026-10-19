@@ -143,7 +143,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
             {(!canTrain || error) && (
               <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
                 <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
-                <div className="text-red-600 text-sm text-left">
+                <div className="text-red-600 text-sm text-start">
                   {!hasMinimumClasses && (
                     <p className="mb-1">{t('training.need2Groups')}</p>
                   )}
@@ -186,7 +186,7 @@ export function TrainingSection({ project, onTrainingComplete }: TrainingSection
         {(!canTrain || error) && (
           <div className="mb-6 p-4 bg-red-50 rounded-lg flex items-start gap-3">
             <AlertCircle className="text-red-600 shrink-0 mt-0.5" size={20} />
-            <div className="text-red-600 text-sm text-left">
+            <div className="text-red-600 text-sm text-start">
               {!hasMinimumClasses && (
                 <p className="mb-1">Need at least 2 groups to train the model.</p>
               )}

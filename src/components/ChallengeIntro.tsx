@@ -33,7 +33,7 @@ export function ChallengeIntro({ onDismiss }: ChallengeIntroProps) {
               </div>
 
               <div className="space-y-2">
-                <ol className="list-decimal list-inside space-y-1 ml-2">
+                <ol className="list-decimal list-inside space-y-1 ms-2">
                   <li>{t('challengeIntro.step1')}</li>
                   <li>{t('challengeIntro.step2')}</li>
                   <li>{t('challengeIntro.step3')}</li>

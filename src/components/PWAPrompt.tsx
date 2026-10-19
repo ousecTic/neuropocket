@@ -25,7 +25,7 @@ export function PWAPrompt() {
   if (dismissed) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-sm z-50">
+    <div className="fixed bottom-4 start-4 bg-white rounded-lg shadow-lg p-4 max-w-sm z-50">
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
           {showOfflineMessage && (
@@ -49,7 +49,7 @@ export function PWAPrompt() {
         </div>
         <button
           onClick={() => setDismissed(true)}
-          className="text-gray-400 hover:text-gray-600 p-1 -mt-1 -mr-1"
+          className="text-gray-400 hover:text-gray-600 p-1 -mt-1 -me-1"
           aria-label={t('pwa.dismiss')}
         >
           <X size={16} />

@@ -1,6 +1,20 @@
 import { Hero } from '../components/Hero';
 import { Footer } from '../components/Footer';
 
+// Organizations that translated NeuroPocket.
+const TRANSLATION_PARTNERS = [
+  {
+    name: 'Darakht-e Danesh Academi',
+    org: 'a program of Right to Learn Afghanistan',
+    languages: 'Dari · Pashto',
+    url: 'https://darakhtdanesh.org',
+    logo: '/partners/darakht-e-danesh.svg',
+  },
+];
+
+// Individual translators. Only list people who opted in, using the name they chose.
+const TRANSLATION_CONTRIBUTORS: { name: string; languages: string }[] = [];
+
 export function Home() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--bg-color-white)' }}>
@@ -76,7 +90,12 @@ export function Home() {
             Now Available in Your Language
           </h2>
           <p className="mb-12 text-lg mx-auto" style={{ color: 'var(--subtext-color)', maxWidth: '640px' }}>
-            NeuroPocket now speaks 7 languages, with full right-to-left support for Arabic. Pick your language right inside the app — your choice is remembered, and it all works offline.
+            NeuroPocket now speaks 10 languages, with right-to-left support for Arabic, Dari, Pashto and Urdu. Pick your language right inside the app — your choice is remembered, and it all works offline.
+            {' '}Dari and Pashto translations by{' '}
+            <a href="#translation-partners" className="hover:underline" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
+              Darakht-e Danesh Academi
+            </a>
+            .
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
@@ -87,6 +106,9 @@ export function Home() {
               'العربية',
               'हिन्दी',
               'Kiswahili',
+              'دری',
+              'پښتو',
+              'اردو',
             ].map((lang) => (
               <span
                 key={lang}
@@ -101,6 +123,49 @@ export function Home() {
               </span>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Translation Partners Section */}
+      <div id="translation-partners" className="py-24" style={{ backgroundColor: 'white' }}>
+        <div className="mx-auto px-6 md:px-12 lg:px-16 text-center" style={{ maxWidth: 'var(--container-width)' }}>
+          <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--text-color)', fontWeight: '600' }}>
+            Translation Partners
+          </h2>
+          <p className="mb-12 text-lg mx-auto" style={{ color: 'var(--subtext-color)', maxWidth: '640px' }}>
+            NeuroPocket is translated by people and organizations who want AI learning available in every language. Thank you.
+          </p>
+          <div className="flex flex-wrap justify-center gap-6">
+            {TRANSLATION_PARTNERS.map((partner) => (
+              <a
+                key={partner.name}
+                href={partner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center gap-3 px-8 py-6 bg-white rounded-lg hover:shadow-md transition-shadow"
+                style={{ border: '1px solid var(--border-color)', textDecoration: 'none', maxWidth: '320px' }}
+              >
+                <img src={partner.logo} alt={partner.name} className="h-12 w-auto" />
+                <div>
+                  <p className="font-semibold" style={{ color: 'var(--text-color)' }}>{partner.name}</p>
+                  <p className="text-sm" style={{ color: 'var(--subtext-color)' }}>{partner.org}</p>
+                  <p className="text-sm mt-1" style={{ color: 'var(--primary-color)' }}>{partner.languages}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+          {TRANSLATION_CONTRIBUTORS.length > 0 && (
+            <div className="mt-12">
+              <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--text-color)' }}>Contributors</h3>
+              <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2" style={{ color: 'var(--subtext-color)' }}>
+                {TRANSLATION_CONTRIBUTORS.map((person) => (
+                  <li key={person.name}>
+                    {person.name} <span className="text-sm">({person.languages})</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 

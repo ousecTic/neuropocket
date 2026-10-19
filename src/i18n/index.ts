@@ -8,6 +8,9 @@ import pt from './locales/pt.json';
 import ar from './locales/ar.json';
 import hi from './locales/hi.json';
 import sw from './locales/sw.json';
+import fa from './locales/fa.json';
+import ps from './locales/ps.json';
+import ur from './locales/ur.json';
 
 export const SUPPORTED_LANGUAGES = [
   { code: 'en', label: 'English' },
@@ -17,12 +20,15 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'ar', label: 'العربية' },
   { code: 'hi', label: 'हिन्दी' },
   { code: 'sw', label: 'Kiswahili' },
+  { code: 'fa', label: 'دری' },
+  { code: 'ps', label: 'پښتو' },
+  { code: 'ur', label: 'اردو' },
 ] as const;
 
 export type LanguageCode = (typeof SUPPORTED_LANGUAGES)[number]['code'];
 
 const STORAGE_KEY = 'np_lang';
-const RTL_LANGUAGES = ['ar'];
+const RTL_LANGUAGES = ['ar', 'fa', 'ps', 'ur'];
 
 function getInitialLanguage(): string {
   const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
@@ -30,7 +36,9 @@ function getInitialLanguage(): string {
     return saved;
   }
   // Fall back to the browser language (just the base, e.g. "es-MX" -> "es"), else English.
-  const browser = typeof navigator !== 'undefined' ? navigator.language.split('-')[0] : 'en';
+  // Dari is sometimes reported as "prs" rather than "fa-AF".
+  const base = typeof navigator !== 'undefined' ? navigator.language.split('-')[0] : 'en';
+  const browser = base === 'prs' ? 'fa' : base;
   return SUPPORTED_LANGUAGES.some((l) => l.code === browser) ? browser : 'en';
 }
 
@@ -49,6 +57,9 @@ i18n.use(initReactI18next).init({
     ar: { translation: ar },
     hi: { translation: hi },
     sw: { translation: sw },
+    fa: { translation: fa },
+    ps: { translation: ps },
+    ur: { translation: ur },
   },
   lng: getInitialLanguage(),
   fallbackLng: 'en',

@@ -34,7 +34,7 @@ export function OfflineIndicator() {
   if (!showOffline || dismissed) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 transition-opacity duration-300 opacity-100">
+    <div className="fixed bottom-4 start-4 z-50 transition-opacity duration-300 opacity-100">
       <div className="bg-white rounded-lg shadow-lg p-4 flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
           <WifiOff className="w-5 h-5 text-gray-600" />
@@ -44,7 +44,7 @@ export function OfflineIndicator() {
         </div>
         <button
           onClick={() => setDismissed(true)}
-          className="text-gray-400 hover:text-gray-600 p-1 -mt-1 -mr-1"
+          className="text-gray-400 hover:text-gray-600 p-1 -mt-1 -me-1"
           aria-label={t('offline.dismiss')}
         >
           <X size={16} />

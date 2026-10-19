@@ -206,6 +206,15 @@ installer (`.exe`) and Android app (`.apk`) attached.
 - To release manually, push a tag like `v1.6.0`, or use the **Release
   (manual)** workflow's "Run workflow" button for a draft test build.
 
+## 🌍 Translations
+
+NeuroPocket is available in English, Español, Français, Português, العربية, हिन्दी, Kiswahili, دری (Dari), پښتو (Pashto) and اردو (Urdu). Locale files live in `src/i18n/locales/`.
+
+- **Dari and Pashto** were translated by [Darakht-e Danesh Academi](https://darakhtdanesh.org), a program of Right to Learn Afghanistan.
+- **Urdu** is machine-generated and awaiting review by a native speaker.
+
+Want to help translate? Open an issue or email contact@learnaianywhere.org. Contributors who opt in are credited on the website, under the name they choose.
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.

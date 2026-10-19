@@ -75,7 +75,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
                 maxLength={MAX_PROJECT_NAME_LENGTH}
                 autoFocus
               />
-              <div className="text-right text-sm text-gray-500 mt-1">
+              <div className="text-end text-sm text-gray-500 mt-1">
                 {newName.length}/{MAX_PROJECT_NAME_LENGTH}
               </div>
               {error && (
@@ -108,7 +108,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
       ) : (
         <>
           <Link to={`/project/${project.id}`} className="block">
-            <h3 className="text-lg font-semibold mb-2 hover:text-primary truncate pr-8" title={project.name}>{project.name}</h3>
+            <h3 className="text-lg font-semibold mb-2 hover:text-primary truncate pe-8" title={project.name}>{project.name}</h3>
             <p className="text-sm text-gray-500">
               {t('projectCard.created', { date: new Date(project.createdAt).toLocaleDateString() })}
             </p>
@@ -121,7 +121,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               </p>
             </div>
           </Link>
-                    <div className="absolute top-4 right-4 flex gap-2">
+                    <div className="absolute top-4 end-4 flex gap-2">
             <button
               onClick={() => setIsRenaming(true)}
               className="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20 text-primary hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/40"
