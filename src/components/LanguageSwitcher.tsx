@@ -16,11 +16,6 @@ export function LanguageSwitcher() {
   const currentCode = i18n.language;
   const current =
     SUPPORTED_LANGUAGES.find((l) => l.code === currentCode) ?? SUPPORTED_LANGUAGES[0];
-  // Only some locales credit their translators; skip the English fallback.
-  const hasTranslationCredit = i18n.exists('languageSwitcher.translationCredit', {
-    lng: currentCode,
-    fallbackLng: [],
-  });
 
   const MENU_WIDTH = 176; // matches w-44 (11rem)
 
@@ -114,11 +109,6 @@ export function LanguageSwitcher() {
                 </button>
               </li>
             ))}
-            {hasTranslationCredit && (
-              <li role="none" className="border-t border-gray-100 mt-1 px-4 pt-2 pb-1 text-xs text-gray-500">
-                {t('languageSwitcher.translationCredit')}
-              </li>
-            )}
           </ul>,
           document.body,
         )}

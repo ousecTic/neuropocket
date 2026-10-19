@@ -1,5 +1,5 @@
 {
-  "_note": "Translated by Darakht-e Danesh Academi (Right to Learn Afghanistan). languageSwitcher.translationCredit is a draft for DDA to confirm. Wording unchanged except {{name}} added to the two delete confirmations; JSON syntax fixed and {{placeholders}} restored. Please have a native speaker proofread before release.",
+  "_note": "Translated by Darakht-e Danesh Academi (Right to Learn Afghanistan). Wording unchanged except {{name}} added to the two delete confirmations; JSON syntax fixed and {{placeholders}} restored. Please have a native speaker proofread before release.",
   "common": {
     "save": "ساتل خوندي کول",
     "cancel": "لغوه کول",
@@ -13,8 +13,7 @@
     "logoAlt": "NeuroPocket"
   },
   "languageSwitcher": {
-    "label": "د خوښې وړ ژبه ټاکل",
-    "translationCredit": "پښتو ژباړه: درخت دانش اکاډمي (Darakht-e Danesh Academi)"
+    "label": "د خوښې وړ ژبه ټاکل"
   },
   "projectList": {
     "loading": "پروژې د پورته کیدو په حال کې دي...",
