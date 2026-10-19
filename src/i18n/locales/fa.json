@@ -1,5 +1,5 @@
 {
-  "_note": "Volunteer translation (Dari / Afghan Persian). Wording unchanged; only JSON syntax fixed. Please have a native speaker proofread before release.",
+  "_note": "Translated by Darakht-e Danesh Academi (Right to Learn Afghanistan), Dari / Afghan Persian. Wording unchanged; only JSON syntax fixed. languageSwitcher.translationCredit is a draft for DDA to confirm. Please have a native speaker proofread before release.",
   "common": {
     "save": "ذخیره",
     "cancel": "لغو",
@@ -13,7 +13,8 @@
     "logoAlt": "NeuroPocket"
   },
   "languageSwitcher": {
-    "label": "تغییر زبان"
+    "label": "تغییر زبان",
+    "translationCredit": "ترجمه دری: درخت دانش اکادمی (Darakht-e Danesh Academi)"
   },
   "projectList": {
     "loading": "در حال آماده‌سازی پروژه‌ها...",
