@@ -21,6 +21,31 @@ const stripOnlineOnlyHeadLinks = () => ({
   },
 });
 
+// Moves the inlined app script from <head> to the end of <body>. The single-file build
+// inlines ~15 MB of JavaScript, and in <head> the browser has to read all of it before
+// it can draw the loading screen in index.html. A module script runs after the page
+// is parsed either way, so moving it doesn't change when the app starts.
+const moveInlineScriptToBodyEnd = () => ({
+  name: 'move-inline-script-to-body-end',
+  enforce: 'post' as const,
+  generateBundle(_options: unknown, bundle: Record<string, { type: string; fileName: string; source?: unknown }>) {
+    for (const file of Object.values(bundle)) {
+      if (file.type !== 'asset' || !file.fileName.endsWith('.html')) continue;
+      const html = String(file.source);
+      const start = html.indexOf('<script type="module" crossorigin>');
+      const end = start === -1 ? -1 : html.indexOf('</script>', start);
+      if (start === -1 || end === -1 || start > html.indexOf('</head>')) continue;
+      const script = html.slice(start, end + '</script>'.length);
+      const rest = html.slice(0, start) + html.slice(end + '</script>'.length);
+      // Sliced rather than String.replace, which would read the "$" in the code as
+      // replacement patterns.
+      const bodyEnd = rest.lastIndexOf('</body>');
+      if (bodyEnd === -1) continue;
+      file.source = rest.slice(0, bodyEnd) + script + '\n' + rest.slice(bodyEnd);
+    }
+  },
+});
+
 export default defineConfig(({ mode }) => {
   const offline = mode === 'offline';
 
@@ -42,7 +67,7 @@ export default defineConfig(({ mode }) => {
     : {},
   plugins: [
     react(),
-    ...(offline ? [stripOnlineOnlyHeadLinks(), viteSingleFile()] : []),
+    ...(offline ? [stripOnlineOnlyHeadLinks(), viteSingleFile(), moveInlineScriptToBodyEnd()] : []),
     ...(offline ? [] : [VitePWA({
       registerType: 'autoUpdate',
       includeAssets: [
