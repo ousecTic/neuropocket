@@ -30,16 +30,34 @@ export type LanguageCode = (typeof SUPPORTED_LANGUAGES)[number]['code'];
 const STORAGE_KEY = 'np_lang';
 const RTL_LANGUAGES = ['ar', 'fa', 'ps', 'ur'];
 
+// The supported code for a language tag (just the base, e.g. "es-MX" -> "es"), or null.
+// Dari is sometimes reported as "prs" rather than "fa-AF".
+function toSupported(tag: string | null | undefined): string | null {
+  if (!tag) return null;
+  const base = tag.toLowerCase().split(/[-_]/)[0];
+  const code = base === 'prs' ? 'fa' : base;
+  return SUPPORTED_LANGUAGES.some((l) => l.code === code) ? code : null;
+}
+
 function getInitialLanguage(): string {
+  // A ?lang= in the address (e.g. neuropocket.html?lang=ur, as the offline course opens
+  // it) wins, and is saved so the app stays in that language.
+  const requested =
+    typeof location !== 'undefined' ? toSupported(new URLSearchParams(location.search).get('lang')) : null;
+  if (requested) {
+    try {
+      localStorage.setItem(STORAGE_KEY, requested);
+    } catch {
+      // Storage can be unavailable (e.g. blocked over file://); the language still applies.
+    }
+    return requested;
+  }
   const saved = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
   if (saved && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
     return saved;
   }
-  // Fall back to the browser language (just the base, e.g. "es-MX" -> "es"), else English.
-  // Dari is sometimes reported as "prs" rather than "fa-AF".
-  const base = typeof navigator !== 'undefined' ? navigator.language.split('-')[0] : 'en';
-  const browser = base === 'prs' ? 'fa' : base;
-  return SUPPORTED_LANGUAGES.some((l) => l.code === browser) ? browser : 'en';
+  // Fall back to the browser language, else English.
+  return toSupported(typeof navigator !== 'undefined' ? navigator.language : null) ?? 'en';
 }
 
 function applyDirection(lng: string) {

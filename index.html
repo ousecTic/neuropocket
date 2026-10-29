@@ -52,8 +52,9 @@
       </div>
     </div>
     <script>
-      // Show the loading message in the language the app will open in (the saved
-      // choice, else the browser language, as in src/i18n), before i18next has loaded.
+      // Show the loading message in the language the app will open in (?lang= in the
+      // address, else the saved choice, else the browser language, as in src/i18n),
+      // before i18next has loaded.
       (function () {
         var msgs = {
           en: 'Loading… the first load can take a moment.',
@@ -67,13 +68,18 @@
           ps: 'پورته کېږي… لومړی ځل ښايي لږ وخت ونيسي.',
           ur: 'لوڈ ہو رہا ہے… پہلی بار کھلنے میں تھوڑا وقت لگ سکتا ہے۔'
         };
+        function base(tag) {
+          var code = String(tag || '').toLowerCase().split(/[-_]/)[0];
+          return code === 'prs' ? 'fa' : code;
+        }
         try {
-          var lang = null;
-          try { lang = localStorage.getItem('np_lang'); } catch (e) {}
-          if (!lang || !msgs[lang]) {
-            lang = (navigator.language || 'en').split('-')[0].toLowerCase();
-            if (lang === 'prs') lang = 'fa';
+          var match = /[?&]lang=([^&#]*)/.exec(location.search);
+          var lang = match ? base(decodeURIComponent(match[1])) : null;
+          if (!msgs[lang]) {
+            lang = null;
+            try { lang = localStorage.getItem('np_lang'); } catch (e) {}
           }
+          if (!lang || !msgs[lang]) lang = base(navigator.language || 'en');
           var el = document.getElementById('np-boot-msg');
           if (el && msgs[lang]) el.textContent = msgs[lang];
         } catch (e) {}
