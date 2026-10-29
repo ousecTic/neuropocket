@@ -50,3 +50,4 @@ jobs:
       tag: ${{ needs.prep.outputs.tag }}
       ref: ${{ needs.prep.outputs.ref }}
       publish: ${{ needs.prep.outputs.publish == 'true' }}
+    secrets: inherit
