@@ -225,5 +225,20 @@
     "newContent": "New content available, click on reload button to update.",
     "reload": "Reload",
     "dismiss": "Dismiss"
+  },
+  "library": {
+    "pickExamples": "Pick Examples",
+    "titleImages": "Example Pictures",
+    "searchPlaceholder": "Search, e.g. lion, banana, bus",
+    "noResults": "No groups match \"{{query}}\"",
+    "back": "Back",
+    "selectAll": "Select all",
+    "clearSelection": "Clear",
+    "tapToSelect": "Tap the pictures you want to add.",
+    "addImages": "Add Photos ({{count}})",
+    "loading": "Loading examples...",
+    "error": "Could not load the example pictures.",
+    "pickExample": "Pick Example",
+    "tapToTest": "Tap a picture to test your AI."
   }
 }

@@ -204,21 +204,22 @@ export const useMLStore = create<MLStore>()(
             classNames
           });
 
-          // Determine validation split based on dataset size
-          // For small datasets (< 10 images per class), use all data for training
-          // to avoid the issue where validation split leaves no training data
-          const minImagesPerClass = Math.min(...classes.map(c => c.images.length));
-          const useValidationSplit = minImagesPerClass > 10;
-          const validationSplit = useValidationSplit ? 0.2 : 0.0;
-          
-          console.log(`Using validation split: ${validationSplit} (min images per class: ${minImagesPerClass})`);
+          // Train on every image (no validation hold-back: nothing uses the score, and
+          // tf.js would take it from the end of the class-ordered data, i.e. mostly the
+          // last class). Weight each class by its size so a group with fewer images
+          // isn't out-voted; equal-sized groups all get 1.0.
+          const classWeight: { [classIndex: number]: number } = {};
+          classes.forEach((c, i) => {
+            classWeight[i] = totalImages / (classes.length * c.images.length);
+          });
+          console.log('Class weights:', classes.map((c, i) => `${c.name}: ${classWeight[i].toFixed(2)}`).join(', '));
 
           // Train the model
           console.log('Starting model training...');
           await newModel.fit(xs, ys, {
             epochs: TRAINING_EPOCHS,
             batchSize: BATCH_SIZE,
-            validationSplit,
+            classWeight,
             callbacks: {
               onEpochEnd: (epoch, logs) => {
                 if (logs) {

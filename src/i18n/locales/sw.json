@@ -226,5 +226,20 @@
     "newContent": "Maudhui mapya yanapatikana, bofya kitufe cha kupakia upya ili kusasisha.",
     "reload": "Pakia upya",
     "dismiss": "Ondoa"
+  },
+  "library": {
+    "pickExamples": "Chagua Mifano",
+    "titleImages": "Picha za Mfano",
+    "searchPlaceholder": "Tafuta, k.m. lion, banana, bus",
+    "noResults": "Hakuna kundi linalolingana na \"{{query}}\"",
+    "back": "Rudi",
+    "selectAll": "Chagua zote",
+    "clearSelection": "Futa",
+    "tapToSelect": "Gusa picha unazotaka kuongeza.",
+    "addImages": "Ongeza Picha ({{count}})",
+    "loading": "Inapakia mifano...",
+    "error": "Imeshindwa kupakia picha za mfano.",
+    "pickExample": "Chagua Mfano",
+    "tapToTest": "Gusa picha ili kujaribu AI yako."
   }
 }

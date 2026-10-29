@@ -3,8 +3,10 @@ import Upload from 'lucide-react/dist/esm/icons/upload';
 import X from 'lucide-react/dist/esm/icons/x';
 import Camera from 'lucide-react/dist/esm/icons/camera';
 import SwitchCamera from 'lucide-react/dist/esm/icons/switch-camera';
+import Images from 'lucide-react/dist/esm/icons/images';
 import { useTranslation } from 'react-i18next';
 import { ClassImage } from '../types/project';
+import { LibraryPicker } from './LibraryPicker';
 
 interface ImageUploadProps {
   onUpload: (dataUrls: string[]) => void;
@@ -30,6 +32,7 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
   const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
   const [cameraError, setCameraError] = useState<string>('');
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const [showLibrary, setShowLibrary] = useState(false);
 
   // Function to center crop and resize an image to a square
   const resizeImage = (dataUrl: string, targetSize: number): Promise<string> => {
@@ -298,6 +301,17 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
               disabled={loading}
             />
           </label>
+
+          {/* Example library button */}
+          <button
+            type="button"
+            onClick={() => setShowLibrary(true)}
+            disabled={loading}
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 disabled:opacity-60 disabled:cursor-not-allowed transition-colors font-medium"
+          >
+            <Images size={20} />
+            <span>{t('library.pickExamples')}</span>
+          </button>
         </div>
 
         {loading && (
@@ -310,6 +324,14 @@ export function ImageUpload({ onUpload, onDelete, images = [] }: ImageUploadProp
           </div>
         )}
       </div>
+
+      {showLibrary && (
+        <LibraryPicker
+          mode="images"
+          onAdd={onUpload}
+          onClose={() => setShowLibrary(false)}
+        />
+      )}
 
       {/* Camera Modal */}
       {showCamera && (

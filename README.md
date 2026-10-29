@@ -154,6 +154,23 @@ The built application will be available in the `electron/dist` directory.
 ##### Android
 Open the project in Android Studio and use the Build menu to create APK or Android App Bundle.
 
+## Example Image Library
+Kids can fill a group with built-in example pictures ("Pick Examples" on a group)
+instead of taking photos, and test their trained model with one ("Pick Example" on
+the Model tab). The library is
+183 kid-safe Tiny ImageNet classes, 30 images each, packed into one sprite sheet per
+class in `public/library/` (~7 MB), with the class list in `src/library/libraryManifest.json`.
+The single-file offline build embeds only the "best pick" classes.
+
+These files are committed. To rebuild them from the filtered dataset folder:
+```bash
+npm run build:library -- <path-to-neuropocket_dataset>
+```
+This also writes `shipped_review.html` next to the dataset showing every shipped image.
+To hand-pick or drop specific images, add `scripts/library-overrides.json`
+(`{ "<class name>": { "include": [...], "exclude": [...] } }`); included images come
+first, so the first one becomes the class's cover picture.
+
 ## Project Structure
 - `/src` - Main web application code
 - `/electron` - Electron-specific code and configuration

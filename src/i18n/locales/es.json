@@ -226,5 +226,20 @@
     "newContent": "Hay contenido nuevo disponible, haz clic en el botón de recargar para actualizar.",
     "reload": "Recargar",
     "dismiss": "Descartar"
+  },
+  "library": {
+    "pickExamples": "Elegir ejemplos",
+    "titleImages": "Imágenes de ejemplo",
+    "searchPlaceholder": "Buscar, p. ej. lion, banana, bus",
+    "noResults": "Ningún grupo coincide con \"{{query}}\"",
+    "back": "Atrás",
+    "selectAll": "Seleccionar todo",
+    "clearSelection": "Borrar",
+    "tapToSelect": "Toca las imágenes que quieras añadir.",
+    "addImages": "Añadir fotos ({{count}})",
+    "loading": "Cargando ejemplos...",
+    "error": "No se pudieron cargar las imágenes de ejemplo.",
+    "pickExample": "Elegir ejemplo",
+    "tapToTest": "Toca una imagen para probar tu IA."
   }
 }
