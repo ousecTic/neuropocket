@@ -91,7 +91,7 @@ export function LibraryPicker(props: LibraryPickerProps) {
       key={cls.slug}
       type="button"
       onClick={() => handleClassClick(cls)}
-      className="text-left rounded-lg overflow-hidden border-2 border-transparent hover:border-primary/40 transition-colors"
+      className="text-start rounded-lg overflow-hidden border-2 border-transparent hover:border-primary/40 transition-colors"
     >
       <div className="aspect-square rounded-md bg-gray-100" style={tileStyle(cls, 0)} />
       <div className="px-1 py-1.5">
@@ -154,7 +154,7 @@ export function LibraryPicker(props: LibraryPickerProps) {
               style={tileStyle(cls, i)}
             >
               {selected && (
-                <span className="absolute top-1 right-1 bg-primary text-white rounded-full p-0.5 shadow">
+                <span className="absolute top-1 end-1 bg-primary text-white rounded-full p-0.5 shadow">
                   <Check size={14} />
                 </span>
               )}
@@ -175,7 +175,7 @@ export function LibraryPicker(props: LibraryPickerProps) {
               <button
                 type="button"
                 onClick={() => setOpenClass(null)}
-                className="p-2 -ml-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 -ms-2 hover:bg-gray-100 rounded-full transition-colors"
                 title={t('library.back')}
               >
                 <ArrowLeft size={20} className="rtl:rotate-180" />
