@@ -70,13 +70,39 @@ jobs:
           sed -i "s/versionCode [0-9]*/versionCode ${{ steps.code.outputs.code }}/" android/app/build.gradle
           grep -E "versionName|versionCode" android/app/build.gradle
 
-      - name: Assemble debug APK
+      # Every release is signed with the same permanent key, so Android installs
+      # it over the previous version. The key lives in repository secrets; see
+      # "Signing the Android app" in the README.
+      - name: Write signing key
+        shell: bash
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::The ANDROID_KEYSTORE_BASE64 secret is missing. See 'Signing the Android app' in the README."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/neuropocket-release.jks"
+          echo "NP_KEYSTORE_FILE=$RUNNER_TEMP/neuropocket-release.jks" >> "$GITHUB_ENV"
+
+      - name: Assemble signed release APK
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+        env:
+          NP_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          NP_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          NP_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Check the signature
+        shell: bash
+        run: |
+          APK=android/app/build/outputs/apk/release/app-release.apk
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --print-certs "$APK" | grep -E "Signer #1 certificate (DN|SHA-256)"
+          rm -f "$NP_KEYSTORE_FILE"
 
       - name: Rename APK
         shell: bash
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk "neuropocket.${{ inputs.version }}.apk"
+        run: cp android/app/build/outputs/apk/release/app-release.apk "neuropocket.${{ inputs.version }}.apk"
 
       - uses: actions/upload-artifact@v4
         with:

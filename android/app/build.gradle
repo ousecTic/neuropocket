@@ -16,10 +16,29 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // Release APKs are signed with the one permanent NeuroPocket key, so a new
+    // version installs over the old one. The key comes from environment
+    // variables (set from GitHub secrets in .github/workflows/build-release.yml);
+    // without them the release APK is left unsigned. See "Signing the Android app"
+    // in the README.
+    signingConfigs {
+        release {
+            def keystoreFile = System.getenv('NP_KEYSTORE_FILE')
+            if (keystoreFile) {
+                storeFile file(keystoreFile)
+                storePassword System.getenv('NP_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('NP_KEY_ALIAS')
+                keyPassword System.getenv('NP_KEY_PASSWORD')
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (System.getenv('NP_KEYSTORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }

@@ -36,3 +36,7 @@ ios/
 
 # Keep capacitor config
 !capacitor.config.ts
+
+# Android signing keys (see "Signing the Android app" in the README)
+*.jks
+*.keystore

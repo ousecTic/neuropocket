@@ -135,3 +135,4 @@ jobs:
       tag: ${{ needs.version.outputs.tag }}
       ref: main
       publish: true
+    secrets: inherit

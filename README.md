@@ -223,6 +223,40 @@ installer (`.exe`) and Android app (`.apk`) attached.
 - To release manually, push a tag like `v1.6.0`, or use the **Release
   (manual)** workflow's "Run workflow" button for a draft test build.
 
+### Signing the Android app
+
+Every release APK is signed with one permanent key. Android only installs a new
+version over an old one when both are signed with the same key, so **never lose
+or replace this key**: without it, everyone would have to uninstall NeuroPocket
+(losing their projects) before installing a new version.
+
+The key lives in four repository secrets. Releases stop with an error if they are
+missing. To set them up once, in PowerShell, with the JDK's `keytool` and the
+GitHub CLI:
+
+```powershell
+# 1. Make the key. It asks for a password; use the same one when asked for the key password.
+keytool -genkeypair -v -keystore neuropocket-release.jks -alias neuropocket -keyalg RSA -keysize 4096 -validity 36500 -dname "CN=NeuroPocket, O=Learn AI Anywhere"
+
+# 2. Store it as secrets (the password ones ask for it).
+gh secret set ANDROID_KEYSTORE_BASE64 --repo ousecTic/neuropocket --body ([Convert]::ToBase64String([IO.File]::ReadAllBytes("neuropocket-release.jks")))
+gh secret set ANDROID_KEYSTORE_PASSWORD --repo ousecTic/neuropocket
+gh secret set ANDROID_KEY_PASSWORD --repo ousecTic/neuropocket
+gh secret set ANDROID_KEY_ALIAS --repo ousecTic/neuropocket --body neuropocket
+```
+
+3. Back up `neuropocket-release.jks` and its password in two safe places (for
+   example a password manager and an encrypted drive). Don't commit it; `*.jks` is
+   git-ignored.
+
+Releases up to v1.8.0 were debug builds, each signed with a different throwaway
+key. Phones with one of those installed need to uninstall it once before
+installing a signed version; after that, updates install normally.
+
+To build a signed APK locally, set `NP_KEYSTORE_FILE` (the path to the `.jks`),
+`NP_KEYSTORE_PASSWORD`, `NP_KEY_ALIAS` and `NP_KEY_PASSWORD`, then run
+`./gradlew assembleRelease` in `android/`.
+
 ## 🌍 Translations
 
 NeuroPocket is available in English, Español, Français, Português, العربية, हिन्दी, Kiswahili, دری (Dari), پښتو (Pashto) and اردو (Urdu). Locale files live in `src/i18n/locales/`.
