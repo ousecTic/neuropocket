@@ -1,6 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import * as tf from '@tensorflow/tfjs';
+import { setWasmPaths } from '@tensorflow/tfjs-backend-wasm';
+import wasmUrl from '@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm.wasm?url';
+import wasmSimdUrl from '@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-simd.wasm?url';
+import wasmThreadedSimdUrl from '@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-threaded-simd.wasm?url';
 import {
   MOBILE_NET_INPUT_WIDTH,
   MOBILE_NET_INPUT_HEIGHT,
@@ -54,6 +58,58 @@ interface MLActions {
 
 type MLStore = MLState & MLActions;
 
+// Run the model with WebAssembly on the CPU rather than WebGL on the GPU. On low-end
+// phones whose GPU can't build WebGL shaders in the background, the first WebGL run
+// froze the app for 15+ seconds after install (measured on a Galaxy A12), and WASM
+// also processed each image faster there (88 ms vs 350 ms).
+setWasmPaths({
+  'tfjs-backend-wasm.wasm': wasmUrl,
+  'tfjs-backend-wasm-simd.wasm': wasmSimdUrl,
+  'tfjs-backend-wasm-threaded-simd.wasm': wasmThreadedSimdUrl
+});
+
+async function selectBackend(): Promise<void> {
+  try {
+    if (await tf.setBackend('wasm')) return;
+  } catch (error) {
+    console.warn('WASM backend unavailable:', error);
+  }
+  // Old WebViews (e.g. Chrome 69 on an un-updated Android 9) can't start this WASM
+  // build. Fall back to plain JavaScript on the CPU: slower, but WebGL on those same
+  // old WebViews crashed the app on a 1 GB test device.
+  console.warn('WASM backend failed to start; using the CPU backend');
+  await tf.setBackend('cpu');
+}
+
+// Shared by every caller while the model is loading, so it only loads once.
+let modelLoading: Promise<tf.GraphModel> | null = null;
+
+async function loadAndWarmUpModel(): Promise<tf.GraphModel> {
+  const start = performance.now();
+  await selectBackend();
+
+  // In the offline (single-file) build the model is embedded and loaded
+  // from memory, since fetch() of local files is blocked over file://.
+  let mobilenet: tf.GraphModel;
+  if (import.meta.env.VITE_OFFLINE_BUILD) {
+    const { loadEmbeddedModel } = await import('../offline/loadEmbeddedModel');
+    mobilenet = await loadEmbeddedModel();
+  } else {
+    mobilenet = await tf.loadGraphModel('./model/model.json');
+  }
+
+  // Warmup the model
+  const dummyInput = tf.zeros([1, MOBILE_NET_INPUT_WIDTH, MOBILE_NET_INPUT_HEIGHT, 3]);
+  const warmupResult = mobilenet.predict(dummyInput) as tf.Tensor;
+  await warmupResult.data();
+  console.log('Feature shape:', warmupResult.shape);
+  console.log(`MobileNet ready on ${tf.getBackend()} in ${Math.round(performance.now() - start)}ms`);
+  warmupResult.dispose();
+  dummyInput.dispose();
+
+  return mobilenet;
+}
+
 export const useMLStore = create<MLStore>()(
   persist(
     (set, get) => ({
@@ -70,25 +126,11 @@ export const useMLStore = create<MLStore>()(
         if (get().mobilenet) return true;
 
         try {
-          // In the offline (single-file) build the model is embedded and loaded
-          // from memory, since fetch() of local files is blocked over file://.
-          let mobilenet: tf.GraphModel;
-          if (import.meta.env.VITE_OFFLINE_BUILD) {
-            const { loadEmbeddedModel } = await import('../offline/loadEmbeddedModel');
-            mobilenet = await loadEmbeddedModel();
-          } else {
-            mobilenet = await tf.loadGraphModel('./model/model.json');
+          if (!modelLoading) {
+            modelLoading = loadAndWarmUpModel().finally(() => { modelLoading = null; });
           }
-          
-          // Warmup the model
-          tf.tidy(() => {
-            const dummyInput = tf.zeros([1, MOBILE_NET_INPUT_WIDTH, MOBILE_NET_INPUT_HEIGHT, 3]);
-            const warmupResult = mobilenet.predict(dummyInput) as tf.Tensor;
-            console.log('Feature shape:', warmupResult.shape);
-            warmupResult.dispose();
-          });
-          
-          set({ mobilenet });
+          const mobilenet = await modelLoading;
+          if (!get().mobilenet) set({ mobilenet });
           return true;
         } catch (error) {
           console.error('Error loading MobileNet:', error);

@@ -32,6 +32,7 @@
     "@capacitor/cli": "^6.2.0",
     "@capacitor/core": "^6.2.0",
     "@tensorflow/tfjs": "^4.17.0",
+    "@tensorflow/tfjs-backend-wasm": "4.22.0",
     "i18next": "^26.3.3",
     "idb": "^8.0.0",
     "lucide-react": "^0.344.0",
