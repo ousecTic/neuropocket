@@ -20,7 +20,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'ar', label: 'العربية' },
   { code: 'hi', label: 'हिन्दी' },
   { code: 'sw', label: 'Kiswahili' },
-  { code: 'fa', label: 'دری' },
+  { code: 'fa', label: 'فارسی' },
   { code: 'ps', label: 'پښتو' },
   { code: 'ur', label: 'اردو' },
 ] as const;
@@ -31,7 +31,7 @@ const STORAGE_KEY = 'np_lang';
 const RTL_LANGUAGES = ['ar', 'fa', 'ps', 'ur'];
 
 // The supported code for a language tag (just the base, e.g. "es-MX" -> "es"), or null.
-// Dari is sometimes reported as "prs" rather than "fa-AF".
+// Farsi (Afghan Persian, also called Dari) is sometimes reported as "prs" rather than "fa-AF".
 function toSupported(tag: string | null | undefined): string | null {
   if (!tag) return null;
   const base = tag.toLowerCase().split(/[-_]/)[0];

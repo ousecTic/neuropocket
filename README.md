@@ -259,9 +259,9 @@ To build a signed APK locally, set `NP_KEYSTORE_FILE` (the path to the `.jks`),
 
 ## 🌍 Translations
 
-NeuroPocket is available in English, Español, Français, Português, العربية, हिन्दी, Kiswahili, دری (Dari), پښتو (Pashto) and اردو (Urdu). Locale files live in `src/i18n/locales/`.
+NeuroPocket is available in English, Español, Français, Português, العربية, हिन्दी, Kiswahili, فارسی (Farsi), پښتو (Pashto) and اردو (Urdu). Locale files live in `src/i18n/locales/`.
 
-- **Dari and Pashto** were translated by [Darakht-e Danesh Academi](https://darakhtdanesh.org), a program of Right to Learn Afghanistan.
+- **Farsi and Pashto** were translated by [Darakht-e Danesh Academi](https://darakhtdanesh.org), a program of Right to Learn Afghanistan.
 - **Urdu** is machine-generated and awaiting review by a native speaker.
 
 Want to help translate? Open an issue or email contact@learnaianywhere.org. Contributors who opt in are credited on the website, under the name they choose.
