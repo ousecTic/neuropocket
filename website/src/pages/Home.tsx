@@ -6,7 +6,7 @@ const TRANSLATION_PARTNERS = [
   {
     name: 'Darakht-e Danesh Academi',
     org: 'a program of Right to Learn Afghanistan',
-    languages: 'Dari · Pashto',
+    languages: 'Farsi · Pashto',
     url: 'https://darakhtdanesh.org',
     logo: '/partners/darakht-e-danesh.svg',
   },
@@ -90,8 +90,8 @@ export function Home() {
             Now Available in Your Language
           </h2>
           <p className="mb-12 text-lg mx-auto" style={{ color: 'var(--subtext-color)', maxWidth: '640px' }}>
-            NeuroPocket now speaks 10 languages, with right-to-left support for Arabic, Dari, Pashto and Urdu. Pick your language right inside the app — your choice is remembered, and it all works offline.
-            {' '}Dari and Pashto translations by{' '}
+            NeuroPocket now speaks 10 languages, with right-to-left support for Arabic, Farsi, Pashto and Urdu. Pick your language right inside the app — your choice is remembered, and it all works offline.
+            {' '}Farsi and Pashto translations by{' '}
             <a href="#translation-partners" className="hover:underline" style={{ color: 'var(--primary-color)', textDecoration: 'none' }}>
               Darakht-e Danesh Academi
             </a>
@@ -106,7 +106,7 @@ export function Home() {
               'العربية',
               'हिन्दी',
               'Kiswahili',
-              'دری',
+              'فارسی',
               'پښتو',
               'اردو',
             ].map((lang) => (
